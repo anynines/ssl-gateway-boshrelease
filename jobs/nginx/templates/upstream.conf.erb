@@ -1,0 +1,5 @@
+upstream cf-routers {
+  <% p('a9s_ssl_gateway.cf_routers').each do |router| %>
+  <%= "server #{router};" %>
+  <% end %>
+}
