@@ -1,7 +1,7 @@
-<% cf_app_domain = p('a9s_ssl_gateway.default_apps_domain') %>
 #!/bin/bash -e
+<% cf_app_domain = p('a9s_ssl_gateway.default_apps_domain') %>
 
-PIDFILE=/var/vcap/sys/run/nginx/nginx.pid
+PIDFILE=/var/vcap/packages/nginx/logs/nginx.pid
 
 mkdir -p /var/vcap/sys/run/nginx
 mkdir -p /var/vcap/sys/log/nginx
@@ -16,7 +16,10 @@ cp /var/vcap/jobs/nginx/etc/nginx.conf /var/vcap/store/nginx/
 cp /var/vcap/jobs/nginx/etc/cf-default-apps-domain.conf /var/vcap/store/nginx/conf.d/
 cp /var/vcap/jobs/nginx/etc/upstream.conf /var/vcap/store/nginx/conf.d/
 cp /var/vcap/jobs/nginx/etc/shared.conf /var/vcap/store/nginx/static/
+cp /var/vcap/jobs/nginx/etc/shared_host_wss.conf /var/vcap/store/nginx/static/
+cp /var/vcap/jobs/nginx/etc/ssh-proxy.conf /var/vcap/store/nginx/
 
+cp /var/vcap/jobs/nginx/etc/blacklist-app-domains.conf /var/vcap/store/nginx/conf.d/blacklist-app-domains.conf
 cp /var/vcap/jobs/nginx/etc/cf-default-apps-domain.conf /var/vcap/store/nginx/conf.d/<%= cf_app_domain %>.conf
 cp /var/vcap/jobs/nginx/etc/cf-default-apps-domain-cert.crt.bundle /var/vcap/store/nginx/ssl/wild.<%= cf_app_domain %>.crt.bundle
 cp /var/vcap/jobs/nginx/etc/cf-default-apps-domain-cert.key /var/vcap/store/nginx/ssl/wild.<%= cf_app_domain %>.key

@@ -1,0 +1,41 @@
+---
+name: virtual_host_service_api
+templates:
+  bin/virtual_host_service_api_ctl.sh.erb: bin/virtual_host_service_api_ctl
+  config/application.yml.erb: config/application.yml
+  config/amqp.yml.erb: config/amqp.yml
+  config/database.yml.erb: config/database.yml
+  helpers/ctl_setup.sh: helpers/ctl_setup.sh
+  helpers/ctl_utils.sh: helpers/ctl_utils.sh
+  helpers/consul_utils.sh: helpers/consul_utils.sh
+  data/properties.sh: data/properties.sh
+
+packages:
+- ruby
+- libpq
+- libyaml
+- zlib
+- virtual_host_service_api
+
+properties:
+
+  rabbitmq.admin_username:
+    description: 'username for auth with rabbitmq'
+  rabbitmq.admin_password:
+    descriptions: 'password for auth with rabbitmq'
+  rabbitmq.host:
+    description: 'Address of the message queue'
+
+  vhost_api.postgresql_db:
+    description: "postgres db"
+  vhost_api.postgresql_username:
+    description: "username"
+  vhost_api.postgresql_host:
+    description: "host"
+  vhost_api.postgresql_password:
+    description: "password"
+
+  vhost_api.customer_panel_secret:
+    description: "secret for the customer panel"
+  vhost_api.port:
+    description: "port to listen to"

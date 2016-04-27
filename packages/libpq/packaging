@@ -1,0 +1,28 @@
+# Available variables
+# $BOSH_COMPILE_TARGET - where this package & spec'd source files are available
+# $BOSH_INSTALL_TARGET - where you copy/install files to be included in package
+
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+# Detect # of CPUs so make jobs can be parallelized
+CPUS=$(grep -c ^processor /proc/cpuinfo)
+
+export HOME=/var/vcap
+export POSTGRESQL_VERSION=`ls -r libpq/postgresql-* | sed 's/libpq\/postgresql-\(.*\)\.tar.bz2/\1/' | head -1`
+
+tar jxf libpq/postgresql-$POSTGRESQL_VERSION.tar.bz2
+cd postgresql-$POSTGRESQL_VERSION
+./configure --prefix=${BOSH_INSTALL_TARGET} --with-openssl
+
+pushd src/bin/pg_config
+  make
+  make install
+popd
+
+cp -LR src/include ${BOSH_INSTALL_TARGET}
+
+pushd src/interfaces/libpq
+  make
+  make install
+popd

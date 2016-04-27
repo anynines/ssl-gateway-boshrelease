@@ -1,0 +1,5 @@
+check process virtual_host_service_api
+  with pidfile /var/vcap/sys/run/virtual_host_service_api/virtual_host_service_api.pid
+  start program "/var/vcap/jobs/virtual_host_service_api/bin/virtual_host_service_api_ctl start"
+  stop program "/var/vcap/jobs/virtual_host_service_api/bin/virtual_host_service_api_ctl stop"
+  group vcap

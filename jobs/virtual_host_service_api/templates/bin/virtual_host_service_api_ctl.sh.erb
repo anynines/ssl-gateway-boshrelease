@@ -1,0 +1,125 @@
+#!/bin/bash
+
+set -e # exit immediately if a simple command exits with a non-zero status
+set -u # report the usage of uninitialized variables
+
+# Setup env vars and folders for the webapp_ctl script
+source /var/vcap/jobs/virtual_host_service_api/helpers/ctl_setup.sh 'virtual_host_service_api'
+
+export PATH=/var/vcap/packages/ruby/bin:$PATH
+export HOME=/home/vcap # rake needs it to be set to run tasks
+export bundle_cmd=/var/vcap/packages/ruby/bin/bundle
+export C_INCLUDE_PATH=/var/vcap/packages/libpq/include:$C_INCLUDE_PATH
+export LIBRARY_PATH=/var/vcap/packages/libpq/lib:$LIBRARY_PATH
+export LANG=en_US.UTF-8
+
+export JOB_DIR=/var/vcap/jobs/virtual_host_service_api
+export PACKAGE_DIR=/var/vcap/packages/virtual_host_service_api
+export RUN_DIR=/var/vcap/sys/run/virtual_host_service_api
+export LOG_DIR=/var/vcap/sys/log/virtual_host_service_api
+export PIDFILE=$RUN_DIR/virtual_host_service_api.pid
+
+export CONFIG_DIR=$JOB_DIR/config
+export VIRTUAL_HOST_SERVICE_API_CONFIG=$CONFIG_DIR/config.yml
+#export HONEYBADGER_CONFIG=$CONFIG_DIR/honeybadger.yml
+export DATABASE_CONFIG=$CONFIG_DIR/database.yml
+export BUNDLE_GEMFILE=$PACKAGE_DIR/Gemfile
+export RABBIT_CONFIG=$CONFIG_DIR/amqp.yml
+export APPLICATION_CONFIG=$CONFIG_DIR/application.yml
+
+export TMPDIR=/var/vcap/data/virtual_host_service_api/tmp
+
+
+export RAILS_ENV=production
+export PORT=<%= p('vhost_api.port', 3000) %>
+
+
+case $1 in
+
+  start)
+    mkdir -p $RUN_DIR
+    mkdir -p $LOG_DIR
+    mkdir -p $TMPDIR
+    mkdir -p $PACKAGE_DIR
+
+    chown vcap:vcap "$RUN_DIR"
+    chown vcap:vcap "$LOG_DIR"
+    chown vcap:vcap "$TMPDIR"
+
+
+    pid_guard $PIDFILE "virtual_host_service_api"
+
+    ulimit -n 64000
+
+    cd $PACKAGE_DIR
+    chown -R vcap:vcap db
+    echo "Linking configuration"
+    ln -sf $VIRTUAL_HOST_SERVICE_API_CONFIG $PACKAGE_DIR/config/config.yml
+    ln -sf $DATABASE_CONFIG $PACKAGE_DIR/config/database.yml
+#    ln -sf $HONEYBADGER_CONFIG $PACKAGE_DIR/config/honeybadger.yml
+    ln -sf $RABBIT_CONFIG $PACKAGE_DIR/config/amqp.yml
+    ln -sf $APPLICATION_CONFIG $PACKAGE_DIR/config/application.yml
+    echo "Finished linking configuration"
+
+    echo "Linking log directory"
+    if [ ! -L $PACKAGE_DIR/log ]; then
+      rm -rf $PACKAGE_DIR/log
+      ln -s $LOG_DIR $PACKAGE_DIR/log
+    fi
+    echo "Finished linking log directory"
+
+    echo "Linking tmp directory"
+    if [ ! -L $PACKAGE_DIR/tmp ]; then
+      ln -s $TMPDIR $PACKAGE_DIR/tmp
+    fi
+    echo "Finished linking tmp directory"
+
+    <% if_p('consul.agent_address') do |consul_agent_address| %>
+
+      <%= "export consul_agent_address=\"#{consul_agent_address}\"" %>
+      <%= "export port=#{p('vhost_api.port', 3000)}" %>
+      <%  final_service_name = nil
+          if_p('consul.service_name') do |service_name|
+            final_service_name = "#{spec.deployment}-#{service_name}"
+          end
+          final_service_name ||= spec.deployment
+      %>
+      <%= "export service_name=#{final_service_name}" %>
+
+      set +e
+      <%= "register_at_consul $service_name $port $consul_agent_address" %>
+      result=$?
+      set -e
+
+      if [ $result != 0 ]; then
+        echo "Consul registration failed for service: $service_name, port: $port !"
+        exit 1
+      fi
+    <% end %>
+
+    # Run the migrations only on the first virtual_host_service instance
+    <% if spec.index.to_i == 0 %>
+      echo "Executing virtual_host_service_api migrations"
+      # chpst -u vcap:vcap $bundle_cmd exec rake db:create
+      chpst -u vcap:vcap  $bundle_cmd exec rake db:migrate
+
+      if [ $? != 0 ]; then
+        echo "Migrations failed"
+        exit 1
+      fi
+    <% end %>
+
+    echo "Starting virtual_host_service_api daemon"
+    chpst -u vcap:vcap $bundle_cmd exec rails s -b 0.0.0.0 --pid $PIDFILE -p $PORT -d
+    echo "Start complete"
+    ;;
+
+  stop)
+    kill_and_wait $PIDFILE
+    ;;
+
+  *)
+    echo "Usage: anynines_VIRTUAL_HOST_SERVICE_API_ctl {start|stop}"
+    ;;
+
+esac

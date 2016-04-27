@@ -1,0 +1,13 @@
+production:
+  amqp_channel:       'virtual_host_jobs'
+  queue_id:           'worker_<%= spec.job.name %>_<%= index %>'
+  cert_dir:           '/var/vcap/store/nginx/ssl/'
+  v_host_config_dir:  '/var/vcap/store/nginx/sites-available/'
+  v_host_link_dir:    '/var/vcap/store/nginx/sites-enabled/'
+  webserver_config:   '/var/vcap/store/nginx/nginx.conf'
+  shared_config:      '/var/vcap/store/nginx/static/shared_host.conf'
+  shared_config_wss:  '/var/vcap/store/nginx/static/shared_host_wss.conf'
+  upstream_config:    '/var/vcap/jobs/nginx/etc/upstream.conf'
+  nginx_command:      'sudo /var/vcap/packages/nginx/sbin/nginx'
+  routers:            [<%= p('a9s_ssl_gateway.cf_routers').map{ |r| "'#{r}'" }.join(',') %>]
+  honeybadger_api_key: ''

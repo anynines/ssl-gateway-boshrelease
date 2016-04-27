@@ -1,0 +1,11 @@
+# abort script on any command that exit with a non zero value
+set -e
+
+bundle_cmd=/var/vcap/packages/ruby/bin/bundle
+
+mkdir -p ${BOSH_INSTALL_TARGET}
+rm -rf ${BOSH_INSTALL_TARGET}/*
+cp -Ra virtual_host_service_worker/* ${BOSH_INSTALL_TARGET}
+cd ${BOSH_INSTALL_TARGET}
+
+${bundle_cmd} install --local --deployment --without development test

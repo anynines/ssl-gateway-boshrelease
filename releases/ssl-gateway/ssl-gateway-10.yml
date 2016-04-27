@@ -1,0 +1,59 @@
+---
+packages:
+- name: libpq
+  version: d27de4889ebd19799ed3f0a663b642de80dca5bb
+  fingerprint: d27de4889ebd19799ed3f0a663b642de80dca5bb
+  sha1: 2b5faf4f70c3a19bac285439510639b632bacbf5
+  dependencies: []
+- name: libyaml
+  version: ec170fd1ca2cda520318a00bda317209f6976459
+  fingerprint: ec170fd1ca2cda520318a00bda317209f6976459
+  sha1: 492ad761f980078cc5b2cd73f26f2a8d3bf15c85
+  dependencies: []
+- name: nginx
+  version: 37ed1ccf3a27d830e9efc88d695dcae6b243ec37
+  fingerprint: 37ed1ccf3a27d830e9efc88d695dcae6b243ec37
+  sha1: 23870a2f672c0fb009f85026a7cee62b3bea5e72
+  dependencies: []
+- name: ruby
+  version: 2fe7adf592cfc06e055b0e1c2defc1510a2e7fe5
+  fingerprint: 2fe7adf592cfc06e055b0e1c2defc1510a2e7fe5
+  sha1: be764e95df3cfd37f9c072a4bf10b270e3b7e1be
+  dependencies:
+  - libyaml
+  - zlib
+- name: virtual_host_service_api
+  version: 7299cf1dcee20a959ccfc7aa721a27c13eb3be2c
+  fingerprint: 7299cf1dcee20a959ccfc7aa721a27c13eb3be2c
+  sha1: a425c3d7716490c5e949d9567565f28db15da036
+  dependencies:
+  - libpq
+  - ruby
+- name: virtual_host_service_worker
+  version: dcb9d5f2e65718c99e22138ec7ba105da7ef8bef
+  fingerprint: dcb9d5f2e65718c99e22138ec7ba105da7ef8bef
+  sha1: fded8c290925976c79ad33d41b63f455c97f34ec
+  dependencies:
+  - ruby
+- name: zlib
+  version: 0f542d589ec67301e44c6df13243e95340921ab5
+  fingerprint: 0f542d589ec67301e44c6df13243e95340921ab5
+  sha1: e6bc78143868a7e1f46b14bf85303cd7a88e2f73
+  dependencies: []
+jobs:
+- name: nginx
+  version: d084a95312b47ff0db6e55e10f5d18f142fdb43f
+  fingerprint: d084a95312b47ff0db6e55e10f5d18f142fdb43f
+  sha1: 1efa6aae29fe6cb7bb2cf57489e87c0360b8d8a1
+- name: virtual_host_service_api
+  version: b6774d6ca4c999c38b39e12c36315e7e8575d01d
+  fingerprint: b6774d6ca4c999c38b39e12c36315e7e8575d01d
+  sha1: dda539e034a6af63c5621ec0d1f843c6bfaff895
+- name: virtual_host_service_worker
+  version: d87419e968b0e0f3dcd942d4697f37d1bc69b5e8
+  fingerprint: d87419e968b0e0f3dcd942d4697f37d1bc69b5e8
+  sha1: eb394d53e43aec55f43e4ab3ecc44277582583d4
+commit_hash: fe410eae
+uncommitted_changes: true
+name: ssl-gateway
+version: '10'

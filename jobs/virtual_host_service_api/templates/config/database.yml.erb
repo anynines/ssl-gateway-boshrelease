@@ -1,0 +1,18 @@
+defaults: &defaults
+  adapter: postgresql
+  encoding: utf8
+  reconnect: false
+  database: '<%= p('vhost_api.postgresql_db') %>'
+  username: '<%= p('vhost_api.postgresql_username') %>'
+  password: '<%= p('vhost_api.postgresql_password') %>'
+  host: '<%= p('vhost_api.postgresql_host') %>'
+
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults
