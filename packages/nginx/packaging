@@ -1,0 +1,20 @@
+set -e -x
+
+echo "Extracting pcre..."
+tar xzvf nginx110/pcre-8.38.tar.gz
+
+echo "Extracting nginx..."
+tar xzvf nginx110/nginx-1.10.0.tar.gz
+
+echo "Building nginx..."
+
+pushd nginx-1.10.0
+  ./configure \
+    --with-debug \
+    --with-pcre=../pcre-8.38 \
+    --prefix=${BOSH_INSTALL_TARGET} \
+    --with-http_ssl_module \
+
+  make
+  make install
+popd
