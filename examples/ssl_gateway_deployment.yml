@@ -68,6 +68,8 @@ jobs:
   templates:
   - name: nginx
     release: ssl-gateway
+  - name: virtual_host_service_worker
+    release: ssl-gateway
   networks:
   - name: default
     static_ips:

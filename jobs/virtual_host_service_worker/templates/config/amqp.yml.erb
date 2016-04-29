@@ -1,0 +1,14 @@
+defaults: &defaults
+  user: ''
+  pass: ''
+  host: ''
+  vhost: /
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

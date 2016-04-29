@@ -1,0 +1,3 @@
+[submodule "src/virtual_host_service_worker"]
+	path = src/virtual_host_service_worker
+	url = git@github.com:a9hcp/virtual_host_service_worker.git

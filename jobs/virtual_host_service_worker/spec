@@ -1,0 +1,14 @@
+---
+name: virtual_host_service_worker
+templates:
+  bin/virtual_host_service_worker_ctl.sh.erb: bin/virtual_host_service_worker_ctl
+  config/application.yml.erb: config/application.yml
+  config/amqp.yml.erb: config/amqp.yml
+
+packages:
+- ruby
+- virtual_host_service_worker
+
+properties:
+  a9s_ssl_gateway.cf_routers:
+    description: 'array with ip addresses of the cf routers'
