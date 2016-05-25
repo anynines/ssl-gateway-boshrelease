@@ -76,6 +76,11 @@ jobs:
     - 10.244.7.2
 
 properties:
+  vhost_worker:
+    user: a9s-brk-usr-Gq9EcoYtvq7QSUjcgewfVA
+    password: q0grMfJo45dRszMf1mKBjg
+    host: d2027d9.service.dc1.consul
+
   a9s_ssl_gateway:
     default_apps_domain: <%= app_domain %>
     cf_routers:

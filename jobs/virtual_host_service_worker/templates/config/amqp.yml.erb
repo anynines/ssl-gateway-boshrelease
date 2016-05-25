@@ -1,7 +1,7 @@
 defaults: &defaults
-  user: ''
-  pass: ''
-  host: ''
+  user: '<%= p('vhost_worker.user') %>'
+  pass: '<%= p('vhost_worker.password') %>'
+  host: '<%= p('vhost_worker.host') %>'
   vhost: /
 
 development:

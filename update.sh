@@ -1,0 +1,95 @@
+LIBYAML_VERSION="0.1.5"
+LIBYAML_TARBALL_DIR=blobs/libyaml
+LIBYAML_TARBALL_FILE=$LIBYAML_TARBALL_DIR/yaml-$LIBYAML_VERSION.tar.gz
+LIBYAML_TARBALL_DOWNLOAD_URL=http://pyyaml.org/download/libyaml/yaml-$LIBYAML_VERSION.tar.gz
+
+ZLIB_VERSION="1.2.8"
+ZLIB_TARBALL_DIR=blobs/zlib
+ZLIB_TARBALL_FILE=$ZLIB_TARBALL_DIR/zlib-$ZLIB_VERSION.tar.gz
+ZLIB_TARBALL_DOWNLOAD_URL=http://zlib.net/zlib-$ZLIB_VERSION.tar.gz
+
+RUBY_VERSION="2.2.4"
+RUBY_TARBALL_DIR=blobs/ruby
+RUBY_TARBALL_FILE=$RUBY_TARBALL_DIR/ruby-$RUBY_VERSION.tar.gz
+RUBY_TARBALL_DOWNLOAD_URL=http://cache.ruby-lang.org/pub/ruby/2.2/ruby-$RUBY_VERSION.tar.gz
+
+RUBYGEMS_VERSION="2.6.1"
+RUBYGEMS_TARBALL_DIR=blobs/ruby
+RUBYGEMS_TARBALL_FILE=$RUBYGEMS_TARBALL_DIR/rubygems-$RUBYGEMS_VERSION.tgz
+RUBYGEMS_TARBALL_DOWNLOAD_URL=http://production.cf.rubygems.org/rubygems/rubygems-$RUBYGEMS_VERSION.tgz
+
+BUNDLER_VERSION="1.10.6"
+BUNDLER_TARBALL_DIR=blobs/ruby
+BUNDLER_TARBALL_FILE=$BUNDLER_TARBALL_DIR/bundler-$BUNDLER_VERSION.gem
+BUNDLER_TARBALL_DOWNLOAD_URL=https://rubygems.org/downloads/bundler-$BUNDLER_VERSION.gem
+
+NGINX_VERSION="1.10.0"
+NGINX_TARBALL_DIR=blobs/nginx
+NGINX_TARBALL_FILE=$NGINX_TARBALL_DIR/nginx-$NGINX_VERSION.tgz
+NGINX_TARBALL_DOWNLOAD_URL=http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz
+
+PCRE_VERSION="8.38"
+PCRE_TARBALL_DIR=blobs/nginx
+PCRE_TARBALL_FILE=$PCRE_TARBALL_DIR/pcre-$PCRE_VERSION.tgz
+PCRE_TARBALL_DOWNLOAD_URL=http://ftp.cs.stanford.edu/pub/exim/pcre/pcre-$PCRE_VERSION.tar.gz
+
+
+# libyaml sources
+if [ ! -f $LIBYAML_TARBALL_FILE ]; then
+  echo "Downloading Libyaml version $LIBYAML_VERSION tarball"
+  mkdir -p $LIBYAML_TARBALL_DIR
+  curl $LIBYAML_TARBALL_DOWNLOAD_URL -o $LIBYAML_TARBALL_FILE
+else
+  echo "Detected Libyaml tarball. Not downloading."
+fi
+
+# zlib sources
+if [ ! -f $ZLIB_TARBALL_FILE ]; then
+  echo "Downloading zlib version $ZLIB_VERSION tarball"
+  mkdir -p $ZLIB_TARBALL_DIR
+  curl $ZLIB_TARBALL_DOWNLOAD_URL -o $ZLIB_TARBALL_FILE
+else
+  echo "Detected zlib tarball. Not downloading."
+fi
+
+# ruby sources
+if [ ! -f $RUBY_TARBALL_FILE ]; then
+  echo "Downloading Ruby version $RUBY_VERSION tarball"
+  mkdir -p $RUBY_TARBALL_DIR
+  curl $RUBY_TARBALL_DOWNLOAD_URL -o $RUBY_TARBALL_FILE
+else
+  echo "Detected Ruby tarball. Not downloading."
+fi
+
+# rubygems sources
+if [ ! -f $RUBYGEMS_TARBALL_FILE ]; then
+  echo "Downloading Rubygems version $RUBYGEMS_VERSION tarball"
+  mkdir -p $RUBYGEMS_TARBALL_DIR
+  curl $RUBYGEMS_TARBALL_DOWNLOAD_URL -o $RUBYGEMS_TARBALL_FILE
+else
+  echo "Detected Rubygems tarball. Not downloading."
+fi
+
+# bundler gem
+if [ ! -f $BUNDLER_TARBALL_FILE ]; then
+  echo "Downloading bundler version $BUNDLER_VERSION gem"
+  mkdir -p $BUNDLER_TARBALL_DIR
+  curl $BUNDLER_TARBALL_DOWNLOAD_URL -o $BUNDLER_TARBALL_FILE
+else
+  echo "Detected bundler gem. Not downloading."
+fi
+
+if [ ! -f $NGINX_TARBALL_FILE ]; then
+  echo "Downloading nginx version $NGINX_VERSION gem"
+  mkdir -p $NGINX_TARBALL_DIR
+  curl $NGINX_TARBALL_DOWNLOAD_URL -o $NGINX_TARBALL_FILE
+else
+  echo "Detected nginx gem. Not downloading."
+fi
+if [ ! -f $PCRE_TARBALL_FILE ]; then
+  echo "Downloading pcre version $PCRE_VERSION gem"
+  mkdir -p $PCRE_TARBALL_DIR
+  curl $PCRE_TARBALL_DOWNLOAD_URL -o $PCRE_TARBALL_FILE
+else
+  echo "Detected pcre gem. Not downloading."
+fi

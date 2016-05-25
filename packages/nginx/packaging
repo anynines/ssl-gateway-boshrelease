@@ -1,10 +1,10 @@
 set -e -x
 
 echo "Extracting pcre..."
-tar xzvf nginx110/pcre-8.38.tar.gz
+tar xzvf nginx/pcre-8.38.tgz
 
 echo "Extracting nginx..."
-tar xzvf nginx110/nginx-1.10.0.tar.gz
+tar xzvf nginx/nginx-1.10.0.tgz
 
 echo "Building nginx..."
 
