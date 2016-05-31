@@ -12,9 +12,9 @@ packages:
 properties:
   a9s_ssl_gateway.cf_routers:
     description: 'array with ip addresses of the cf routers'
-  vhost_worker.user:
+  rabbitmq.admin_username:
     description: 'username for auth with rabbitmq'
-  vhost_worker.password:
+  rabbitmq.admin_password:
     descriptions: 'password for auth with rabbitmq'
-  vhost_worker.host:
+  rabbitmq.host:
     description: 'Address of the message queue'

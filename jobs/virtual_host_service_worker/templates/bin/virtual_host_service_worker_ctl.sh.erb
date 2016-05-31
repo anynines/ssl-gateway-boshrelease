@@ -2,15 +2,19 @@
 
 export BUNDLE_CMD=/var/vcap/packages/ruby/bin/bundle
 export DAEMON_ENV=production
-export PIDFILE=/var/vcap/sys/run/nginx/nginx.pid
+export PIDFILE=/var/vcap/sys/run/virtual_host_service_worker/virtual_host_service_worker.pid
+export PATH=/var/vcap/packages/ruby/bin/:$PATH
 
+
+mkdir -p /var/vcap/sys/run/virtual_host_service_worker/
 cp /var/vcap/jobs/virtual_host_service_worker/config/application.yml /var/vcap/packages/virtual_host_service_worker/config/
 cp /var/vcap/jobs/virtual_host_service_worker/config/amqp.yml /var/vcap/packages/virtual_host_service_worker/config/
 
 case $1 in
 
   start)
-    $BUNDLE_CMD exec/var/vcap/packages/virtual_host_service_worker/bin/virtual_host_service_worker start
+    cd /var/vcap/packages/virtual_host_service_worker
+    $BUNDLE_CMD exec bin/virtual_host_service_worker start --pid $PIDFILE
     ;;
   stop)
     kill $(cat $PIDFILE)

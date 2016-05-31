@@ -1,7 +1,7 @@
 defaults: &defaults
-  user: '<%= p('vhost_worker.user') %>'
-  pass: '<%= p('vhost_worker.password') %>'
-  host: '<%= p('vhost_worker.host') %>'
+  user: '<%= p('rabbitmq.admin_username') %>'
+  pass: '<%= p('rabbitmq.admin_password') %>'
+  host: '<%= p('rabbitmq.host') %>'
   vhost: /
 
 development:
