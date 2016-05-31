@@ -1,0 +1,26 @@
+#!/bin/bash -e
+
+export BUNDLE_CMD=/var/vcap/packages/ruby/bin/bundle
+export DAEMON_ENV=production
+export PIDFILE=/var/vcap/sys/run/virtual_host_service_worker/virtual_host_api.pid
+export PATH=/var/vcap/packages/ruby/bin/:$PATH
+
+
+mkdir -p /var/vcap/sys/run/virtual_host_service_worker/
+cp /var/vcap/jobs/virtual_host_api/config/application.yml /var/vcap/packages/virtual_host_api/config/
+cp /var/vcap/jobs/virtual_host_api/config/amqp.yml /var/vcap/packages/virtual_host_api/config/
+cp /var/vcap/jobs/virtual_host_api/config/database.yml /var/vcap/packages/virtual_host_api/config/
+
+case $1 in
+
+  start)
+    cd /var/vcap/packages/virtual_host_api
+    $BUNDLE_CMD exec bin/virtual_host_api start --pid $PIDFILE
+    ;;
+  stop)
+    kill $(cat $PIDFILE)
+    ;;
+  *)
+    echo "Usage: ctl {start|stop}"
+    ;;
+esac

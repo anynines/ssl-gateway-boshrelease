@@ -1,0 +1,7 @@
+check process virtual_host_service_worker
+  with pidfile /var/vcap/sys/run/virtual_host_service_worker/virtual_host_service_api.pid
+  start program "/var/vcap/jobs/virtual_host_service_worker/bin/virtual_host_service_api_ctl start"
+  stop program "/var/vcap/jobs/virtual_host_service_worker/bin/virtual_host_service_api_ctl stop"
+  depends on postgresql-ha
+  depends on rabbitmq
+  group vcap

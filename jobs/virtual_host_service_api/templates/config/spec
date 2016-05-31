@@ -1,0 +1,27 @@
+---
+name: virtual_host_service_worker
+templates:
+  bin/virtual_host_service_api_ctl.sh.erb: bin/virtual_host_service_api_ctl
+  config/application.yml.erb: config/application.yml
+  config/amqp.yml.erb: config/amqp.yml
+  config/database.yml: config/database.yml
+
+packages:
+- ruby
+- virtual_host_service_api
+
+properties:
+
+  rabbitmq.admin_username:
+    description: 'username for auth with rabbitmq'
+  rabbitmq.admin_password:
+    descriptions: 'password for auth with rabbitmq'
+  rabbitmq.host:
+    description: 'Address of the message queue'
+
+  vhost_api.postgresql_db:
+  vhost_api.postgresql_username:
+  vhost_api.postgresql_host:
+  vhost_api.postgresql_password:
+
+  vhost_api.customer_panel_secret:

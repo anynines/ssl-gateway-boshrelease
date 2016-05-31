@@ -1,0 +1,14 @@
+defaults: &defaults
+  user: '<%= p('rabbitmq.admin_username') %>'
+  pass: '<%= p('rabbitmq.admin_password') %>'
+  host: '<%= p('rabbitmq.host') %>'
+  vhost: /
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

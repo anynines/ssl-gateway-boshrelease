@@ -2,7 +2,7 @@
   # In case you are using BOSH lite on AWS you can specify the VMs
   # elastic IP in the 'PUBLIC_IP' evnrionment variable
   public_ip = ENV['PUBLIC_IP'] || '10.244.0.34'
-  system_domain = "#{public_ip}.xip.io"
+  system_domain = "bosh-lite.com"
   service_jumper_host = "10.244.6.10"
   app_domain = system_domain
 %>
@@ -13,6 +13,12 @@ name: ssl-gateway
 
 releases:
 - name: ssl-gateway
+  version: latest
+- name: rabbitmq
+  version: latest
+- name: consul
+  version: latest
+- name: postgresql94
   version: latest
 
 compilation:
@@ -33,18 +39,33 @@ networks:
 - name: default
   subnets:
   - range: 10.244.7.0/30
+    dns:
+    - 10.244.1.14
+    - 10.244.1.18
     reserved:
     - 10.244.7.1
     static:
     - 10.244.7.2
     cloud_properties:
       name: random
-
+  - range: 10.244.7.4/30
+    dns:
+    - 10.244.1.14
+    - 10.244.1.18
+    reserved:
+    - 10.244.7.5
+    static:
+    - 10.244.7.6
+    cloud_properties:
+      name: random
   # An additional IP for the compilation worker.
   - range: 10.244.7.20/30
     reserved:
     - 10.244.7.21
     static: []
+    dns:
+    - 10.244.1.14
+    - 10.244.1.18
     cloud_properties:
       name: random
 
@@ -58,6 +79,20 @@ resource_pools:
     version: latest
 
 jobs:
+- name: gateway-api
+  templates:
+  - name: consul
+    release: consul
+  - name: postgresql-ha
+    release: postgresql94
+  instances: 1
+  resource_pool: default
+  persistent_disk: 6000
+  networks:
+  - name: default
+    static_ips:
+    - 10.244.7.6
+
 - name: ssl-gateway
   instances: 1
   persistent_disk: 2048
@@ -66,6 +101,10 @@ jobs:
     max_in_flight: 1
     canaries: 0
   templates:
+  - name: consul
+    release: consul
+  - name: rabbitmq
+    release: rabbitmq
   - name: nginx
     release: ssl-gateway
   - name: virtual_host_service_worker
@@ -76,10 +115,61 @@ jobs:
     - 10.244.7.2
 
 properties:
+  network: default
+  networks:
+    apps: default
+
   vhost_worker:
     user: a9s-brk-usr-Gq9EcoYtvq7QSUjcgewfVA
     password: q0grMfJo45dRszMf1mKBjg
-    host: d2027d9.service.dc1.consul
+    host: ssl-gateway-ssl-gateway-0.node.dc1.consul
+
+  vhost_api:
+    postgresql_host: ssl-gateway-gateway-api-0.node.dc1.consul
+    postgresql_db: db1
+    postgresql_username: db1
+    postgresql_password: pwd
+    customer_panel_secret: FGaNYNkgvQ
+
+  rabbitmq:
+    admin_username: a9s-brk-usr-Gq9EcoYtvq7QSUjcgewfVA
+    admin_password: q0grMfJo45dRszMf1mKBjg
+    host: ssl-gateway-ssl-gateway-0.node.dc1.consul
+
+  postgresql-ha:
+    database: testdb1
+    port: 5432
+    version: 94
+    kernel:
+      shmmax: 12013123
+    postgres:
+      archive_dir: /var/vcap/store/postgresql94/archive
+    admin_credentials:
+      username: admin
+      password: admin
+    replication_credentials:
+      username: repl
+      password: repl
+    databases:
+    - name: db1
+      username: usr1
+      password: pwd
+    plan:
+      effective_cache_size: 10MB
+      max_connections: 500
+      shared_buffers: 10MB
+      work_mem: 1MB
+    replication: false
+    cluster:
+      node_addresses:
+      - ssl-gateway-gateway-api-0.node.dc1.consul
+      ssh_cert:
+        private_key: ""
+        public_key: ""
+        hosts_without_key_checking: ""
+    ssl:
+      enable: false
+
 
   a9s_ssl_gateway:
     default_apps_domain: <%= app_domain %>
@@ -132,4 +222,83 @@ properties:
       j8x2QQKBgQDevjRDDTWbBkg8HdCRxxCvhfaHBntoSJdTHlr14Gce48NXGaXRJPQT
       9dMsPsSHkFxEra7G2clGnhpe+pK9V+WTrD9Qnoc+tK808hX1YQ6mBlnR6w99jlaR
       HVTi2pRhEhbWUkBv2kooXvD6ANb15PbPSF1FK7YyW1KHqcbm+lF22g==
+      -----END RSA PRIVATE KEY-----
+
+  consul:
+    dc: dc1
+    domain: consul
+    encrypt: 1Fh/4nClivqZQ/xIhBnIPA==
+    server: false
+    cluster:
+      join_hosts:
+      - 10.244.1.2
+      - 10.244.1.6
+      - 10.244.1.10
+    agent_address: 127.0.0.1:8500
+    ssl_ca: |
+      -----BEGIN CERTIFICATE-----
+      MIIEejCCA2KgAwIBAgIJANYSH7QJl5nzMA0GCSqGSIb3DQEBBQUAMIGEMQswCQYD
+      VQQGEwJERTERMA8GA1UECBMIU2FhcmxhbmQxCzAJBgNVBAcTAlNCMQwwCgYDVQQK
+      EwNhOXMxDDAKBgNVBAsTA29wczEWMBQGA1UEAxQNKi5leGFtcGxlLmNvbTEhMB8G
+      CSqGSIb3DQEJARYSb3dvbGZAYW55bmluZXMuY29tMB4XDTE1MDcwNzEwMTAyMloX
+      DTI1MDcwNDEwMTAyMlowgYQxCzAJBgNVBAYTAkRFMREwDwYDVQQIEwhTYWFybGFu
+      ZDELMAkGA1UEBxMCU0IxDDAKBgNVBAoTA2E5czEMMAoGA1UECxMDb3BzMRYwFAYD
+      VQQDFA0qLmV4YW1wbGUuY29tMSEwHwYJKoZIhvcNAQkBFhJvd29sZkBhbnluaW5l
+      cy5jb20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCz3B0Pi0GR9suq
+      +HpXnqDlDBPt+yq+MP6t+hRl1gnK9XYySi+2A3CffqrMVIoygB+jXTjIRmVHOw9V
+      sm24z4kARC9thD+Gr+V6NJ1vshrCs5+eoASBhHAvcYVht/z4M12y2sLo00oU3scC
+      WPbJJSMXBXRqgOA+U84+iucmBOAb5dSmoK5FsPZc+EVpInoXHvjXyiygGL3Nantn
+      mSy/sUq1jGicc1lIBNeZdMM4GuJcZwB+o/6Yg4OOs/jfzBq2WTHM6j7HP5rHpu2j
+      D4xrgAl+vM8v3Ry7m3bZou7r/O6Rm+PaaISGNlYunhCR0iRaBxjnO61Yc9lHgbz+
+      3vEdqgodAgMBAAGjgewwgekwHQYDVR0OBBYEFMduL4HX24ZW7Eq2QhXxUy2g0B8A
+      MIG5BgNVHSMEgbEwga6AFMduL4HX24ZW7Eq2QhXxUy2g0B8AoYGKpIGHMIGEMQsw
+      CQYDVQQGEwJERTERMA8GA1UECBMIU2FhcmxhbmQxCzAJBgNVBAcTAlNCMQwwCgYD
+      VQQKEwNhOXMxDDAKBgNVBAsTA29wczEWMBQGA1UEAxQNKi5leGFtcGxlLmNvbTEh
+      MB8GCSqGSIb3DQEJARYSb3dvbGZAYW55bmluZXMuY29tggkA1hIftAmXmfMwDAYD
+      VR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAAOCAQEAaYLUO8zl63yL0A/K50XOKLat
+      fz1/oFRvtCg++vqQiaAgtR+IepAIvTG/45XlCNR0uPHwtcy9E2Obr6Nh4XJ9oRrq
+      5TXWRrDG2R9CbDuXQOEODDrw55ioYgmQJWi8Ki4k242hZkMsl1ZKBHy3BRUJhxVM
+      fJx5so7XLYVqyMWdWwM8QhlaQCoTDfBO/4baMuJn30AnlT5UxC0aimtZF6CuNYZx
+      b8DnA36qtyTAU3gE0833/c+WxbuGMdvIim8kvCkfMmdYdAxVj0dtn+o4S1lbSiG7
+      U875SB63/Ip3nUgJKRDO9C0cjxWcBciPhjpYDefh4J/Tnwg25+ifP8vwxJfERg==
+      -----END CERTIFICATE-----
+
+    ssl_cert: |
+      -----BEGIN CERTIFICATE-----
+      MIIDbDCCAlSgAwIBAgIBCjANBgkqhkiG9w0BAQUFADCBhDELMAkGA1UEBhMCREUx
+      ETAPBgNVBAgTCFNhYXJsYW5kMQswCQYDVQQHEwJTQjEMMAoGA1UEChMDYTlzMQww
+      CgYDVQQLEwNvcHMxFjAUBgNVBAMUDSouZXhhbXBsZS5jb20xITAfBgkqhkiG9w0B
+      CQEWEm93b2xmQGFueW5pbmVzLmNvbTAeFw0xNTA3MDcxMDExMzJaFw0yNTA3MDQx
+      MDExMzJaMHcxFjAUBgNVBAMUDSouZXhhbXBsZS5jb20xETAPBgNVBAgTCFNhYXJs
+      YW5kMQswCQYDVQQGEwJERTEhMB8GCSqGSIb3DQEJARYSb3dvbGZAYW55bmluZXMu
+      Y29tMQwwCgYDVQQKEwNhOXMxDDAKBgNVBAsTA29wczCBnzANBgkqhkiG9w0BAQEF
+      AAOBjQAwgYkCgYEAypCn5zKd27OwYu9uS+7NtRx9u2yS1wg+nJXCO5RGaBdYrHz7
+      tAie2Wme55EmcVG6b25o+0WdG73BhDliBL8USKCYr/uNpMV6aMBaZ4heyR9losAK
+      6Ule+4KRpEya4/LtyArh41BdyJgm9DMZ5UDhdxfTR+1on48xZRdWEoGPiu8CAwEA
+      AaN5MHcwCQYDVR0TBAIwADAdBgNVHQ4EFgQUPg9evk7bJDtzH1OsjP/jq5yAF2Ew
+      HwYDVR0jBBgwFoAUx24vgdfbhlbsSrZCFfFTLaDQHwAwCwYDVR0PBAQDAgWgMB0G
+      A1UdJQQWMBQGCCsGAQUFBwMBBggrBgEFBQcDAjANBgkqhkiG9w0BAQUFAAOCAQEA
+      RbCNlHmbVh73m+FFyFw7vLoftRRl+G9YSv6NeOvskrCgXjGwgamJAEGq17hRsy2U
+      wZDRmyonuCX0/BGZ79SDEzTwi0MJUHp3QwflPR9GS+Tk8WZJgdJZCv58ut4+4R9U
+      1LEfZlrnOV3ClEAYEu8hX4IlEd1NpZ17oBJQIjT4CkAMSAt5U8VGRkPruZMYxSoe
+      cM/sdfD2+dWMrDllLGZLUC6UquePPBUvetR1BJ0NSEjO0ZfEtMyB+Q89Wyp2hDua
+      37FOEoyq7ssL5lYEVidJwPNr+Pt8ziAxnJcAe2tiXTm4Jk7ODQRaaG/8xlPQ5TOn
+      zZkP6I1J4wKupW+ysoek/Q==
+      -----END CERTIFICATE-----
+
+    ssl_key: |
+      -----BEGIN RSA PRIVATE KEY-----
+      MIICXQIBAAKBgQDKkKfnMp3bs7Bi725L7s21HH27bJLXCD6clcI7lEZoF1isfPu0
+      CJ7ZaZ7nkSZxUbpvbmj7RZ0bvcGEOWIEvxRIoJiv+42kxXpowFpniF7JH2WiwArp
+      SV77gpGkTJrj8u3ICuHjUF3ImCb0MxnlQOF3F9NH7WifjzFlF1YSgY+K7wIDAQAB
+      AoGBALQOt6EUZiuX4y9eYy2N/T6DL+Q9E52ez4ECwd+R4q++KO1SP679hq39a+mt
+      JX3PRyir/Rd1/rxdBTpSg6VycES1u+VV2x8BavdG8vRQUXlw2mODob37WigxDpjw
+      HPKikDTX4Qla6W+PGYYSv2fQKE44RQ9DftzztrG2xcCymmoJAkEA6Ykh3MnaExdW
+      INkJ5rUOkQTaI6ciyg+TEejJT3f0wsjfJUDOOU90blD5vr7nHuOo7Xj2dCJqf1p1
+      XuX43zN7zQJBAN4M3Y0lxqSLZvQQEPkeSw3ECjvEcTn+3RqFIx3XM3r19RmdyjZ+
+      tN/nI1OJEPgrMJX+gs/7JLCfKO4XpEhcPasCQHgbyUiun/P1qpxWQ9td/1Hidvaj
+      PSdC/1bUrMSsYzvS58FXJTkgfjdGekv6DxA58mXAMrDkCnXZZkgaavcQmXkCQQCC
+      pq1BXKXJsWBNYJqsCb/9hIjE6+v3RNeRwB6Oc04OHmQtw2L0t47zY0us3ixG6Rq4
+      Vr1fZJUM+0kY9n4qOWPrAkArDzH+DfwWkqb2rooor8XkWY3fTXAyA/vjTkSZvNvV
+      O2MOFAxXQlCPTtNlYkqyoirS9OAMG0XOmKavNgxQQmng
       -----END RSA PRIVATE KEY-----

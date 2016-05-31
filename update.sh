@@ -16,7 +16,7 @@ RUBY_TARBALL_DOWNLOAD_URL=http://cache.ruby-lang.org/pub/ruby/2.2/ruby-$RUBY_VER
 RUBYGEMS_VERSION="2.6.1"
 RUBYGEMS_TARBALL_DIR=blobs/ruby
 RUBYGEMS_TARBALL_FILE=$RUBYGEMS_TARBALL_DIR/rubygems-$RUBYGEMS_VERSION.tgz
-RUBYGEMS_TARBALL_DOWNLOAD_URL=http://production.cf.rubygems.org/rubygems/rubygems-$RUBYGEMS_VERSION.tgz
+RUBYGEMS_TARBALL_DOWNLOAD_URL=https://rubygems.org/rubygems/rubygems-$RUBYGEMS_VERSION.tgz
 
 BUNDLER_VERSION="1.10.6"
 BUNDLER_TARBALL_DIR=blobs/ruby
@@ -38,7 +38,7 @@ PCRE_TARBALL_DOWNLOAD_URL=http://ftp.cs.stanford.edu/pub/exim/pcre/pcre-$PCRE_VE
 if [ ! -f $LIBYAML_TARBALL_FILE ]; then
   echo "Downloading Libyaml version $LIBYAML_VERSION tarball"
   mkdir -p $LIBYAML_TARBALL_DIR
-  curl $LIBYAML_TARBALL_DOWNLOAD_URL -o $LIBYAML_TARBALL_FILE
+  curl -L $LIBYAML_TARBALL_DOWNLOAD_URL -o $LIBYAML_TARBALL_FILE
 else
   echo "Detected Libyaml tarball. Not downloading."
 fi
@@ -47,7 +47,7 @@ fi
 if [ ! -f $ZLIB_TARBALL_FILE ]; then
   echo "Downloading zlib version $ZLIB_VERSION tarball"
   mkdir -p $ZLIB_TARBALL_DIR
-  curl $ZLIB_TARBALL_DOWNLOAD_URL -o $ZLIB_TARBALL_FILE
+  curl -L $ZLIB_TARBALL_DOWNLOAD_URL -o $ZLIB_TARBALL_FILE
 else
   echo "Detected zlib tarball. Not downloading."
 fi
@@ -56,7 +56,7 @@ fi
 if [ ! -f $RUBY_TARBALL_FILE ]; then
   echo "Downloading Ruby version $RUBY_VERSION tarball"
   mkdir -p $RUBY_TARBALL_DIR
-  curl $RUBY_TARBALL_DOWNLOAD_URL -o $RUBY_TARBALL_FILE
+  curl -L $RUBY_TARBALL_DOWNLOAD_URL -o $RUBY_TARBALL_FILE
 else
   echo "Detected Ruby tarball. Not downloading."
 fi
@@ -65,7 +65,7 @@ fi
 if [ ! -f $RUBYGEMS_TARBALL_FILE ]; then
   echo "Downloading Rubygems version $RUBYGEMS_VERSION tarball"
   mkdir -p $RUBYGEMS_TARBALL_DIR
-  curl $RUBYGEMS_TARBALL_DOWNLOAD_URL -o $RUBYGEMS_TARBALL_FILE
+  curl -L $RUBYGEMS_TARBALL_DOWNLOAD_URL -o $RUBYGEMS_TARBALL_FILE
 else
   echo "Detected Rubygems tarball. Not downloading."
 fi
@@ -74,7 +74,7 @@ fi
 if [ ! -f $BUNDLER_TARBALL_FILE ]; then
   echo "Downloading bundler version $BUNDLER_VERSION gem"
   mkdir -p $BUNDLER_TARBALL_DIR
-  curl $BUNDLER_TARBALL_DOWNLOAD_URL -o $BUNDLER_TARBALL_FILE
+  curl -L $BUNDLER_TARBALL_DOWNLOAD_URL -o $BUNDLER_TARBALL_FILE
 else
   echo "Detected bundler gem. Not downloading."
 fi
@@ -82,14 +82,14 @@ fi
 if [ ! -f $NGINX_TARBALL_FILE ]; then
   echo "Downloading nginx version $NGINX_VERSION gem"
   mkdir -p $NGINX_TARBALL_DIR
-  curl $NGINX_TARBALL_DOWNLOAD_URL -o $NGINX_TARBALL_FILE
+  curl -L $NGINX_TARBALL_DOWNLOAD_URL -o $NGINX_TARBALL_FILE
 else
   echo "Detected nginx gem. Not downloading."
 fi
 if [ ! -f $PCRE_TARBALL_FILE ]; then
   echo "Downloading pcre version $PCRE_VERSION gem"
   mkdir -p $PCRE_TARBALL_DIR
-  curl $PCRE_TARBALL_DOWNLOAD_URL -o $PCRE_TARBALL_FILE
+  curl -L $PCRE_TARBALL_DOWNLOAD_URL -o $PCRE_TARBALL_FILE
 else
   echo "Detected pcre gem. Not downloading."
 fi

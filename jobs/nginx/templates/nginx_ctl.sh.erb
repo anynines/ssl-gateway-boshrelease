@@ -1,7 +1,7 @@
 #!/bin/bash -e
 <% cf_app_domain = p('a9s_ssl_gateway.default_apps_domain') %>
 
-PIDFILE=/var/vcap/sys/run/nginx/nginx.pid
+PIDFILE=/var/vcap/packages/nginx/logs/nginx.pid
 
 mkdir -p /var/vcap/sys/run/nginx
 mkdir -p /var/vcap/sys/log/nginx

@@ -1,0 +1,13 @@
+defaults: &defaults
+  amqp_channel: 'virtual_host_jobs'
+  api_keys:
+    customer_partal: '<%= p('vhost_api.customer_panel_secret') %>'
+
+production:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+development:
+  <<: *defualts
