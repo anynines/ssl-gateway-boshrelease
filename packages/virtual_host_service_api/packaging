@@ -1,0 +1,13 @@
+# abort script on any command that exit with a non zero value
+set -e
+
+bundle_cmd=/var/vcap/packages/ruby/bin/bundle
+libpq_dir=/var/vcap/packages/libpq
+
+mkdir -p ${BOSH_INSTALL_TARGET}
+rm -rf ${BOSH_INSTALL_TARGET}/*
+cp -Ra virtual_host_service_api/* ${BOSH_INSTALL_TARGET}
+cd ${BOSH_INSTALL_TARGET}
+
+${bundle_cmd} config build.pg --with-pg-lib=${libpq_dir}/lib --with-pg-include=${libpq_dir}/include
+${bundle_cmd} install --local --deployment --without development test

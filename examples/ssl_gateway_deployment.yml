@@ -58,6 +58,16 @@ networks:
     - 10.244.7.6
     cloud_properties:
       name: random
+  - range: 10.244.7.8/30
+    dns:
+    - 10.244.1.14
+    - 10.244.1.18
+    reserved:
+    - 10.244.7.9
+    static:
+    - 10.244.7.10
+    cloud_properties:
+      name: random
   # An additional IP for the compilation worker.
   - range: 10.244.7.20/30
     reserved:
@@ -79,7 +89,7 @@ resource_pools:
     version: latest
 
 jobs:
-- name: gateway-api
+- name: databases
   templates:
   - name: consul
     release: consul
@@ -91,7 +101,7 @@ jobs:
   networks:
   - name: default
     static_ips:
-    - 10.244.7.6
+    - 10.244.7.10
 
 - name: ssl-gateway
   instances: 1
@@ -103,33 +113,50 @@ jobs:
   templates:
   - name: consul
     release: consul
-  - name: rabbitmq
-    release: rabbitmq
   - name: nginx
     release: ssl-gateway
   - name: virtual_host_service_worker
     release: ssl-gateway
+  - name: rabbitmq
+    release: rabbitmq
   networks:
   - name: default
     static_ips:
     - 10.244.7.2
+
+- name: gateway-api
+  templates:
+  - name: consul
+    release: consul
+  - name: virtual_host_service_api
+    release: ssl-gateway
+  instances: 1
+  resource_pool: default
+  persistent_disk: 6000
+  networks:
+  - name: default
+    static_ips:
+    - 10.244.7.6
+
+
 
 properties:
   network: default
   networks:
     apps: default
 
-  vhost_worker:
-    user: a9s-brk-usr-Gq9EcoYtvq7QSUjcgewfVA
-    password: q0grMfJo45dRszMf1mKBjg
-    host: ssl-gateway-ssl-gateway-0.node.dc1.consul
+  # vhost_worker:
+  #   user: a9s-brk-usr-Gq9EcoYtvq7QSUjcgewfVA
+  #   password: q0grMfJo45dRszMf1mKBjg
+  #   host: ssl-gateway-databases-0.node.dc1.consul
 
   vhost_api:
-    postgresql_host: ssl-gateway-gateway-api-0.node.dc1.consul
+    postgresql_host: ssl-gateway-psql-master-alias.node.dc1.consul
     postgresql_db: db1
-    postgresql_username: db1
+    postgresql_username: usr1
     postgresql_password: pwd
     customer_panel_secret: FGaNYNkgvQ
+    port: 3000
 
   rabbitmq:
     admin_username: a9s-brk-usr-Gq9EcoYtvq7QSUjcgewfVA
@@ -162,7 +189,7 @@ properties:
     replication: false
     cluster:
       node_addresses:
-      - ssl-gateway-gateway-api-0.node.dc1.consul
+      - ssl-gateway-databases-0.node.dc1.consul
       ssh_cert:
         private_key: ""
         public_key: ""

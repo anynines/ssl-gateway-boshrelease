@@ -18,7 +18,7 @@ RUBYGEMS_TARBALL_DIR=blobs/ruby
 RUBYGEMS_TARBALL_FILE=$RUBYGEMS_TARBALL_DIR/rubygems-$RUBYGEMS_VERSION.tgz
 RUBYGEMS_TARBALL_DOWNLOAD_URL=https://rubygems.org/rubygems/rubygems-$RUBYGEMS_VERSION.tgz
 
-BUNDLER_VERSION="1.10.6"
+BUNDLER_VERSION="1.12.5"
 BUNDLER_TARBALL_DIR=blobs/ruby
 BUNDLER_TARBALL_FILE=$BUNDLER_TARBALL_DIR/bundler-$BUNDLER_VERSION.gem
 BUNDLER_TARBALL_DOWNLOAD_URL=https://rubygems.org/downloads/bundler-$BUNDLER_VERSION.gem
@@ -32,6 +32,11 @@ PCRE_VERSION="8.38"
 PCRE_TARBALL_DIR=blobs/nginx
 PCRE_TARBALL_FILE=$PCRE_TARBALL_DIR/pcre-$PCRE_VERSION.tgz
 PCRE_TARBALL_DOWNLOAD_URL=http://ftp.cs.stanford.edu/pub/exim/pcre/pcre-$PCRE_VERSION.tar.gz
+
+PSQL_VERSION="9.4.6"
+PSQL_TARBALL_DIR=blobs/libpq
+PSQL_TARBALL_FILE=$PSQL_TARBALL_DIR/postgresql-$PSQL_VERSION.tar.bz2
+PSQL_TARBALL_DOWNLOAD_URL=https://ftp.postgresql.org/pub/source/v$PSQL_VERSION/postgresql-$PSQL_VERSION.tar.bz2
 
 
 # libyaml sources
@@ -92,4 +97,12 @@ if [ ! -f $PCRE_TARBALL_FILE ]; then
   curl -L $PCRE_TARBALL_DOWNLOAD_URL -o $PCRE_TARBALL_FILE
 else
   echo "Detected pcre gem. Not downloading."
+fi
+
+if [ ! -f $PSQL_TARBALL_FILE ]; then
+  echo "Downloading pcre version $PSQL_VERSION gem"
+  mkdir -p $PSQL_TARBALL_DIR
+  curl -L $PSQL_TARBALL_DOWNLOAD_URL -o $PSQL_TARBALL_FILE
+else
+  echo "Detected psql gem. Not downloading."
 fi
