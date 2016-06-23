@@ -1,0 +1,59 @@
+---
+packages:
+- name: libyaml
+  version: ec170fd1ca2cda520318a00bda317209f6976459
+  fingerprint: ec170fd1ca2cda520318a00bda317209f6976459
+  sha1: 492ad761f980078cc5b2cd73f26f2a8d3bf15c85
+  dependencies: []
+- name: nginx
+  version: 72fe31794ebd9c46b5f7f3d8348d63c27c5b2576
+  fingerprint: 72fe31794ebd9c46b5f7f3d8348d63c27c5b2576
+  sha1: 47a6d77886ad8b98440a445f84afe39933e0db7c
+  dependencies: []
+- name: zlib
+  version: 0f542d589ec67301e44c6df13243e95340921ab5
+  fingerprint: 0f542d589ec67301e44c6df13243e95340921ab5
+  sha1: e6bc78143868a7e1f46b14bf85303cd7a88e2f73
+  dependencies: []
+- name: virtual_host_service_api
+  version: e70a5befc3df6dc3e3cedb81101e4699e15067de
+  fingerprint: e70a5befc3df6dc3e3cedb81101e4699e15067de
+  sha1: 814025ddd95adba909e8ed62fb41ee9bcce1c300
+  dependencies:
+  - libpq
+  - ruby
+- name: ruby
+  version: 2fe7adf592cfc06e055b0e1c2defc1510a2e7fe5
+  fingerprint: 2fe7adf592cfc06e055b0e1c2defc1510a2e7fe5
+  sha1: be764e95df3cfd37f9c072a4bf10b270e3b7e1be
+  dependencies:
+  - libyaml
+  - zlib
+- name: virtual_host_service_worker
+  version: 7e170e1f3649ff035f61889f3f06f17f8f14bfe7
+  fingerprint: 7e170e1f3649ff035f61889f3f06f17f8f14bfe7
+  sha1: 280922a944e29c545d8893756bb57e1dd7df233b
+  dependencies:
+  - ruby
+- name: libpq
+  version: d27de4889ebd19799ed3f0a663b642de80dca5bb
+  fingerprint: d27de4889ebd19799ed3f0a663b642de80dca5bb
+  sha1: 2b5faf4f70c3a19bac285439510639b632bacbf5
+  dependencies: []
+jobs:
+- name: nginx
+  version: ee1b9f72cc10a0379c37814ab197b27417a00b60
+  fingerprint: ee1b9f72cc10a0379c37814ab197b27417a00b60
+  sha1: 383f482b4df36773e742fd6208797b6869b55f35
+- name: virtual_host_service_api
+  version: b6774d6ca4c999c38b39e12c36315e7e8575d01d
+  fingerprint: b6774d6ca4c999c38b39e12c36315e7e8575d01d
+  sha1: dda539e034a6af63c5621ec0d1f843c6bfaff895
+- name: virtual_host_service_worker
+  version: 1710eaad643c082b8f0a81daefa0c2ee27afdfef
+  fingerprint: 1710eaad643c082b8f0a81daefa0c2ee27afdfef
+  sha1: 85bb393053b9bc1f4dacb103c3c35d353f341dc0
+commit_hash: b6df5390
+uncommitted_changes: true
+name: ssl-gateway
+version: '2'

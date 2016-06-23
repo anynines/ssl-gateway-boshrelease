@@ -1,6 +1,6 @@
 production:
   amqp_channel:       'virtual_host_jobs'
-  queue_id:           'worker_<%= index %>'
+  queue_id:           'worker_<%= spec.job.name %>_<%= index %>'
   cert_dir:           '/var/vcap/store/nginx/ssl/'
   v_host_config_dir:  '/var/vcap/store/nginx/sites-available/'
   v_host_link_dir:    '/var/vcap/store/nginx/sites-enabled/'
