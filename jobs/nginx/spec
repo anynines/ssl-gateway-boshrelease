@@ -7,6 +7,7 @@ templates:
   cf-default-apps-domain-cert.crt.bundle.erb: etc/cf-default-apps-domain-cert.crt.bundle
   cf-default-apps-domain-cert.key.erb: etc/cf-default-apps-domain-cert.key
   shared.conf.erb: etc/shared.conf
+  shared_host_wss.conf.erb: etc/shared_host_wss.conf
   upstream.conf.erb: etc/upstream.conf
 
 packages:

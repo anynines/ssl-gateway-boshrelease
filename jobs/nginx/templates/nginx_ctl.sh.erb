@@ -16,6 +16,7 @@ cp /var/vcap/jobs/nginx/etc/nginx.conf /var/vcap/store/nginx/
 cp /var/vcap/jobs/nginx/etc/cf-default-apps-domain.conf /var/vcap/store/nginx/conf.d/
 cp /var/vcap/jobs/nginx/etc/upstream.conf /var/vcap/store/nginx/conf.d/
 cp /var/vcap/jobs/nginx/etc/shared.conf /var/vcap/store/nginx/static/
+cp /var/vcap/jobs/nginx/etc/shared_host_wss.conf /var/vcap/store/nginx/static/
 
 cp /var/vcap/jobs/nginx/etc/cf-default-apps-domain.conf /var/vcap/store/nginx/conf.d/<%= cf_app_domain %>.conf
 cp /var/vcap/jobs/nginx/etc/cf-default-apps-domain-cert.crt.bundle /var/vcap/store/nginx/ssl/wild.<%= cf_app_domain %>.crt.bundle

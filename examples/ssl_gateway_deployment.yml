@@ -2,7 +2,7 @@
   # In case you are using BOSH lite on AWS you can specify the VMs
   # elastic IP in the 'PUBLIC_IP' evnrionment variable
   public_ip = ENV['PUBLIC_IP'] || '10.244.0.34'
-  system_domain = "bosh-lite.com"
+  system_domain = "bosh-lite.adherry.de"
   service_jumper_host = "10.244.6.10"
   app_domain = system_domain
 %>
