@@ -14,8 +14,16 @@
       targets = [p('a9s_ssl_gateway.z1.network_address'),p('a9s_ssl_gateway.z2.network_address')]
       gateway = p('a9s_ssl_gateway.z3.network_address').next
   end
+  public_gateway = spec.networks.public.gateway
 %>
+echo "net.ipv4.conf.all.arp_announce = 2" > /etc/sysctl.d/20-loadbalancer.conf
+echo "net.ipv4.conf.all.arp_ignore = 1" >> /etc/sysctl.d/20-loadbalancer.conf
+sysctl -p /etc/sysctl.d/20-loadbalancer.conf
+<%= "route del default" %>
+<%= "route add default gw #{public_gateway}" %>
 <%= "route add -net #{targets.first} netmask 255.255.255.0 gw #{gateway}"%>
 <%= "route add -net #{targets.last} netmask 255.255.255.0 gw #{gateway}" %>
 <%= "ip addr add #{p('a9s_ssl_gateway.failover_ip')}/32 dev lo" %>
+
 <% end %>
+exit 0

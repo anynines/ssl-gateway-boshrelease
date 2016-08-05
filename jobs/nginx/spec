@@ -23,12 +23,14 @@ properties:
     description: 'private key for the shared app domain certificate'
   a9s_ssl_gateway.cf_routers:
     description: 'array with ip addresses of the cf routers'
-  a9s_ssl_gateway.failover_ip
+  a9s_ssl_gateway.failover_ip:
     description: 'public ip of the keepalived, if any, if this value is set, the network gateway nodes are not optional'
-  a9s_ssl_gateway.z1.network_address
+  a9s_ssl_gateway.z1.network_address:
     description: 'network address of the  z1 network, optional if failover_ip is nil'
-    example: '192.168.1.0'
-  a9s_ssl_gateway.z2.network_address
+    default: ""
+  a9s_ssl_gateway.z2.network_address:
     description: 'network address of the z2 network, optional if failover_ip is nil'
-  a9s_ssl_gateway.z3.network_address
+    default: ""
+  a9s_ssl_gateway.z3.network_address:
     description: 'network address of the  z3 network, optional if failover_ip is nil'
+    default: ""
