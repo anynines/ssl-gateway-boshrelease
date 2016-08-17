@@ -27,13 +27,13 @@ sysctl -p /etc/sysctl.d/20-loadbalancer.conf
 
 iptables -A INPUT -s 127.0.0.0/8 -p tcp --destination-port 111 -j ACCEPT
 iptables -A INPUT -s 10.0.0.0/8 -p tcp --destination-port 111 -j ACCEPT
-iptables -A INPUT -s 172.16.0.0 -p tcp --destination-port 111 -j ACCEPT
+iptables -A INPUT -s 172.16.0.0/12 -p tcp --destination-port 111 -j ACCEPT
 iptables -A INPUT -s 192.168.0.0/16 -p tcp --destination-port 111 -j ACCEPT
 iptables -A INPUT -p tcp --destination-port 111 -j REJECT
 
 iptables -A INPUT -s 127.0.0.0/8 -p udp --destination-port 111 -j ACCEPT
 iptables -A INPUT -s 10.0.0.0/8 -p udp --destination-port 111 -j ACCEPT
-iptables -A INPUT -s 172.16.0.0 -p udp --destination-port 111 -j ACCEPT
+iptables -A INPUT -s 172.16.0.0/12 -p udp --destination-port 111 -j ACCEPT
 iptables -A INPUT -s 192.168.0.0/16 -p udp --destination-port 111 -j ACCEPT
 iptables -A INPUT -p udp --destination-port 111 -j REJECT
 
