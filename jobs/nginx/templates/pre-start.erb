@@ -1,5 +1,5 @@
 #!/bin/bash
-<% if p('a9s_ssl_gateway.failover_ip') !=  nil %>
+<% if_p('a9s_ssl_gateway.failover_ip') do %>
 
 <%
   case spec.az
