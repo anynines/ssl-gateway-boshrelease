@@ -1,0 +1,13 @@
+stream {
+  upstream ssh_routers {
+    <% p('a9s_ssl_gateway.ssh_routers').each do |router| %>
+    <%= "server #{router}:2222;" %>
+    <% end %>
+  }
+
+  server {
+      listen 2222;
+      proxy_pass ssh_routers;
+  }
+}
+

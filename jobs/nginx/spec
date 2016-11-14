@@ -10,6 +10,7 @@ templates:
   shared_host_wss.conf.erb: etc/shared_host_wss.conf
   upstream.conf.erb: etc/upstream.conf
   pre-start.erb: bin/pre-start
+  ssh-proxy.conf.erb: etc/ssh-proxy.conf
 
 packages:
 - nginx
@@ -36,5 +37,3 @@ properties:
     default: ""
   a9s_ssl_gateway.ssh_routers:
     description: 'ssh upstream servers (access vms)'
-  a9s_ssl_gateway.ssh_domain:
-    description: 'the domain of the ssh upstream servers (usually the system domain)'
