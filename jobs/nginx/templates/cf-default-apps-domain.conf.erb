@@ -1,5 +1,6 @@
 <% cf_app_domain = p('a9s_ssl_gateway.default_apps_domain') %>
 
+
 server {
     listen       80;
     server_name  <%= cf_app_domain %> *.<%= cf_app_domain %>;
@@ -89,3 +90,15 @@ server {
         deny  all;
     }
 }
+<% if_p('a9s_ssl_gateway.ssh_domain') do %>
+stream {
+  server {
+      listen 2222;
+  #    server_name <%= p('a9s_ssl_gateway.ssh_domain') %>;
+
+      access_log  /var/vcap/sys/log/nginx/ssh.access.log  main;
+      error_log   /var/vcap/sys/log/nginx/ssh.error.log;
+      proxy_pass ssh_routers;
+  }
+}
+<% end %>

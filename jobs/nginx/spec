@@ -34,3 +34,7 @@ properties:
   a9s_ssl_gateway.z3.network_address:
     description: 'network address of the  z3 network, optional if failover_ip is nil'
     default: ""
+  a9s_ssl_gateway.ssh_routers:
+    description: 'ssh upstream servers (access vms)'
+  a9s_ssl_gateway.ssh_domain:
+    description: 'the domain of the ssh upstream servers (usually the system domain)'
