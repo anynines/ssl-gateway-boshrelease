@@ -31,3 +31,7 @@ libpq/postgresql-9.4.6.tar.bz2:
   object_id: cdd4ffb2-b846-4b16-9695-5db1ce74d7ef
   sha: bc5271b113b42e94cf093b6fb799b03092827c71
   size: 17734946
+nginx/nginx-1.10.0/auto/cc/acc:
+  object_id: 2903c713-8e13-4d52-9c33-3098916c4daf
+  sha: 3b5451f82755e83c099ef94743b3cc6726af08cc
+  size: 224
