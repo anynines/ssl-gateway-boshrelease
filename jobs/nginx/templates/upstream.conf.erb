@@ -3,10 +3,3 @@ upstream cf-routers {
   <%= "server #{router};" %>
   <% end %>
 }
-stream {
-  upstream ssh-routers {
-    <% p('a9s_ssl_gateway.ssh_routers').each do |router| %>
-    <%= "server #{router}:2222" %>
-    <% end %>
-  }
-}
