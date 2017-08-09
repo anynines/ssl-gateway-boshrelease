@@ -1,37 +1,40 @@
----
-libyaml/yaml-0.1.5.tar.gz:
-  object_id: b65dc141-722b-4c49-8a7d-df69eea832ca
-  sha: 8b78cb9f759c7d80db8a7328c0ebecfe34fde737
-  size: 504897
-nginx/nginx-1.10.0.tgz:
-  object_id: 2745d7f0-785a-42e1-acf5-a284f7e19fbd
-  sha: 7a452cfe37e4134481442dbfa3fbdac6f484c5bc
-  size: 908954
-nginx/pcre-8.38.tgz:
-  object_id: f13c9152-c164-4818-bd3a-58750aa02994
-  sha: 3ab418d0026c2a4e693ec783bd60660debc32b8f
-  size: 2053336
-zlib/zlib-1.2.8.tar.gz:
-  object_id: 47c5093c-a6ad-4adb-b0d5-6cda5f0962b0
-  sha: a4d316c404ff54ca545ea71a27af7dbc29817088
-  size: 571091
-ruby/bundler-1.12.5.gem:
-  object_id: a2904e38-1f71-4293-b91f-260f627e58b6
-  sha: a414b2aafa54affac99dc453ced5adc152211eb9
-  size: 280064
-ruby/ruby-2.2.4.tar.gz:
-  object_id: de97e673-f816-4b93-a4f5-65183f415611
-  sha: 818e5e157f76d4912ba3a7c7b4fc5156105e83c3
-  size: 16638151
-ruby/rubygems-2.6.1.tgz:
-  object_id: 7b37b428-1e85-49d2-8db3-f59fd5d7d76a
-  sha: 46c3a761b31781542839c9c7b74b5d1f29176867
-  size: 477342
-libpq/postgresql-9.4.6.tar.bz2:
-  object_id: cdd4ffb2-b846-4b16-9695-5db1ce74d7ef
-  sha: bc5271b113b42e94cf093b6fb799b03092827c71
-  size: 17734946
+libpg/postgresql-9.6.3.tar.bz2:
+  size: 19534323
+  object_id: e80744fc-ff6b-4010-6214-c909cc2d4c15
+  sha: 5131272f6f22b38eafee8b090fff8d6b6fe1cff7
+libyaml/yaml-0.1.7.tar.gz:
+  size: 527518
+  object_id: 3d1af42b-41c3-4288-77cb-134114e5af7e
+  sha: 3590cbf092ef4c71bc0a9b404c00a626b1e04dee
 nginx/nginx-1.10.0/auto/cc/acc:
+  size: 224
   object_id: 2903c713-8e13-4d52-9c33-3098916c4daf
   sha: 3b5451f82755e83c099ef94743b3cc6726af08cc
-  size: 224
+nginx/nginx-1.13.4.tar.gz:
+  size: 988415
+  object_id: 7bb95f67-af25-4885-49b2-56d529bfebb1
+  sha: ee4496ef27fac66cf90aa60c4132215e552a340d
+nginx/pcre-8.41.tar.gz:
+  size: 2068775
+  object_id: d6fd8b49-17f9-43a4-5bff-7a1698adb53f
+  sha: dddf0995aefe04cc6267c1448ffef0e7b0560ec0
+ruby/bundler-1.12.5.gem:
+  size: 280064
+  object_id: a2904e38-1f71-4293-b91f-260f627e58b6
+  sha: a414b2aafa54affac99dc453ced5adc152211eb9
+ruby/bundler-1.15.3.gem:
+  size: 336384
+  object_id: 95b57bdc-9abd-411a-42e8-cf72211696ac
+  sha: bd1e1ba80789ea013a11a2909a154dcee118ebbc
+ruby/ruby-2.4.1.tar.gz:
+  size: 14174752
+  object_id: 7ed93f64-2521-49b8-5c21-7efb2b1393b4
+  sha: 47909a0f77ea900573f027d27746960ad6d07d15
+ruby/rubygems-2.6.12.tgz:
+  size: 767895
+  object_id: 1a27c9d8-b842-447e-5de1-b314e07bcc9b
+  sha: 5ffe5a8c3fdbefdc8b5b6bcc67d059fe9b76b954
+zlib/zlib-1.2.11.tar.gz:
+  size: 607698
+  object_id: a6751cde-21f1-42f0-66c8-6551598c1d10
+  sha: e6d119755acdf9104d7ba236b1242696940ed6dd
