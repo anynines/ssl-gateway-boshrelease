@@ -47,6 +47,8 @@ server {
 	      proxy_set_header X-Forwarded-Proto $scheme;
         proxy_set_header Host $http_host;
         proxy_pass http://cf-routers;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
     }
 
     error_page   500 502 503 504  /50x.html;
