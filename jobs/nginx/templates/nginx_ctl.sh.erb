@@ -1,5 +1,7 @@
 #!/bin/bash -e
 <% cf_app_domain = p('a9s_ssl_gateway.default_apps_domain') %>
+<% domain_blacklist = p('a9s_ssl_gateway.domain_blacklist') %>
+
 
 PIDFILE=/var/vcap/packages/nginx/logs/nginx.pid
 
@@ -18,6 +20,15 @@ cp /var/vcap/jobs/nginx/etc/upstream.conf /var/vcap/store/nginx/conf.d/
 cp /var/vcap/jobs/nginx/etc/shared.conf /var/vcap/store/nginx/static/
 cp /var/vcap/jobs/nginx/etc/shared_host_wss.conf /var/vcap/store/nginx/static/
 cp /var/vcap/jobs/nginx/etc/ssh-proxy.conf /var/vcap/store/nginx/
+
+<% domain_blacklist.each do |blacklisted_domain| %>
+touch /var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain["domain"] %>.crt.bundle
+<%= blacklisted_domain["cert"] %> > /var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain["domain"] %>.crt.bundle
+<%= blacklisted_domain["ca_cert"] %> > /var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain["domain"] %>.crt.bundle
+
+touch /var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain["domain"] %>.key
+<%= blacklisted_domain["key"] %> > /var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain["domain"] %>.key
+<% end %>
 
 cp /var/vcap/jobs/nginx/etc/blacklist-app-domains.conf /var/vcap/store/nginx/conf.d/blacklist-app-domains.conf
 cp /var/vcap/jobs/nginx/etc/cf-default-apps-domain.conf /var/vcap/store/nginx/conf.d/<%= cf_app_domain %>.conf
