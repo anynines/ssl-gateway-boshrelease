@@ -30,7 +30,7 @@ We use [SemVer](http://semver.org/) for versioning.
 ## Authors
 
 * **Dennis Groß** - *Initial work* - [gdenn](https://github.com/gdenn)
-* **Sven Schmidt** - *Initial work* - [gdenn](https://github.com/schmidtsv)
+* **Sven Schmidt** - *Initial work* - [schmidtsv](https://github.com/schmidtsv)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
