@@ -3,7 +3,7 @@
 <% domain_blacklist.each do |blacklisted_domain| %>
 server {
     listen       80;
-    server_name  (.*)?<%= blacklisted_domain['domain'] %>;
+    server_name  *.<%= blacklisted_domain['domain'] %> <%= blacklisted_domain['domain'] %>;
 
     access_log  /var/vcap/sys/log/nginx/<%= blacklisted_domain['domain'] %>.access.log  main;
     error_log   /var/vcap/sys/log/nginx/<%= blacklisted_domain['domain'] %>.error.log;
