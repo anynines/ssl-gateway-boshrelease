@@ -2,13 +2,20 @@
 
 <% domain_blacklist.each do |blacklisted_domain| %>
 server {
-    listen       80;
+    listen       443;
     server_name  *.<%= blacklisted_domain['domain'] %> <%= blacklisted_domain['domain'] %>;
 
     access_log  /var/vcap/sys/log/nginx/<%= blacklisted_domain['domain'] %>.access.log  main;
     error_log   /var/vcap/sys/log/nginx/<%= blacklisted_domain['domain'] %>.error.log;
 
     location / {
+        deny  all;
+        <% if blacklisted_domain.key?("allow") %>
+            <% blacklisted_domain['allow'].each do |allowed_ip| %>
+        allow <%= allowed_ip %>;
+            <% end %>
+	<% end %>
+
         proxy_buffering  off;
         proxy_set_header X-Forwarded-Host $host;
         proxy_set_header X-Forwarded-Server $host;
@@ -21,15 +28,6 @@ server {
     error_page   500 502 503 504  /50x.html;
     location = /50x.html {
         root   /usr/share/nginx/html;
-    }
-
-    location / {
-        deny  all;
-        <% if blacklisted_domain['allow']? %>
-            <% blacklisted_domain['allow'].each do |allowed_ip| %>
-        allow <%= allowed_ip %>;
-            <% end %>
-        <% end %>
     }
 }
 <% end %>
