@@ -3,19 +3,6 @@ require 'httparty'
 require 'pp'
 
 describe 'ssl-gateway reachability spec for apps' do
-  let(:gateway_manifest) { 
-    b = binding
-    b.local_variable_set(:local_ip, ENV["LOCALHOST_IP"])
-
-    manifest_path = File.join(__dir__, "../manifests/reachability.yml")
-
-    File.open(manifest_path, "w") do |f|  
-      f.write(ERB.new(File.join(__dir__, "../manifests/reachability.yml.erb")).result(b))
-    end
-
-    manifest_path
-  }
-
   let(:app_name) { 
     ENV["APP_NAME"] = "checker"
     ENV["APP_NAME"] 
@@ -34,14 +21,23 @@ describe 'ssl-gateway reachability spec for apps' do
   let(:random_domain) { ENV["RANDOM_DOMAIN"] }
 
   before(:context) do
+    b = binding
+    b.local_variable_set(:local_ip, ENV["LOCALHOST_IP"])
+
+    manifest_path = File.join(__dir__, "../manifests/reachability.yml")
+
+    File.open(manifest_path, "w") do |f|  
+      f.write(ERB.new(File.join(__dir__, "../manifests/reachability.yml.erb")).result(b))
+    end
+
     Dir.chdir(File.join(__dir__, "../../")) do
       if ENV('OPS_FILE')
-        `bosh deploy -d ssl-gateway #{gateway_manifest} -l #{ENV('IAAS_CONFIG')} -l #{ENV('EXTERNAL_SECRETS')} -o #{ENV('OPS_FILE')}`
+        `bosh deploy -d ssl-gateway #{manifest_path} -l #{ENV['IAAS_CONFIG']} -l #{ENV['EXTERNAL_SECRETS']} -o #{ENV['OPS_FILE']}`
       else 
-        `bosh deploy -d ssl-gateway #{gateway_manifest} -l #{ENV('IAAS_CONFIG')} -l #{ENV('EXTERNAL_SECRETS')}`
+        `bosh deploy -d ssl-gateway #{manifest_path} -l #{ENV['IAAS_CONFIG']} -l #{ENV['EXTERNAL_SECRETS']}`
       end
 
-      `cf login -o #{ENV('CF_ORG')} -s #{ENV('CF_SPACE')} -u #{ENV('CF_USERNAME')} -p #{ENV('CF_PASSWORD')} --skip-ssl-validation`
+      `cf login -o #{ENV['CF_ORG']} -s #{ENV['CF_SPACE']} -u #{ENV['CF_USERNAME']} -p #{ENV['CF_PASSWORD']} --skip-ssl-validation`
     end
     
     Dir.chdir(File.join(__dir__, "support/service-binding-checker")) do
