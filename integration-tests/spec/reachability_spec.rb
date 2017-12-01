@@ -16,7 +16,10 @@ describe 'ssl-gateway reachability spec for apps' do
     manifest_path
   }
 
-  let(:app_name) { "checker" }
+  let(:app_name) { 
+    ENV["APP_NAME"] = "checker"
+    ENV["APP_NAME"] 
+  }
 
   let(:reachable_ssl_blacklist_domain) { ENV["REACHABLE_SSL_BLACKLIST_DOMAIN"] }
 
@@ -42,30 +45,26 @@ describe 'ssl-gateway reachability spec for apps' do
     end
     
     Dir.chdir(File.join(__dir__, "support/service-binding-checker")) do
-      `export PORT=80 && cf push #{app_name}`
-      `export PORT=443 && cf push #{app_name}`
-      `export PORT=4443 && cf push #{app_name}`
+      `export PORT=80 && cf push #{ENV["APP_NAME"]}`
+      `export PORT=443 && cf push #{ENV["APP_NAME"]}`
+      `export PORT=4443 && cf push #{ENV["APP_NAME"]}`
 
-      `export PORT=80 && cf push #{app_name} -d #{reachable_blacklist_domain}`
+      `export PORT=80 && cf push #{ENV["APP_NAME"]} -d #{ENV["REACHABLE_BLACKLIST_DOMAIN"]}`
 
-      `export PORT=80 && cf push #{app_name} -d #{unreachable_blacklist_domain}`
+      `export PORT=80 && cf push #{ENV["APP_NAME"]} -d #{ENV["UNREACHABLE_BLACKLIST_DOMAIN"]}`
 
-      `export PORT=80 && cf push #{app_name} -d #{reachable_ssl_blacklist_domain}`
-      `export PORT=443 && cf push #{app_name} -d #{reachable_ssl_blacklist_domain}`
-      `export PORT=4443 && cf push #{app_name} -d #{reachable_ssl_blacklist_domain}`
+      `export PORT=80 && cf push #{ENV["APP_NAME"]} -d #{ENV["REACHABLE_SSL_BLACKLIST_DOMAIN"]}`
+      `export PORT=443 && cf push #{ENV["APP_NAME"]} -d #{ENV["REACHABLE_SSL_BLACKLIST_DOMAIN"]}`
+      `export PORT=4443 && cf push #{ENV["APP_NAME"]} -d #{ENV["REACHABLE_SSL_BLACKLIST_DOMAIN"]}`
 
-      `export PORT=80 && cf push #{app_name} -d #{unreachable_ssl_blacklist_domain}`
-      `export PORT=443 && cf push #{app_name} -d #{unreachable_ssl_blacklist_domain}`
-      `export PORT=4443 && cf push #{app_name} -d #{unreachable_ssl_blacklist_domain}`
+      `export PORT=80 && cf push #{app_name} -d #{ENV["UNREACHABLE_SSL_BLACKLIST_DOMAIN"]}`
+      `export PORT=443 && cf push #{app_name} -d #{ENV["UNREACHABLE_SSL_BLACKLIST_DOMAIN"]}`
+      `export PORT=4443 && cf push #{app_name} -d #{ENV["UNREACHABLE_SSL_BLACKLIST_DOMAIN"]}`
     end
   end
 
   after(:context) do
-    `cf delete #{app_name}.#{reachable_blacklist_domain}`
-    `cf delete #{app_name}.#{unreachable_blacklist_domain}`
-    `cf delete #{app_name}.#{unreachable_ssl_blacklist_domain}`
-    `cf delete #{app_name}.#{reachable_ssl_blacklist_domain}`
-    `cf delete #{app_name}.#{default_app_domain}`
+    `cf delete #{ENV["APP_NAME"]}`
   end
 
   context 'when a ssl-gateway is deployed with service checker apps' do
