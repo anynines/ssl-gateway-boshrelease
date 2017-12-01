@@ -22,12 +22,14 @@ cp /var/vcap/jobs/nginx/etc/shared_host_wss.conf /var/vcap/store/nginx/static/
 cp /var/vcap/jobs/nginx/etc/ssh-proxy.conf /var/vcap/store/nginx/
 
 <% domain_blacklist.each do |blacklisted_domain| %>
+  <% if (blacklisted_domain.key?("certificate") && blacklisted_domain.key?("ca") && blacklisted_domain.key?("private_key")) %>
 >/var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain["domain"] %>.crt.bundle
 echo "<%= blacklisted_domain["certificate"] %>" >> /var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain["domain"] %>.crt.bundle
 echo "<%= blacklisted_domain["ca"] %>" >> /var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain["domain"] %>.crt.bundle
 
 >/var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain["domain"] %>.key
 echo "<%= blacklisted_domain["private_key"] %>" >> /var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain["domain"] %>.key
+  <% end %>
 <% end %>
 
 cp /var/vcap/jobs/nginx/etc/blacklist-app-domains.conf /var/vcap/store/nginx/conf.d/blacklist-app-domains.conf

@@ -112,6 +112,10 @@ properties:
       ca: ((ssltest2.ca))
       certificate: ((ssltest2.certificate))
       private_key: ((ssltest2.private_key))
+    - domain: ssltest3.com
+    - domain: ssltest4.com
+      allow: 
+      - <%= local_ip %>
 
   consul:
     domain: ((iaas.consul.domain))

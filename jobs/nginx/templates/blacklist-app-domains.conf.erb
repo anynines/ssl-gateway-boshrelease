@@ -34,7 +34,7 @@ server {
     }
 }
 
-
+    <% if (blacklisted_domain.key?("certificate") && blacklisted_domain.key?("ca") && blacklisted_domain.key?("private_key")) %>
 server {
     listen       443;
     server_name  *.<%= blacklisted_domain['domain'] %> <%= blacklisted_domain['domain'] %>;
@@ -117,4 +117,5 @@ server {
         deny  all;
     }
 }
+    <% end %>
 <% end %>

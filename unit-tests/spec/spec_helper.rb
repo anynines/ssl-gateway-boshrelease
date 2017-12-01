@@ -1,6 +1,5 @@
 require 'json'
 require 'rspec'
-require 'unit_tests_utils'
 
 Dir["#{__dir__}/support/**/*.rb"].each { |f| require f }
 
