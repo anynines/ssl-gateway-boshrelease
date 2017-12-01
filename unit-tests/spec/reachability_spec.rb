@@ -1,7 +1,8 @@
 require 'spec_helper'
 require 'httparty'
+require 'pp'
 
-describe 'ssl-gateway deployment with de.a9s.eu blacklisted' do
+describe 'ssl-gateway reachability spec for apps' do
   let(:gateway_manifest) { 
     b = binding
     b.local_variable_set(:local_ip, `ifconfig | awk '/inet addr/{print substr($2,6)}' | head -1`)
@@ -13,11 +14,13 @@ describe 'ssl-gateway deployment with de.a9s.eu blacklisted' do
 
   let(:app_name) { "checker" }
 
-  let(:reachable_blacklist_domain) { "ssltest.com" }
+  let(:reachable_blacklist_domain) { ENV["REACHABLE_BLACKLIST_DOMAIN"] }
 
-  let(:unreachable_blacklist_domain) { "ssltest2.com" }
+  let(:unreachable_blacklist_domain) { ENV["UNREACHABLE_BLACKLIST_DOMAIN"] }
 
-  let(:default_app_domain) { "de.a9sapp.eu" }
+  let(:default_app_domain) { ENV["DEFAULT_APP_DOMAIN"] }
+
+  let(:random_domain) { ENV["RANDOM_DOMAIN"] }
 
   before(:context) do
     # `bosh deploy -d ssl-gateway #{gateway_manifest} -l #{ENV('IAAS_CONFIG')} -l #{ENV('EXTERNAL_SECRETS')} -o #{ENV('OPS')}`
@@ -44,45 +47,59 @@ describe 'ssl-gateway deployment with de.a9s.eu blacklisted' do
   end
 
   context 'when a ssl-gateway is deployed with service checker apps' do
-    context 'default_app_domain: de.a9sapp.eu' do
-      it 'it is possible to send an http request on port 80 to the default app domain' do
-        expect(HTTParty.get("http://#{app_name}.#{default_app_domain}").code) to be("200")
+    context "random_domain #{ENV["RANDOM_DOMAIN"]}" do
+      it 'it is possible to send a http request on port 80 to the default app domain' do
+        expect(HTTParty.get("http://#{app_name}.#{random_domain}").code == 200)
       end
 
-      it 'it is possible to send an https request on port 443 to the default app domain' do
-        expect(HTTParty.get("https://#{app_name}.#{default_app_domain}:443", :verify => false).code) to be("200")
+      it 'it is possible to send a https request on port 443 to the default app domain' do
+        expect(HTTParty.get("https://#{app_name}.#{random_domain}:443", :verify => false).code == 200)
       end
 
-      it 'it is possible to send an http request on port 4443 to the default app domain' do
-        expect(HTTParty.get("https://#{app_name}.#{default_app_domain}:4443", :verify => false).code) to be("200")
-      end
-    end
-
-    context 'blacklist domain with localhost allowed: ssltest.com' do
-      it 'it is possible to send an http request on port 80 to the default app domain' do
-        expect(HTTParty.get("http://#{app_name}.#{reachable_blacklist_domain}").code) to be("200")
-      end
-
-      it 'it is possible to send an https request on port 443 to the default app domain' do
-        expect(HTTParty.get("https://#{app_name}.#{reachable_blacklist_domain}:443", :verify => false).code) to be("200")
-      end
-
-      it 'it is possible to send an http request on port 4443 to the default app domain' do
-        expect(HTTParty.get("https://#{app_name}.#{reachable_blacklist_domain}:4443", :verify => false).code) to be("200")
+      it 'it is possible to send a http request on port 4443 to the default app domain' do
+        expect(HTTParty.get("https://#{app_name}.#{random_domain}:4443", :verify => false).code == 200)
       end
     end
 
-    context 'blacklist domain with deny all: ssltest2.com' do
-      it 'it is possible to send an http request on port 80 to the default app domain' do
-        expect(HTTParty.get("http://#{app_name}.#{unreachable_blacklist_domain}").code) to be("403")
+    context "default_app_domain #{ENV["DEFAULT_APP_DOMAIN"]}" do
+      it 'it is possible to send a http request on port 80 to the default app domain' do
+        expect(HTTParty.get("http://#{app_name}.#{default_app_domain}").code == 200)
       end
 
-      it 'it is possible to send an https request on port 443 to the default app domain' do
-        expect(HTTParty.get("https://#{app_name}.#{unreachable_blacklist_domain}:443", :verify => false).code) to be("403")
+      it 'it is possible to send a https request on port 443 to the default app domain' do
+        expect(HTTParty.get("https://#{app_name}.#{default_app_domain}:443", :verify => false).code == 200)
       end
 
-      it 'it is possible to send an http request on port 4443 to the default app domain' do
-        expect(HTTParty.get("https://#{app_name}.#{unreachable_blacklist_domain}:4443", :verify => false).code) to be("403")
+      it 'it is possible to send a http request on port 4443 to the default app domain' do
+        expect(HTTParty.get("https://#{app_name}.#{default_app_domain}:4443", :verify => false).code == 200)
+      end
+    end
+
+    context "blacklist domain with localhost allowed #{ENV["REACHABLE_BLACKLIST_DOMAIN"]}" do
+      it 'it is possible to send a http request on port 80 to the default app domain' do
+        expect(HTTParty.get("http://#{app_name}.#{reachable_blacklist_domain}").code == 200)
+      end
+
+      it 'it is possible to send a https request on port 443 to the default app domain' do
+        expect(HTTParty.get("https://#{app_name}.#{reachable_blacklist_domain}:443", :verify => false).code == 200)
+      end
+
+      it 'it is possible to send a http request on port 4443 to the default app domain' do
+        expect(HTTParty.get("https://#{app_name}.#{reachable_blacklist_domain}:4443", :verify => false).code == 200)
+      end
+    end
+
+    context "blacklist domain with deny all #{ENV["UNREACHABLE_BLACKLIST_DOMAIN"]}" do
+      it 'it is possible to send a http request on port 80 to the default app domain' do
+        expect(HTTParty.get("http://#{app_name}.#{unreachable_blacklist_domain}").code == 403)
+      end
+
+      it 'it is possible to send a https request on port 443 to the default app domain' do
+        expect(HTTParty.get("https://#{app_name}.#{unreachable_blacklist_domain}:443", :verify => false).code == 403)
+      end
+
+      it 'it is possible to send a http request on port 4443 to the default app domain' do
+        expect(HTTParty.get("https://#{app_name}.#{unreachable_blacklist_domain}:4443", :verify => false).code == 403)
       end
     end
   end

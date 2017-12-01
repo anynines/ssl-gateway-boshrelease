@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 
 gem 'rspec'
-gem 'unit-tests-utils', :git => 'git@github.com:anynines/unit-tests-utils.git'
+gem 'httparty'
