@@ -20,7 +20,7 @@ describe 'ssl-gateway reachability spec for apps' do
 
   let(:random_domain) { ENV["RANDOM_DOMAIN"] }
 
-  before(:context) do
+  before(:all) do
     b = binding
     b.local_variable_set(:local_ip, ENV["LOCALHOST_IP"])
 
@@ -31,7 +31,7 @@ describe 'ssl-gateway reachability spec for apps' do
     end
 
     Dir.chdir(File.join(__dir__, "../../")) do
-      if ENV('OPS_FILE')
+      if ENV['OPS_FILE']
         `bosh deploy -d ssl-gateway #{manifest_path} -l #{ENV['IAAS_CONFIG']} -l #{ENV['EXTERNAL_SECRETS']} -o #{ENV['OPS_FILE']}`
       else 
         `bosh deploy -d ssl-gateway #{manifest_path} -l #{ENV['IAAS_CONFIG']} -l #{ENV['EXTERNAL_SECRETS']}`
@@ -59,7 +59,7 @@ describe 'ssl-gateway reachability spec for apps' do
     end
   end
 
-  after(:context) do
+  after(:all) do
     `cf delete #{ENV["APP_NAME"]}`
   end
 
