@@ -9,6 +9,10 @@ RSpec.configure do |config|
     BoshHelper::upload_last_dev_release
   end
 
+  config.after(:suite) do
+    BoshHelper::cleanup_all
+  end
+
   config.color = true
   config.fail_fast = true
   config.formatter = :documentation

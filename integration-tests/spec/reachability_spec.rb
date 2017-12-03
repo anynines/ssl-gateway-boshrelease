@@ -34,7 +34,6 @@ describe 'ssl-gateway reachability spec for apps' do
 
   after(:all) do
     CFHelpers::delete_app(app_name)
-    BoshHelper::cleanup_all
   end
 
   context 'when a ssl-gateway is deployed with service checker apps' do
