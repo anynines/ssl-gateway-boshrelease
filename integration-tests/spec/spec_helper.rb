@@ -7,8 +7,8 @@ RSpec.configure do |config|
   config.before(:suite) do
     Dir.chdir(File.join(__dir__, "../../")) do
       `bosh create-release --force`
-      `export RELEASE=$(ls -1t dev_releases/ssl-gateway | sed -n 2p)`
-      `bosh upload-release #{ENV["RELEASE"]}`
+      ENV["RELEASE"] = `ls -1t dev_releases/ssl-gateway | sed -n 2p`
+      `bosh upload-release dev_releases/ssl-gateway/#{ENV["RELEASE"]}`
       `bosh task`
     end
   end
