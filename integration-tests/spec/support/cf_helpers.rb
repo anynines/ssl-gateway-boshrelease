@@ -18,3 +18,7 @@ module CFHelpers
     `cf login -o #{org} -s #{space} -u #{username} -p #{password} --skip-ssl-validation`
   end
 end
+
+RSpec.configure do |c|
+  c.include CFHelpers
+end

@@ -27,3 +27,7 @@ module BoshHelper
     system("bosh clean-up --all")
   end
 end
+
+RSpec.configure do |c|
+  c.include BoshHelper
+end

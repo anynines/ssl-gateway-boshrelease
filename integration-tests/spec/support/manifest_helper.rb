@@ -10,3 +10,7 @@ module ManifestHelpers
     end
   end
 end
+
+RSpec.configure do |c|
+  c.include ManifestHelpers
+end
