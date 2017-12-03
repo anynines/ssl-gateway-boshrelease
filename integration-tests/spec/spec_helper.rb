@@ -9,6 +9,7 @@ RSpec.configure do |config|
       `bosh create-release --force`
       `export RELEASE=$(ls -1t dev_releases/ssl-gateway | sed -n 2p)`
       `bosh upload-release #{ENV["RELEASE"]}`
+      `bosh task`
     end
   end
 
