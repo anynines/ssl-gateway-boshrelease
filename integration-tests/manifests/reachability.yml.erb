@@ -3,7 +3,7 @@ name: ssl-gateway
 
 releases:
 - name: ssl-gateway
-  version: 12+dev.32
+  version: <%= ENV["RELEASE"] %>
 - name: rabbitmq36
   version: 5
   url: https://s3-eu-west-1.amazonaws.com/anynines-bosh-releases/rabbitmq36-5.tgz
