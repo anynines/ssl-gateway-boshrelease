@@ -1,4 +1,4 @@
-module BoshHelper
+module BoshHelpers
   def deploy(manifest, iaas_config, external_secrets=nil, ops_file=nil)
     Dir.chdir(File.join(__dir__, "../../manifests")) do
       cmd = "bosh deploy -d ssl-gateway #{manifest} -l #{iaas_config}"

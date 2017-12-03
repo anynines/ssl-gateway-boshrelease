@@ -4,16 +4,16 @@ require 'pp'
 
 describe 'ssl-gateway reachability spec for apps' do
   let(:app_name) { "checker" }
-  let(:manifest) { "reachability.yml" }
-
   before(:all) do
+    app_name = "checker"
+    manifest = "reachability.yml"
     properties = {
       :release_version => ENV["RELEASE"],
       :local_ip => ENV["LOCALHOST_IP"]
     }
 
     ManifestHelpers::render_manifest(manifest, properties)
-    BoshHelper::deploy(manifest, ENV['IAAS_CONFIG'], ENV['EXTERNAL_SECRETS'], ENV['OPS_FILE'])
+    BoshHelpers::deploy(manifest, ENV['IAAS_CONFIG'], ENV['EXTERNAL_SECRETS'], ENV['OPS_FILE'])
     CFHelpers::login(ENV['CF_USERNAME'], ENV['CF_PASSWORD'], ENV['CF_SPACE'], ENV['CF_ORG'])
     
     CFHelpers::push_checker_app(app_name, 80)
@@ -33,6 +33,7 @@ describe 'ssl-gateway reachability spec for apps' do
   end
 
   after(:all) do
+    app_name = "checker"
     CFHelpers::delete_app(app_name)
   end
 
