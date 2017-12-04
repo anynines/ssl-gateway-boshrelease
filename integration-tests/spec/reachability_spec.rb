@@ -19,7 +19,6 @@ describe 'ssl-gateway reachability spec for apps' do
 
     ManifestHelpers::render_manifest(manifest, properties)
     BoshHelpers::deploy(manifest, ENV['IAAS_CONFIG'], ENV['EXTERNAL_SECRETS'], ENV['OPS_FILE'])
-    CFHelpers::cf_login(ENV['CF_USERNAME'], ENV['CF_PASSWORD'], ENV['CF_SPACE'], ENV['CF_ORG'])
     
     CFHelpers::push_checker_app(app_name, 80)
     #  CFHelpers::push_checker_app(app_name, 443)
@@ -35,11 +34,6 @@ describe 'ssl-gateway reachability spec for apps' do
     # CFHelpers::push_checker_app(app_name, 80, ENV["UNREACHABLE_SSL_BLACKLIST_DOMAIN"])
     # CFHelpers::push_checker_app(app_name, 443, ENV["UNREACHABLE_SSL_BLACKLIST_DOMAIN"])
     # CFHelpers::push_checker_app(app_name, 4443, ENV["UNREACHABLE_SSL_BLACKLIST_DOMAIN"])
-  end
-
-  after(:all) do
-    app_name = "checker"
-    # CFHelpers::delete_app(app_name)
   end
 
   context 'when a ssl-gateway is deployed with service checker apps' do
