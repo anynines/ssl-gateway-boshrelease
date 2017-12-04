@@ -5,16 +5,12 @@ Dir["#{__dir__}/support/**/*.rb"].each { |f| require f }
 
 RSpec.configure do |config|
   config.before(:suite) do
-    Dir.chdir(File.join(__dir__, "../../../")) do
-      `bosh create-release --force`
-      ENV["RELEASE"] = `ls -1t dev_releases/ssl-gateway | sed -n 2p`
-      `bosh upload-release dev_releases/ssl-gateway/#{ENV["RELEASE"]}`
-      `bosh task`
-    end
+    BoshHelpers::create_dev_release
+    BoshHelpers::upload_last_dev_release
   end
 
   config.after(:suite) do
-    `bosh clean-up --all`
+    BoshHelpers::cleanup_all
   end
 
   config.color = true
