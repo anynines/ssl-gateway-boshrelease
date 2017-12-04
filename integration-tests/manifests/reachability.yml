@@ -1,0 +1,157 @@
+---
+name: ssl-gateway
+
+releases:
+- name: ssl-gateway
+  version: 12+dev.4
+
+- name: rabbitmq36
+  version: 5
+  url: https://s3-eu-west-1.amazonaws.com/anynines-bosh-releases/rabbitmq36-5.tgz
+- name: a9s-consul
+  version: latest
+
+stemcells:
+- os: ubuntu-trusty
+  alias: ubuntu-trusty
+  version: ((iaas.stemcells.ubuntu-trusty.version))
+
+update:
+  canaries: 1
+  canary_watch_time: 1000-180000
+  max_in_flight: 50
+  serial: true
+  update_watch_time: 1000-180000
+
+instance_groups:
+
+- name: rabbitmq
+  azs: [z1, z2, z3]
+  vm_type: small
+  persistent_disk_type: small
+  instances: 1
+  stemcell: ubuntu-trusty
+  networks:
+  - name: dynamic
+  jobs:
+  - name: rabbitmq
+    release: rabbitmq36
+  - name: consul
+    release: a9s-consul
+  properties:
+    consul:
+      service_name: rabbitmq
+
+- name: ssl-gateway
+  azs: [z1, z2, z3]
+  vm_type: small
+  persistent_disk_type: small
+  instances: ((iaas.ssl_gateway.gateway_instances))
+  stemcell: ubuntu-trusty
+  jobs:
+  - name: consul
+    release: a9s-consul
+  - name: nginx
+    release: ssl-gateway
+  - name: virtual_host_service_worker
+    release: ssl-gateway
+  networks:
+  - name: public
+
+  properties:
+    network: public
+
+- name: gateway-api
+  templates:
+  - name: consul
+    release: a9s-consul
+  - name: virtual_host_service_api
+    release: ssl-gateway
+  azs: [z1, z2, z3]
+  vm_type: small
+  persistent_disk_type: small
+  instances: 1
+  stemcell: ubuntu-trusty
+  networks:
+  - name: dynamic
+  properties:
+    consul:
+      service_name: vhost-api
+
+properties:
+  network: dynamic
+
+  vhost_api:
+    postgresql_host: a9s-pg-psql-master-alias.node.dc1.((iaas.consul.domain))
+    postgresql_db: sslgateway
+    postgresql_username: sslgateway
+    postgresql_password: ((/a9s_pg_sslgateway_db_password))
+    customer_panel_secret: ((ssl_gw_customerpanel_secret))
+    port: 3000
+
+  rabbitmq:
+    admin_username: admin
+    admin_password: ((ssl_gw_rabbitmq_password))
+    host: ssl-gateway-rabbitmq-0.node.dc1.((iaas.consul.domain))
+
+  a9s_ssl_gateway:
+    default_apps_domain: ((iaas.cf.system_domain))
+    cf_routers: ((iaas.cf.router_ips))
+    default_apps_domain_cert: ((default_app.certificate))
+    default_apps_domain_ca_cert: ((default_app.ca))
+    default_apps_domain_cert_key: ((default_app.private_key))
+    ssh_routers: ((iaas.cf.router_ips))
+    
+    domain_blacklist:
+    - domain: checker.ssltest.com
+      ca: ((ssltest.ca))
+      certificate: ((ssltest.certificate))
+      private_key: ((ssltest.private_key))
+      allow: 
+      - 172.27.1.5
+    - domain: ssltest2.com
+      ca: ((ssltest2.ca))
+      certificate: ((ssltest2.certificate))
+      private_key: ((ssltest2.private_key))
+    - domain: ssltest3.com
+    - domain: ssltest4.com
+      allow: 
+      - 172.27.1.5
+
+  consul:
+    domain: ((iaas.consul.domain))
+    dc: dc1
+    agent_address: 127.0.0.1:8500
+    server: false
+    encrypt: ((/cdns_encrypt))
+    cluster:
+      join_hosts: ((iaas.consul.consul_ips))
+    ssl_ca: ((/cdns_ssl.ca))
+    ssl_cert: ((/cdns_ssl.certificate))
+    ssl_key: ((/cdns_ssl.private_key))
+
+variables:
+- name: ssl_gw_customerpanel_secret
+  type: password
+- name: ssl_gw_rabbitmq_password
+  type: password
+- name: default_ca
+  type: certificate
+  options:
+    is_ca: true
+    common_name: ssl_gateway_default
+- name: default_app
+  type: certificate
+  options:
+    ca: default_ca
+    common_name: ((iaas.cf.system_domain))
+- name: ssltest
+  type: certificate
+  options:
+    ca: default_ca
+    common_name: ssltest
+- name: ssltest2
+  type: certificate
+  options:
+    ca: default_ca
+    common_name: ssltest2
