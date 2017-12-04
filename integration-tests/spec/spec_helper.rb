@@ -17,7 +17,7 @@ RSpec.configure do |config|
   end
 
   config.after(:suite) do
-    CFHelpers::delete_org("ssl-gateway-tests")
+    # CFHelpers::delete_org("ssl-gateway-tests")
     BoshHelpers::cleanup_all
   end
 
