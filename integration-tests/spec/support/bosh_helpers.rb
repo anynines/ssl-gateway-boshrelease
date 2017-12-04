@@ -29,5 +29,5 @@ module BoshHelpers
 end
 
 RSpec.configure do |c|
-  c.include BoshHelper
+  c.include BoshHelpers
 end
