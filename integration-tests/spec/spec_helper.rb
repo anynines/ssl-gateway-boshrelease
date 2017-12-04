@@ -4,6 +4,8 @@ require 'rspec'
 Dir["#{__dir__}/support/**/*.rb"].each { |f| require f }
 
 RSpec.configure do |config|
+  include BoshHelpers
+
   config.before(:suite) do
     BoshHelpers::create_dev_release
     BoshHelpers::upload_last_dev_release

@@ -1,7 +1,7 @@
 module CFHelpers
   def push_checker_app(name, port, domain=nil)
     Dir.chdir(File.join(__dir__, "service-binding-checker")) do
-      ENV["PORT"] = port
+      ENV["PORT"] = port.to_s
       if domain
         `cf push #{name} -d #{domain}`
       else
@@ -19,6 +19,3 @@ module CFHelpers
   end
 end
 
-RSpec.configure do |c|
-  c.include CFHelpers
-end

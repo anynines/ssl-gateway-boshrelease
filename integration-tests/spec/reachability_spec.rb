@@ -2,39 +2,44 @@ require 'spec_helper'
 require 'httparty'
 require 'pp'
 
+include CFHelpers
+include BoshHelpers
+include ManifestHelpers
+
 describe 'ssl-gateway reachability spec for apps' do
   let(:app_name) { "checker" }
+
   before(:all) do
     app_name = "checker"
     manifest = "reachability.yml"
     properties = {
-      :release_version => ENV["RELEASE"],
+      :release_version => ENV["RELEASE"].gsub("ssl-gateway-", "").gsub(".yml", ""),
       :local_ip => ENV["LOCALHOST_IP"]
     }
 
     ManifestHelpers::render_manifest(manifest, properties)
     BoshHelpers::deploy(manifest, ENV['IAAS_CONFIG'], ENV['EXTERNAL_SECRETS'], ENV['OPS_FILE'])
-    CFHelpers::login(ENV['CF_USERNAME'], ENV['CF_PASSWORD'], ENV['CF_SPACE'], ENV['CF_ORG'])
+    CFHelpers::cf_login(ENV['CF_USERNAME'], ENV['CF_PASSWORD'], ENV['CF_SPACE'], ENV['CF_ORG'])
     
     CFHelpers::push_checker_app(app_name, 80)
-    CFHelpers::push_checker_app(app_name, 443)
-    CFHelpers::push_checker_app(app_name, 4443)
+    #  CFHelpers::push_checker_app(app_name, 443)
+    # CFHelpers::push_checker_app(app_name, 4443)
 
-    CFHelpers::push_checker_app(app_name, 80, ENV["REACHABLE_BLACKLIST_DOMAIN"])
-    CFHelpers::push_checker_app(app_name, 80, ENV["UNREACHABLE_BLACKLIST_DOMAIN"])
+    # CFHelpers::push_checker_app(app_name, 80, ENV["REACHABLE_BLACKLIST_DOMAIN"])
+    # CFHelpers::push_checker_app(app_name, 80, ENV["UNREACHABLE_BLACKLIST_DOMAIN"])
 
-    CFHelpers::push_checker_app(app_name, 80, ENV["REACHABLE_SSL_BLACKLIST_DOMAIN"])
-    CFHelpers::push_checker_app(app_name, 443, ENV["REACHABLE_SSL_BLACKLIST_DOMAIN"])
-    CFHelpers::push_checker_app(app_name, 4443, ENV["REACHABLE_SSL_BLACKLIST_DOMAIN"])
+    # CFHelpers::push_checker_app(app_name, 80, ENV["REACHABLE_SSL_BLACKLIST_DOMAIN"])
+    # CFHelpers::push_checker_app(app_name, 443, ENV["REACHABLE_SSL_BLACKLIST_DOMAIN"])
+    # CFHelpers::push_checker_app(app_name, 4443, ENV["REACHABLE_SSL_BLACKLIST_DOMAIN"])
 
-    CFHelpers::push_checker_app(app_name, 80, ENV["UNREACHABLE_SSL_BLACKLIST_DOMAIN"])
-    CFHelpers::push_checker_app(app_name, 443, ENV["UNREACHABLE_SSL_BLACKLIST_DOMAIN"])
-    CFHelpers::push_checker_app(app_name, 4443, ENV["UNREACHABLE_SSL_BLACKLIST_DOMAIN"])
+    # CFHelpers::push_checker_app(app_name, 80, ENV["UNREACHABLE_SSL_BLACKLIST_DOMAIN"])
+    # CFHelpers::push_checker_app(app_name, 443, ENV["UNREACHABLE_SSL_BLACKLIST_DOMAIN"])
+    # CFHelpers::push_checker_app(app_name, 4443, ENV["UNREACHABLE_SSL_BLACKLIST_DOMAIN"])
   end
 
   after(:all) do
     app_name = "checker"
-    CFHelpers::delete_app(app_name)
+    # CFHelpers::delete_app(app_name)
   end
 
   context 'when a ssl-gateway is deployed with service checker apps' do
