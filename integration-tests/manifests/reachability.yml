@@ -3,7 +3,7 @@ name: ssl-gateway
 
 releases:
 - name: ssl-gateway
-  version: 12+dev.75
+  version: 12+dev.4
 
 - name: rabbitmq36
   version: 5

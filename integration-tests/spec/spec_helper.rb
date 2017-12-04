@@ -10,14 +10,14 @@ RSpec.configure do |config|
   config.before(:suite) do
     BoshHelpers::create_dev_release
     BoshHelpers::upload_last_dev_release
-    CFHelpers::cf_login(ENV["CF_USER"], ENV["CF_PASSWORD"])
+    CFHelpers::cf_login(ENV["CF_USERNAME"], ENV["CF_PASSWORD"])
     CFHelpers::create_org("ssl-gateway-tests")
     CFHelpers::create_space("ssl-gateway-tests", "integration")
     CFHelpers::target("ssl-gateway-tests", "integration")
   end
 
   config.after(:suite) do
-    # CFHelpers::delete_org("ssl-gateway-tests")
+    CFHelpers::delete_org("ssl-gateway-tests")
     BoshHelpers::cleanup_all
   end
 

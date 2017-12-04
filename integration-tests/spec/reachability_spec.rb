@@ -21,19 +21,19 @@ describe 'ssl-gateway reachability spec for apps' do
     BoshHelpers::deploy(manifest, ENV['IAAS_CONFIG'], ENV['EXTERNAL_SECRETS'], ENV['OPS_FILE'])
     
     CFHelpers::push_checker_app(app_name, 80)
-    #  CFHelpers::push_checker_app(app_name, 443)
-    # CFHelpers::push_checker_app(app_name, 4443)
+    CFHelpers::push_checker_app(app_name, 443)
+    CFHelpers::push_checker_app(app_name, 4443)
 
-    # CFHelpers::push_checker_app(app_name, 80, ENV["REACHABLE_BLACKLIST_DOMAIN"])
-    # CFHelpers::push_checker_app(app_name, 80, ENV["UNREACHABLE_BLACKLIST_DOMAIN"])
+    CFHelpers::push_checker_app(app_name, 80, ENV["REACHABLE_BLACKLIST_DOMAIN"])
+    CFHelpers::push_checker_app(app_name, 80, ENV["UNREACHABLE_BLACKLIST_DOMAIN"])
 
-    # CFHelpers::push_checker_app(app_name, 80, ENV["REACHABLE_SSL_BLACKLIST_DOMAIN"])
-    # CFHelpers::push_checker_app(app_name, 443, ENV["REACHABLE_SSL_BLACKLIST_DOMAIN"])
-    # CFHelpers::push_checker_app(app_name, 4443, ENV["REACHABLE_SSL_BLACKLIST_DOMAIN"])
+    CFHelpers::push_checker_app(app_name, 80, ENV["REACHABLE_SSL_BLACKLIST_DOMAIN"])
+    CFHelpers::push_checker_app(app_name, 443, ENV["REACHABLE_SSL_BLACKLIST_DOMAIN"])
+    CFHelpers::push_checker_app(app_name, 4443, ENV["REACHABLE_SSL_BLACKLIST_DOMAIN"])
 
-    # CFHelpers::push_checker_app(app_name, 80, ENV["UNREACHABLE_SSL_BLACKLIST_DOMAIN"])
-    # CFHelpers::push_checker_app(app_name, 443, ENV["UNREACHABLE_SSL_BLACKLIST_DOMAIN"])
-    # CFHelpers::push_checker_app(app_name, 4443, ENV["UNREACHABLE_SSL_BLACKLIST_DOMAIN"])
+    CFHelpers::push_checker_app(app_name, 80, ENV["UNREACHABLE_SSL_BLACKLIST_DOMAIN"])
+    CFHelpers::push_checker_app(app_name, 443, ENV["UNREACHABLE_SSL_BLACKLIST_DOMAIN"])
+    CFHelpers::push_checker_app(app_name, 4443, ENV["UNREACHABLE_SSL_BLACKLIST_DOMAIN"])
   end
 
   context 'when a ssl-gateway is deployed with service checker apps' do
