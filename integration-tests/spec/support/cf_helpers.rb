@@ -13,11 +13,11 @@ module CFHelpers
   end
 
   def create_org(name)
-    systen("cf create-org #{name}")
+    system("cf create-org #{name}")
   end
 
   def create_space(org, space)
-    systen("cf create-space -o #{org} #{space}")
+    system("cf create-space -o #{org} #{space}")
   end
 
   def target(org, space)
