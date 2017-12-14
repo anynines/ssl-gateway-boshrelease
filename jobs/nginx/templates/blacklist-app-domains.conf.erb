@@ -1,6 +1,6 @@
 <% domain_blacklist = p('a9s_ssl_gateway.domain_blacklist') %>
 
-<% if domain_blacklist) %>
+<% if domain_blacklist %>
     <% domain_blacklist.each do |blacklisted_domain| %>
 server {
     listen       80;
