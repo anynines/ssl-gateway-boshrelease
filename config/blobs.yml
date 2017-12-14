@@ -1,24 +1,32 @@
 /bundler/bundler.tar.gz:
   size: 15052955
+  object_id: 8e9ffa27-004f-4275-523b-9195f39c63dd
   sha: dc315cd194f0435c191a57f0f915530ccd18b541
 /libyaml/libyaml.tar.gz:
   size: 71324
+  object_id: 88ef5ccf-c690-4fe0-7e99-288cb7c074dc
   sha: e3427406539632d7b141b40dd4396e83307b3e9a
 /nginx/nginx.tar.gz:
   size: 1029752
+  object_id: 68ad5351-0d2c-4f41-5c24-b966c64bb09e
   sha: 6c76c4cbd4d66be433baac3a6349869dd8c0b888
 /pcre/pcre.tar.gz:
   size: 366652
+  object_id: 07a7f11d-cb47-4c11-5783-1b0012b8109b
   sha: 1a499afb4156aa4bb845cf3194631f8601987ada
 /postgres/postgres.tar.gz:
   size: 20595890
+  object_id: 49b9b284-76d4-43a2-70e5-ac679c186c74
   sha: e608f433b32c30ec50d9a5f271d2cfdd9fc72519
 /ruby/ruby.tar.gz:
   size: 27877471
+  object_id: c166c67e-6652-45a3-610f-ef660a0029b6
   sha: 35bec97fa06002f7890f8e1ba0418b1793233ddb
 /rubygems/rubygems.tar.gz:
   size: 511557
+  object_id: 3cd24006-8999-4aac-5b18-6573ca117c54
   sha: 99101e0b0bf001f14e8ff90d7d47fb8ea3f846f5
 /zlib/zlib.tar.gz:
   size: 70427
+  object_id: 9b43f680-64b7-400f-696b-bbd65b1987f8
   sha: 93c62b29ee0b1dd90eaec1b9d750254293d9bcac
