@@ -9,10 +9,9 @@ set -u # report the usage of uninitialized variables
 CPUS=$(grep -c ^processor /proc/cpuinfo)
 
 export HOME=/var/vcap
-export LIBYAML_VERSION=`ls -r libyaml/yaml-* | sed 's/libyaml\/yaml-\(.*\)\.tar.gz/\1/' | head -1`
 
-tar xfz libyaml/yaml-$LIBYAML_VERSION.tar.gz
-cd yaml-$LIBYAML_VERSION
+tar xfz libyaml/libyaml.tar.gz
+cd libyaml
 ./configure --prefix=${BOSH_INSTALL_TARGET}
 make -j${CPUS} && make install
 ldconfig

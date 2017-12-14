@@ -1,0 +1,24 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: avarteqgmbh/a9s-utils
+
+inputs:
+- name: scripts
+- name: anynines-PaaS-deployment
+- name: anynines-deployment
+- name: new-release-version
+
+outputs:
+- name: release-output
+
+params:
+  IAAS_CONFIG:
+
+run: 
+  path: ruby
+  args:
+  - task.rb

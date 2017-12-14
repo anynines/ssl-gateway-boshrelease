@@ -3,7 +3,7 @@ name: virtual_host_service_worker
 dependencies:
 - ruby
 files:
-- ruby/ruby-2.2.4.tar.gz
-- ruby/rubygems-2.6.1.tgz
-- ruby/bundler-1.12.5.gem
+- ruby/ruby.tar.gz
+- rubygems/rubygems.tar.gz
+- bundler/bundler.tar.gz
 - virtual_host_service_worker/**/*

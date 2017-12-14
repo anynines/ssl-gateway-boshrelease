@@ -1,33 +1,24 @@
----
-libyaml/yaml-0.1.5.tar.gz:
-  object_id: b65dc141-722b-4c49-8a7d-df69eea832ca
-  sha: 8b78cb9f759c7d80db8a7328c0ebecfe34fde737
-  size: 504897
-nginx/nginx-1.10.0.tgz:
-  object_id: 2745d7f0-785a-42e1-acf5-a284f7e19fbd
-  sha: 7a452cfe37e4134481442dbfa3fbdac6f484c5bc
-  size: 908954
-nginx/pcre-8.38.tgz:
-  object_id: f13c9152-c164-4818-bd3a-58750aa02994
-  sha: 3ab418d0026c2a4e693ec783bd60660debc32b8f
-  size: 2053336
-zlib/zlib-1.2.8.tar.gz:
-  object_id: 47c5093c-a6ad-4adb-b0d5-6cda5f0962b0
-  sha: a4d316c404ff54ca545ea71a27af7dbc29817088
-  size: 571091
-ruby/bundler-1.12.5.gem:
-  object_id: a2904e38-1f71-4293-b91f-260f627e58b6
-  sha: a414b2aafa54affac99dc453ced5adc152211eb9
-  size: 280064
-ruby/ruby-2.2.4.tar.gz:
-  object_id: de97e673-f816-4b93-a4f5-65183f415611
-  sha: 818e5e157f76d4912ba3a7c7b4fc5156105e83c3
-  size: 16638151
-ruby/rubygems-2.6.1.tgz:
-  object_id: 7b37b428-1e85-49d2-8db3-f59fd5d7d76a
-  sha: 46c3a761b31781542839c9c7b74b5d1f29176867
-  size: 477342
-libpq/postgresql-9.4.6.tar.bz2:
-  object_id: cdd4ffb2-b846-4b16-9695-5db1ce74d7ef
-  sha: bc5271b113b42e94cf093b6fb799b03092827c71
-  size: 17734946
+/bundler/bundler.tar.gz:
+  size: 15052955
+  sha: dc315cd194f0435c191a57f0f915530ccd18b541
+/libyaml/libyaml.tar.gz:
+  size: 71324
+  sha: e3427406539632d7b141b40dd4396e83307b3e9a
+/nginx/nginx.tar.gz:
+  size: 1029752
+  sha: 6c76c4cbd4d66be433baac3a6349869dd8c0b888
+/pcre/pcre.tar.gz:
+  size: 366652
+  sha: 1a499afb4156aa4bb845cf3194631f8601987ada
+/postgres/postgres.tar.gz:
+  size: 20595890
+  sha: e608f433b32c30ec50d9a5f271d2cfdd9fc72519
+/ruby/ruby.tar.gz:
+  size: 27877471
+  sha: 35bec97fa06002f7890f8e1ba0418b1793233ddb
+/rubygems/rubygems.tar.gz:
+  size: 511557
+  sha: 99101e0b0bf001f14e8ff90d7d47fb8ea3f846f5
+/zlib/zlib.tar.gz:
+  size: 70427
+  sha: 93c62b29ee0b1dd90eaec1b9d750254293d9bcac

@@ -9,16 +9,13 @@ set -u # report the usage of uninitialized variables
 CPUS=$(grep -c ^processor /proc/cpuinfo)
 
 export HOME=/var/vcap
-export RUBY_VERSION=`ls -r ruby/ruby-* | sed 's/ruby\/ruby-\(.*\)\.tar\.gz/\1/' | head -1`
-export RUBYGEMS_VERSION=`ls -r ruby/rubygems-* | sed 's/ruby\/rubygems-\(.*\)\.tgz/\1/' | head -1`
-export BUNDLER_VERSION=`ls -r ruby/bundler-* | sed 's/ruby\/bundler-\(.*\)\.gem/\1/' | head -1`
 export LIBYAML_PATH=/var/vcap/packages/libyaml
 export ZLIB_PATH=/var/vcap/packages/zlib
 
 # compile and install ruby
 echo "Compiling and installing ruby..."
-tar xfz ruby/ruby-$RUBY_VERSION.tar.gz
-cd ruby-$RUBY_VERSION
+tar xfz ruby/ruby.tar.gz
+cd ruby
 ./configure --prefix=${BOSH_INSTALL_TARGET} --enable-shared --disable-install-doc --with-opt-dir=$LIBYAML_PATH --with-opt-dir=$ZLIB_PATH
 make -j${CPUS} && make install
 echo "Finished installing ruby."
@@ -26,8 +23,8 @@ cd ..
 
 # compile and install rubygems
 echo "Installing rubygems..."
-tar xfz ruby/rubygems-$RUBYGEMS_VERSION.tgz
-cd rubygems-$RUBYGEMS_VERSION
+tar xfz rubygems/rubygems.tar.gz
+cd rubygems
 ${BOSH_INSTALL_TARGET}/bin/ruby setup.rb
 if [[ $? != 0 ]] ; then
   echo "Cannot install rubygems"
@@ -37,4 +34,8 @@ echo "Finished installing rubygems."
 cd ..
 
 # install the bundler version
-${BOSH_INSTALL_TARGET}/bin/gem install ruby/bundler-${BUNDLER_VERSION}.gem --no-ri --no-rdoc
+tar xfz bundler/bundler.tar.gz
+cd bundler
+${BOSH_INSTALL_TARGET}/bin/gem build bundler.gemspec
+${BOSH_INSTALL_TARGET}/bin/gem install *.gem --no-ri --no-rdoc
+cd ..

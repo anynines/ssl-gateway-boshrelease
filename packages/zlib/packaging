@@ -9,10 +9,9 @@ set -u # report the usage of uninitialized variables
 CPUS=$(grep -c ^processor /proc/cpuinfo)
 
 export HOME=/var/vcap
-export ZLIB_VERSION=`ls -r zlib/zlib-* | sed 's/zlib\/zlib-\(.*\)\.tar.gz/\1/' | head -1`
 
-tar xfz zlib/zlib-$ZLIB_VERSION.tar.gz
-cd zlib-$ZLIB_VERSION
+tar xfz zlib/zlib.tar.gz
+cd zlib
 ./configure --prefix=${BOSH_INSTALL_TARGET}
 make -j${CPUS} && make install
 ldconfig

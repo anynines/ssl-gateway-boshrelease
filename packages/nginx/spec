@@ -1,5 +1,5 @@
 ---
 name: nginx
 files:
-- nginx/nginx-1.10.0.tgz
-- nginx/pcre-8.38.tgz
+- nginx/nginx.tar.gz
+- pcre/pcre.tar.gz

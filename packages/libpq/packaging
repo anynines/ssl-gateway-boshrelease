@@ -9,10 +9,9 @@ set -u # report the usage of uninitialized variables
 CPUS=$(grep -c ^processor /proc/cpuinfo)
 
 export HOME=/var/vcap
-export POSTGRESQL_VERSION=`ls -r libpq/postgresql-* | sed 's/libpq\/postgresql-\(.*\)\.tar.bz2/\1/' | head -1`
 
-tar jxf libpq/postgresql-$POSTGRESQL_VERSION.tar.bz2
-cd postgresql-$POSTGRESQL_VERSION
+tar xfz postgres/postgres.tar.gz
+cd postgresql
 ./configure --prefix=${BOSH_INSTALL_TARGET} --with-openssl
 
 pushd src/bin/pg_config
