@@ -7,7 +7,6 @@ echo "Extracting nginx..."
 mkdir nginx/nginx-extracted && tar xzvf nginx/nginx.tar.gz -C nginx/nginx-extracted --strip-components 1
 
 echo "Building nginx..."
-
 pushd nginx/nginx-extracted
   ./configure \
     --with-debug \
