@@ -9,6 +9,7 @@ PCRE_DOWNLOAD_URL = "https://github.com/embedthis/pcre/archive/v__version__.tar.
 POSTGRES_DOWNLOAD_URL = "https://github.com/postgres/postgres/archive/__version__.tar.gz"
 RUBYGEMS_DOWNLOAD_URL = "https://github.com/rubygems/rubygems/archive/v__version__.tar.gz"
 BUNDLER_DOWNLOAD_URL = "https://github.com/bundler/bundler/archive/v__version__.tar.gz"
+AUTOCONF_DOWNLOAD_URL = "https://ftp.gnu.org/gnu/autoconf/autoconf-__version__.tar.gz"
 
 def download_blob(name, template, version)
   blob_dir = "/tmp/#{name}/"
@@ -73,5 +74,10 @@ add_blob("rubygems.tar.gz", blob)
 remove_blob("bunlder.tar.gz")
 blob =  download_blob("bundler", BUNDLER_DOWNLOAD_URL, ENV["BUNDLER_VERSION"])
 add_blob("bundler.tar.gz", blob)
+
+# update autoconf
+remove_blob("autoconf.tar.gz")
+blob =  download_blob("autoconf", AUTOCONF_DOWNLOAD_URL, ENV["AUTOCONF_VERSION"])
+add_blob("autoconf.tar.gz", blob)
 
 upload_blobs

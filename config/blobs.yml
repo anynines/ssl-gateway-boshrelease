@@ -1,32 +1,36 @@
+/autoconf/autoconf.tar.gz:
+  size: 380539
+  object_id: 12efb556-c50a-4bdb-76d5-64d6a083d9e1
+  sha: 87bdb8d22ca379782ce70fb8710ad7b22c2c9fc4
 /bundler/bundler.tar.gz:
   size: 15052955
-  object_id: 1f60a547-a13f-4dcd-56e3-c5fd92c9f329
+  object_id: 76499b7d-1fbd-4d87-755a-1667316827f3
   sha: dc315cd194f0435c191a57f0f915530ccd18b541
 /libyaml/libyaml.tar.gz:
   size: 71324
-  object_id: 96edfae6-2b33-41b7-5386-08474aaabc64
+  object_id: f86e65d5-c790-41c2-6101-59852c162018
   sha: e3427406539632d7b141b40dd4396e83307b3e9a
 /nginx/nginx.tar.gz:
   size: 990836
-  object_id: 38fe2016-6ecf-4b1f-49c1-0c8a6c4e15f3
+  object_id: e7bc58dd-c5de-4b99-68f9-5c9e58be0362
   sha: 9f774bfade490bc603ae79f5cabeb83e017a3c2d
 /pcre/pcre.tar.gz:
   size: 366652
-  object_id: 2726e808-2ace-4d72-597d-825b4ea93414
+  object_id: 10de9a5e-a29f-4974-6c6a-dd2ccc543565
   sha: 1a499afb4156aa4bb845cf3194631f8601987ada
 /postgres/postgres.tar.gz:
   size: 20595890
-  object_id: 8999ef3a-852d-46c2-4958-8868a498c21a
+  object_id: 2a67b11f-90a4-4483-4651-a84e7aeeef3a
   sha: e608f433b32c30ec50d9a5f271d2cfdd9fc72519
 /ruby/ruby.tar.gz:
   size: 27877471
-  object_id: 98872234-92e1-4004-5e1e-5033420c5dce
+  object_id: 0949263e-864a-4818-636b-e6a80ee0c889
   sha: 35bec97fa06002f7890f8e1ba0418b1793233ddb
 /rubygems/rubygems.tar.gz:
   size: 511557
-  object_id: cc84040d-35b4-4118-7ce6-e52b441b4d20
+  object_id: 8c3a27a8-a748-42ca-4682-a6d6d1ce0477
   sha: 99101e0b0bf001f14e8ff90d7d47fb8ea3f846f5
 /zlib/zlib.tar.gz:
   size: 644492
-  object_id: a5705298-9573-4184-4d67-581b78f8b549
+  object_id: f66f4f48-3a45-4c68-7689-a2748d20e99a
   sha: 56559d4c03beaedb0be1c7481d6a371e2458a496

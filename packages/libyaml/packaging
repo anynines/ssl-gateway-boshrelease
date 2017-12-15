@@ -10,6 +10,12 @@ CPUS=$(grep -c ^processor /proc/cpuinfo)
 
 export HOME=/var/vcap
 
+mkdir autoconf/autoconf-extracted && tar xfz autoconf/autoconf.tar.gz -C autoconf/autoconf-extracted --strip-components 1
+cd autoconf/autoconf-extracted
+./configure
+make && make install
+cd ..
+
 mkdir libyaml/libyaml-extracted && tar xfz libyaml/libyaml.tar.gz -C libyaml/libyaml-extracted --strip-components 1
 cd libyaml/libyaml-extracted
 ./bootstrap
