@@ -29,4 +29,4 @@ params:
 run: 
   path: ruby
   args:
-  - update_blobs.rb
+  - ../scripts/update_blobs.rb

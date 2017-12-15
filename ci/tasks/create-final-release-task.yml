@@ -1,0 +1,22 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: avarteqgmbh/a9s-utils
+
+inputs:
+- name: ssl-gateway-boshrelease
+- name: semver
+
+outputs:
+- name: release-output
+
+params:
+  BUCKET_URL:
+
+run: 
+  path: sh
+  args:
+  - ../scripts/create-final-release.sh

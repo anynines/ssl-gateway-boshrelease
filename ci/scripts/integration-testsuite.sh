@@ -17,7 +17,7 @@ set -o nounset # Report the usage of uninitialized variables
 : ${REACHABLE_SSL_BLACKLIST_DOMAIN?"Env variable CF_API not set"}
 
 
-cd ssl-gateway-boshrelease/integration-tests/
+cd ssl-gateway-boshrelease/acceptance-tests/
 gem install bundler
 bundle install
 rspec

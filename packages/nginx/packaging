@@ -1,10 +1,10 @@
 set -e -x
 
 echo "Extracting pcre..."
-mkdir pcre/pcre-extracted && tar xzvf pcre/pcre-*.tgz -C pcre/pcre-extracted --strip-components 1
+mkdir pcre/pcre-extracted && tar xzvf pcre/pcre.tar.gz -C pcre/pcre-extracted --strip-components 1
 
 echo "Extracting nginx..."
-mkdir nginx/nginx-extracted && tar xzvf nginx/nginx-*.tgz -C nginx/nginx-extracted --strip-components 1
+mkdir nginx/nginx-extracted && tar xzvf nginx/nginx.tar.gz -C nginx/nginx-extracted --strip-components 1
 
 echo "Building nginx..."
 
