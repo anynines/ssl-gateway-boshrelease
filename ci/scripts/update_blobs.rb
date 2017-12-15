@@ -4,7 +4,7 @@ require 'pp'
 NGINX_DOWNLOAD_URL = "https://github.com/nginx/nginx/archive/release-__version__.tar.gz"
 LIBYAML_DOWNLOAD_URL = "https://github.com/yaml/libyaml/archive/__version__.tar.gz"
 RUBY_DOWNLOAD_URL = "https://github.com/ruby/ruby/archive/v__version__.tar.gz"
-ZLIB_DOWNLOAD_URL = "https://github.com/ruby/zlib/archive/v__version__.tar.gz"
+ZLIB_DOWNLOAD_URL = "https://github.com/madler/zlib/archive/v__version__.tar.gz"
 PCRE_DOWNLOAD_URL = "https://github.com/embedthis/pcre/archive/v__version__.tar.gz"
 POSTGRES_DOWNLOAD_URL = "https://github.com/postgres/postgres/archive/__version__.tar.gz"
 RUBYGEMS_DOWNLOAD_URL = "https://github.com/rubygems/rubygems/archive/v__version__.tar.gz"

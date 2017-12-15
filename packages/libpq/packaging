@@ -11,7 +11,7 @@ CPUS=$(grep -c ^processor /proc/cpuinfo)
 export HOME=/var/vcap
 
 tar xfz postgres/postgres.tar.gz
-cd postgresql
+cd postgresql/*
 ./configure --prefix=${BOSH_INSTALL_TARGET} --with-openssl
 
 pushd src/bin/pg_config
