@@ -12,6 +12,7 @@ export HOME=/var/vcap
 
 mkdir libyaml/libyaml-extracted && tar xfz libyaml/libyaml.tar.gz -C libyaml/libyaml-extracted --strip-components 1
 cd libyaml/libyaml-extracted
+./bootstrap
 ./configure --prefix=${BOSH_INSTALL_TARGET}
 make -j${CPUS} && make install
 ldconfig
