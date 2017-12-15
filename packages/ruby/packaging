@@ -14,8 +14,9 @@ export ZLIB_PATH=/var/vcap/packages/zlib
 
 # compile and install ruby
 echo "Compiling and installing ruby..."
-tar xfz ruby/ruby.tar.gz
-cd ruby/*
+
+mkdir ruby/ruby-extracted && tar xfz ruby/ruby.tar.gz -C ruby/ruby-extracted --strip-components 1
+cd ruby/ruby-extracted
 ./configure --prefix=${BOSH_INSTALL_TARGET} --enable-shared --disable-install-doc --with-opt-dir=$LIBYAML_PATH --with-opt-dir=$ZLIB_PATH
 make -j${CPUS} && make install
 echo "Finished installing ruby."
@@ -23,8 +24,8 @@ cd ..
 
 # compile and install rubygems
 echo "Installing rubygems..."
-tar xfz rubygems/rubygems.tar.gz
-cd rubygems/*
+mkdir rubygems/rubygems-extracted && tar xfz rubygems/rubygems.tar.gz -C rubygems/rubygems-extracted --strip-components 1
+rubygems/rubygems-extracted
 ${BOSH_INSTALL_TARGET}/bin/ruby setup.rb
 if [[ $? != 0 ]] ; then
   echo "Cannot install rubygems"
@@ -34,8 +35,8 @@ echo "Finished installing rubygems."
 cd ..
 
 # install the bundler version
-tar xfz bundler/bundler.tar.gz
-cd bundler/*
+mkdir bundler/bundler-extracted && tar xfz bundler/bundler.tar.gz -C bundler/bundler-extracted --strip-components 1
+bundler/bundler-extracted
 ${BOSH_INSTALL_TARGET}/bin/gem build bundler.gemspec
 ${BOSH_INSTALL_TARGET}/bin/gem install *.gem --no-ri --no-rdoc
 cd ..

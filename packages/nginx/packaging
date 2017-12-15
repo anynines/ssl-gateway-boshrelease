@@ -1,17 +1,17 @@
 set -e -x
 
 echo "Extracting pcre..."
-tar xzvf pcre/pcre-*.tgz
+mkdir pcre/pcre-extracted && tar xzvf pcre/pcre-*.tgz -C pcre/pcre-extracted --strip-components 1
 
 echo "Extracting nginx..."
-tar xzvf nginx/nginx-*.tgz
+mkdir nginx/nginx-extracted && tar xzvf nginx/nginx-*.tgz -C nginx/nginx-extracted --strip-components 1
 
 echo "Building nginx..."
 
-pushd nginx/*
+pushd nginx/nginx-extracted
   ./configure \
     --with-debug \
-    --with-pcre=../pcre/* \
+    --with-pcre=../pcre/pcre-extracted \
     --prefix=${BOSH_INSTALL_TARGET} \
     --with-http_ssl_module \
     --with-stream

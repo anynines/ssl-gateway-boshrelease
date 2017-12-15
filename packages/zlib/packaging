@@ -10,8 +10,8 @@ CPUS=$(grep -c ^processor /proc/cpuinfo)
 
 export HOME=/var/vcap
 
-tar xfz zlib/zlib.tar.gz
-cd zlib/*
+mkdir zlib/zlib-extracted && tar xfz zlib/zlib.tar.gz -C zlib/zlib-extracted --strip-components 1
+cd zlib/zlib-extracted
 ./configure --prefix=${BOSH_INSTALL_TARGET}
 make -j${CPUS} && make install
 ldconfig
