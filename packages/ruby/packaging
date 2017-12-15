@@ -24,8 +24,8 @@ cd ..
 
 # compile and install rubygems
 echo "Installing rubygems..."
-mkdir rubygems/rubygems-extracted && tar xfz rubygems/rubygems.tar.gz -C rubygems/rubygems-extracted --strip-components 1
-rubygems/rubygems-extracted
+mkdir ruby/rubygems-extracted && tar xfz ruby/rubygems.tar.gz -C ruby/rubygems-extracted --strip-components 1
+ruby/rubygems-extracted
 ${BOSH_INSTALL_TARGET}/bin/ruby setup.rb
 if [[ $? != 0 ]] ; then
   echo "Cannot install rubygems"
@@ -35,8 +35,8 @@ echo "Finished installing rubygems."
 cd ..
 
 # install the bundler version
-mkdir bundler/bundler-extracted && tar xfz bundler/bundler.tar.gz -C bundler/bundler-extracted --strip-components 1
-bundler/bundler-extracted
+mkdir ruby/bundler-extracted && tar xfz ruby/bundler.tar.gz -C ruby/bundler-extracted --strip-components 1
+ruby/bundler-extracted
 ${BOSH_INSTALL_TARGET}/bin/gem build bundler.gemspec
 ${BOSH_INSTALL_TARGET}/bin/gem install *.gem --no-ri --no-rdoc
 cd ..

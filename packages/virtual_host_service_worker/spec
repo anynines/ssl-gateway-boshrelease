@@ -4,6 +4,6 @@ dependencies:
 - ruby
 files:
 - ruby/ruby.tar.gz
-- rubygems/rubygems.tar.gz
-- bundler/bundler.tar.gz
+- ruby/rubygems.tar.gz
+- ruby/bundler.tar.gz
 - virtual_host_service_worker/**/*

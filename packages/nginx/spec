@@ -2,4 +2,4 @@
 name: nginx
 files:
 - nginx/nginx.tar.gz
-- pcre/pcre.tar.gz
+- nginx/pcre.tar.gz

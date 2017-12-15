@@ -10,8 +10,8 @@ CPUS=$(grep -c ^processor /proc/cpuinfo)
 
 export HOME=/var/vcap
 
-mkdir autoconf/autoconf-extracted && tar xfz autoconf/autoconf.tar.gz -C autoconf/autoconf-extracted --strip-components 1
-cd autoconf/autoconf-extracted
+mkdir libyaml/autoconf-extracted && tar xfz libyaml/autoconf.tar.gz -C libyaml/autoconf-extracted --strip-components 1
+cd libyaml/autoconf-extracted
 ./configure
 make && make install
 cd ..
