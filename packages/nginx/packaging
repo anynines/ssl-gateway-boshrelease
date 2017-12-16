@@ -1,13 +1,13 @@
 set -e -x
 
 echo "Extracting pcre..."
-mkdir nginx/pcre-extracted && tar xzvf nginx/pcre.tar.gz -C nginx/pcre-extracted --strip-components 1
+tar xvf nginx/pcre.tar.gz
 
 echo "Extracting nginx..."
-mkdir nginx/nginx-extracted && tar xzvf nginx/nginx.tar.gz -C nginx/nginx-extracted --strip-components 1
+tar xvf nginx/nginx.tar.gz
 
 echo "Building nginx..."
-pushd nginx/nginx-extracted
+pushd nginx-* > /dev/null
   ./configure \
     --with-debug \
     --with-pcre=../pcre-extracted \
