@@ -11,7 +11,7 @@ CPUS=$(grep -c ^processor /proc/cpuinfo)
 export HOME=/var/vcap
 
 echo "Extracting libyaml..."
-tar xzvf libyaml/libyaml.tar.gz
+tar xvf libyaml/libyaml.tar.gz
 
 echo "Building libyaml"
 pushd yaml-* > /dev/null
