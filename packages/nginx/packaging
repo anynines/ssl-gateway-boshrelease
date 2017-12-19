@@ -10,7 +10,7 @@ echo "Building nginx..."
 pushd nginx-* > /dev/null
   ./configure \
     --with-debug \
-    --with-pcre=../pcre-extracted \
+    --with-pcre=../pcre-1.0.4 \
     --prefix=${BOSH_INSTALL_TARGET} \
     --with-http_ssl_module \
     --with-stream
