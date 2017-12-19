@@ -38,30 +38,10 @@ remove_blob("nginx", "nginx.tar.gz")
 blob =  download_blob("nginx", NGINX_DOWNLOAD_URL, ENV["NGINX_VERSION"])
 add_blob("nginx", "nginx.tar.gz", blob)
 
-# update pcre
-remove_blob("nginx", "pcre.tar.gz")
-blob =  download_blob("pcre", PCRE_DOWNLOAD_URL, ENV["PCRE_VERSION"])
-add_blob("nginx", "pcre.tar.gz", blob)
-
-# update zlib
-remove_blob("zlib", "zlib.tar.gz")
-blob =  download_blob("zlib", ZLIB_DOWNLOAD_URL, ENV["ZLIB_VERSION"])
-add_blob("zlib", "zlib.tar.gz", blob)
-
 # update postgres
 remove_blob("postgres", "postgres.tar.gz")
 blob =  download_blob("postgres", POSTGRES_DOWNLOAD_URL, ENV["POSTGRES_VERSION"])
 add_blob("postgres", "postgres.tar.gz", blob)
-
-# update libyaml
-remove_blob("libyaml", "libyaml.tar.gz")
-blob =  download_blob("libyaml", LIBYAML_DOWNLOAD_URL, ENV["LIBYAML_VERSION"])
-add_blob("libyaml", "libyaml.tar.gz", blob)
-
-# update autoconf
-remove_blob("libyaml", "autoconf.tar.gz")
-blob =  download_blob("autoconf", AUTOCONF_DOWNLOAD_URL, ENV["AUTOCONF_VERSION"])
-add_blob("libyaml", "autoconf.tar.gz", blob)
 
 # update libyaml
 remove_blob("ruby", "ruby.tar.gz")

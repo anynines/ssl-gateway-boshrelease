@@ -10,21 +10,11 @@ CPUS=$(grep -c ^processor /proc/cpuinfo)
 
 export HOME=/var/vcap
 
-echo "Extracting autoconf..."
-tar xvf libyaml/autoconf.tar.gz
-
 echo "Extracting libyaml..."
 tar xvf libyaml/libyaml.tar.gz
 
-echo "Building autoconf.."
-pushd autoconf-* > /dev/null
-  ./configure
-  make && make install
-popd > /dev/null
-
 echo "Building libyaml"
 pushd libyaml-* > /dev/null
-  ./bootstrap
   ./configure --prefix=${BOSH_INSTALL_TARGET}
   make -j${CPUS} && make install
   ldconfig
