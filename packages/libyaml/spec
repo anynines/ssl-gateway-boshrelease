@@ -3,4 +3,3 @@ name: libyaml
 dependencies: []
 files:
 - libyaml/libyaml.tar.gz
-- libyaml/autoconf.tar.gz
