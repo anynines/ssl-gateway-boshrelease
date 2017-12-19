@@ -11,10 +11,10 @@ CPUS=$(grep -c ^processor /proc/cpuinfo)
 export HOME=/var/vcap
 
 echo "Extracting libyaml..."
-tar xvf libyaml/libyaml.tar.gz
+tar xzvf libyaml/libyaml.tar.gz
 
 echo "Building libyaml"
-pushd libyaml-* > /dev/null
+pushd yaml-* > /dev/null
   ./configure --prefix=${BOSH_INSTALL_TARGET}
   make -j${CPUS} && make install
   ldconfig
