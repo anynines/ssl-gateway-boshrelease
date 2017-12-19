@@ -13,7 +13,7 @@ export HOME=/var/vcap
 echo "Extracting zlib..."
 tar xvf zlib/zlib.tar.gz
 
-pusd zlib-* > /dev/null
+pushd zlib-* > /dev/null
   ./configure --prefix=${BOSH_INSTALL_TARGET}
   make -j${CPUS} && make install
   ldconfig
