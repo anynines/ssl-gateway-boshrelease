@@ -10,11 +10,10 @@ echo "Building nginx..."
 pushd nginx-* > /dev/null
   ./configure \
     --with-debug \
-    --with-pcre=../pcre-1.0.4 \
+    --with-pcre=../pcre-8.35 \
     --prefix=${BOSH_INSTALL_TARGET} \
     --with-http_ssl_module \
     --with-stream
 
   make
-  make install
 popd
