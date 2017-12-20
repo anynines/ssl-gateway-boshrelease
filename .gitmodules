@@ -8,3 +8,6 @@
 [submodule "integration-tests/service-binding-checker"]
 	path = integration-tests/service-binding-checker
 	url = git@github.com:anynines/service-binding-checker.git
+[submodule "acceptance-tests/service-binding-checker"]
+	path = acceptance-tests/service-binding-checker
+	url = git@github.com:anynines/service-binding-checker.git
