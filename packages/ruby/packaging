@@ -13,7 +13,7 @@ export LIBYAML_PATH=/var/vcap/packages/libyaml
 export ZLIB_PATH=/var/vcap/packages/zlib
 
 echo "Extracting autoconf..."
-tar xvf ruby/autoconf.tar.gz
+tar xvf ruby/autoconf.tar.gz 
 
 echo "Extracting ruby..."
 tar xvf ruby/ruby.tar.gz
