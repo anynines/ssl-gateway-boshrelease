@@ -23,9 +23,8 @@
   object_id: e8be6a22-4c58-43f7-6408-c0abb0153e0a
   sha: dc315cd194f0435c191a57f0f915530ccd18b541
 /ruby/ruby.tar.gz:
-  size: 407337
-  object_id: ddcffcf9-3543-49cf-6532-3116dedb09b4
-  sha: 2c8c24b0f01581aeb1940e4d02035670451ce493
+  size: 27877471
+  sha: 35bec97fa06002f7890f8e1ba0418b1793233ddb
 /ruby/rubygems.tar.gz:
   size: 511557
   object_id: 09a59d02-2a42-4542-7509-6bf522ad7f8e
