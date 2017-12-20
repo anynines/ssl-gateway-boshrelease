@@ -4,6 +4,7 @@ dependencies:
 - libyaml
 - zlib
 files:
+- ruby/autoconf.tar.gz
 - ruby/ruby.tar.gz
 - ruby/rubygems.tar.gz
 - ruby/bundler.tar.gz
