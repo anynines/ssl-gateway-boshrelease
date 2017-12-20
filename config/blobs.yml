@@ -1,40 +1,32 @@
-/libyaml/libyaml.tar.gz:
-  size: 2969600
-  object_id: 1e1f74e6-bbb1-411e-638a-58122d1b80a7
-  sha: 73d6a3a439234c81ee2716a9e3bdd9744c8f8907
-/nginx/nginx.tar.gz:
-  size: 990836
-  object_id: a71a10fd-e5b5-486c-5fb8-b215e7b81280
-  sha: 9f774bfade490bc603ae79f5cabeb83e017a3c2d
-/nginx/pcre.tar.gz:
-  size: 1996552
-  object_id: 30962ea9-4872-4676-7e1b-bd2383801009
-  sha: 5a0efc7332c6741114372020a60acfed22befcb9
-/postgres/postgres.tar.gz:
-  size: 20595890
-  object_id: f01d95f4-00f6-4014-4709-e7ff79bf1476
-  sha: e608f433b32c30ec50d9a5f271d2cfdd9fc72519
-/ruby/autoconf.tar.gz:
-  size: 1927468
-  object_id: ca78a67d-6ba3-4da1-7dd5-88f265bc5c0f
-  sha: 562471cbcb0dd0fa42a76665acf0dbb68479b78a
-/ruby/bundler.tar.gz:
-  size: 15052955
-  object_id: e8be6a22-4c58-43f7-6408-c0abb0153e0a
-  sha: dc315cd194f0435c191a57f0f915530ccd18b541
-/ruby/ruby.tar.gz:
-  size: 14178729
-  object_id: 3bf049c2-3d9b-474f-6aa0-4067af280645
-  sha: 787b7f4e90fb4b39a61bc1a31eb7765f875a590c
-/ruby/rubygems.tar.gz:
-  size: 511557
-  object_id: 09a59d02-2a42-4542-7509-6bf522ad7f8e
-  sha: 99101e0b0bf001f14e8ff90d7d47fb8ea3f846f5
-/zlib/zlib.tar.gz:
-  size: 644492
-  object_id: 07bc5f7b-c2fe-45d8-60c1-e1f408b5b988
-  sha: 56559d4c03beaedb0be1c7481d6a371e2458a496
-nginx/pcre.tar.gz:
-  size: 1996552
-  object_id: 883d8301-3441-45cd-4576-4e8534e311cd
-  sha: 5a0efc7332c6741114372020a60acfed22befcb9
+libpq/postgresql-9.4.6.tar.bz2:
+  size: 17734946
+  object_id: cdd4ffb2-b846-4b16-9695-5db1ce74d7ef
+  sha: bc5271b113b42e94cf093b6fb799b03092827c71
+libyaml/yaml-0.1.5.tar.gz:
+  size: 504897
+  object_id: b65dc141-722b-4c49-8a7d-df69eea832ca
+  sha: 8b78cb9f759c7d80db8a7328c0ebecfe34fde737
+nginx/nginx.tar.gz:
+  size: 911509
+  object_id: 85723719-a3a6-4b6b-4e5f-9e5c6ad7687c
+  sha: 95cf32c3e33efc53ac81338a5779fbaa425f02e2
+nginx/pcre-8.38.tgz:
+  size: 2053336
+  object_id: f13c9152-c164-4818-bd3a-58750aa02994
+  sha: 3ab418d0026c2a4e693ec783bd60660debc32b8f
+ruby/bundler-1.12.5.gem:
+  size: 280064
+  object_id: a2904e38-1f71-4293-b91f-260f627e58b6
+  sha: a414b2aafa54affac99dc453ced5adc152211eb9
+ruby/ruby-2.2.4.tar.gz:
+  size: 16638151
+  object_id: de97e673-f816-4b93-a4f5-65183f415611
+  sha: 818e5e157f76d4912ba3a7c7b4fc5156105e83c3
+ruby/rubygems-2.6.1.tgz:
+  size: 477342
+  object_id: 7b37b428-1e85-49d2-8db3-f59fd5d7d76a
+  sha: 46c3a761b31781542839c9c7b74b5d1f29176867
+zlib/zlib-1.2.8.tar.gz:
+  size: 571091
+  object_id: 47c5093c-a6ad-4adb-b0d5-6cda5f0962b0
+  sha: a4d316c404ff54ca545ea71a27af7dbc29817088

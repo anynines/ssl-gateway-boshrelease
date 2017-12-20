@@ -108,7 +108,7 @@ properties:
       certificate: ((ssltest.certificate))
       private_key: ((ssltest.private_key))
       allow: 
-      - 172.27.1.5
+      - 
     - domain: ssltest2.com
       ca: ((ssltest2.ca))
       certificate: ((ssltest2.certificate))
@@ -116,7 +116,7 @@ properties:
     - domain: ssltest3.com
     - domain: ssltest4.com
       allow: 
-      - 172.27.1.5
+      - 
 
   consul:
     domain: ((iaas.consul.domain))

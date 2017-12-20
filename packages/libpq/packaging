@@ -9,23 +9,20 @@ set -u # report the usage of uninitialized variables
 CPUS=$(grep -c ^processor /proc/cpuinfo)
 
 export HOME=/var/vcap
+export POSTGRESQL_VERSION=`ls -r libpq/postgresql-* | sed 's/libpq\/postgresql-\(.*\)\.tar.bz2/\1/' | head -1`
 
-echo "Extracting postgres..."
-tar xvf postgres/postgres.tar.gz
+tar jxf libpq/postgresql-$POSTGRESQL_VERSION.tar.bz2
+cd postgresql-$POSTGRESQL_VERSION
+./configure --prefix=${BOSH_INSTALL_TARGET} --with-openssl
 
-echo "Building postgres..."
-pushd postgres-* > /dev/null
-  ./configure --prefix=${BOSH_INSTALL_TARGET} --with-openssl
+pushd src/bin/pg_config
+  make
+  make install
+popd
 
-  pushd src/bin/pg_config > /dev/null
-    make
-    make install
-  popd > /dev/null
+cp -LR src/include ${BOSH_INSTALL_TARGET}
 
-  cp -LR src/include ${BOSH_INSTALL_TARGET}
-
-  pushd src/interfaces/libpq > /dev/null
-    make
-    make install
-  popd > /dev/null
-popd > /dev/null
+pushd src/interfaces/libpq
+  make
+  make install
+popd

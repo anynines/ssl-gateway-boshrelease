@@ -2,4 +2,4 @@
 name: libpq
 dependencies: []
 files:
-- postgres/postgres.tar.gz
+- libpq/postgresql-9.4.6.tar.bz2
