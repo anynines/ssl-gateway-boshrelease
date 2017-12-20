@@ -4,11 +4,11 @@ echo "Extracting pcre..."
 tar xzvf nginx/pcre-8.38.tgz
 
 echo "Extracting nginx..."
-tar xzvf nginx/nginx-1.10.0.tgz
+tar xzvf nginx/nginx.tar.gz
 
 echo "Building nginx..."
 
-pushd nginx-1.10.0
+pushd nginx-*
   ./configure \
     --with-debug \
     --with-pcre=../pcre-8.38 \

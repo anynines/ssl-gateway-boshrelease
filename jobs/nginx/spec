@@ -5,6 +5,7 @@ templates:
   nginx.conf.erb: etc/nginx.conf
   cf-default-apps-domain.conf.erb: etc/cf-default-apps-domain.conf
   cf-default-apps-domain-cert.crt.bundle.erb: etc/cf-default-apps-domain-cert.crt.bundle
+  blacklist-app-domains.conf.erb: etc/blacklist-app-domains.conf
   cf-default-apps-domain-cert.key.erb: etc/cf-default-apps-domain-cert.key
   shared.conf.erb: etc/shared.conf
   shared_host_wss.conf.erb: etc/shared_host_wss.conf
@@ -24,6 +25,7 @@ properties:
     description: 'private key for the shared app domain certificate'
   a9s_ssl_gateway.domain_blacklist:
     description: 'Blacklisted app domains'
+    default: []
   a9s_ssl_gateway.default_apps_domain:
     description: 'The shared app dommain for the Cloud Foundry instance'
   a9s_ssl_gateway.cf_routers:
