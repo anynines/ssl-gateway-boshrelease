@@ -15,15 +15,15 @@
   object_id: f01d95f4-00f6-4014-4709-e7ff79bf1476
   sha: e608f433b32c30ec50d9a5f271d2cfdd9fc72519
 /ruby/autoconf.tar.gz:
-  size: 407337
-  object_id: 2d0317ec-be17-40eb-4b51-7994030545fe
-  sha: 2c8c24b0f01581aeb1940e4d02035670451ce493
+  size: 1927468
+  sha: 562471cbcb0dd0fa42a76665acf0dbb68479b78a
 /ruby/bundler.tar.gz:
   size: 15052955
   object_id: e8be6a22-4c58-43f7-6408-c0abb0153e0a
   sha: dc315cd194f0435c191a57f0f915530ccd18b541
 /ruby/ruby.tar.gz:
   size: 27877471
+  object_id: 211324c1-fb7d-4726-641d-9233d10a2f90
   sha: 35bec97fa06002f7890f8e1ba0418b1793233ddb
 /ruby/rubygems.tar.gz:
   size: 511557

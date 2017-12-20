@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 
 export DEFAULT_APP_DOMAIN=de.a9sapp.eu
 export RANDOM_DOMAIN=checker.misterX.com
