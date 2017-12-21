@@ -3,7 +3,7 @@ name: ssl-gateway
 
 releases:
 - name: ssl-gateway
-  version: 12+dev.6
+  version: 13+dev.1
 
 - name: rabbitmq36
   version: 5
@@ -95,7 +95,7 @@ properties:
     host: ssl-gateway-rabbitmq-0.node.dc1.((iaas.consul.domain))
 
   a9s_ssl_gateway:
-    default_apps_domain: ((iaas.cf.system_domain))
+    default_apps_domain: ((iaas.cf.app_domain))
     cf_routers: ((iaas.cf.router_ips))
     default_apps_domain_cert: ((default_app.certificate))
     default_apps_domain_ca_cert: ((default_app.ca))
@@ -135,7 +135,7 @@ variables:
   type: password
 - name: ssl_gw_rabbitmq_password
   type: password
-- name: default_ca
+- name: default_app_ca
   type: certificate
   options:
     is_ca: true
@@ -143,15 +143,22 @@ variables:
 - name: default_app
   type: certificate
   options:
-    ca: default_ca
-    common_name: ((iaas.cf.system_domain))
+    ca: default_app_ca
+    common_name: default_app
 - name: ssltest
   type: certificate
   options:
-    ca: default_ca
+    ca: default_app_ca
     common_name: ssltest
 - name: ssltest2
   type: certificate
   options:
-    ca: default_ca
+    ca: default_app_ca
     common_name: ssltest2
+
+
+
+
+
+
+

@@ -1,7 +1,7 @@
 module CFHelpers
   def push_checker_app(name, port, domain=nil)
-    cmd = "cf push #{name} -f #{File.join(__dir__, "../../service-binding-checker/manifest.yml")}"
-    cmd << "-d #{domain}" if ENV["PORT"] == port.to_s
+    cmd = "cf push #{name}"
+    cmd << "-d #{domain}" if domain
     system(cmd)
   end
 

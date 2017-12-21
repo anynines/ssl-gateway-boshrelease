@@ -10,6 +10,8 @@ export OPS_FILE=/home/vcap/bosh/anynines-PaaS-deployment/ssl-gateway/ops/vSphere
 export IAAS_CONFIG=/home/vcap/bosh/anynines-PaaS-deployment/iaas-config/a9s-staging-vsphere.yml
 export EXTERNAL_SECRETS=/home/vcap/bosh/anynines-deployment/secrets/external-secrets.yml
 export LOCALHOST_IP=172.27.1.5
+export ANYNINES_PAAS_DEPLOYMENT=/home/vcap/bosh/anynines-PaaS-deployment
+
 
 cf auth $CF_USER $CF_PASSWORD
 
@@ -30,4 +32,7 @@ cf create-domain ssl-gateway-acceptance ssltest.com
 bundle install
 rspec
 
-cf delete-org ssl-gateway-acceptance
+cf -f delete-org ssl-gateway-acceptance
+
+bosh deploy -n $ANYNINES_PAAS_DEPLOYMENT/ssl-gateway/ssl-gateway.yml -l $IAAS_CONFIG -o $OPS_FILE
+bosh clean-up --all
