@@ -15,6 +15,8 @@ name: ssl-gateway-v$VERSION
   version: $VERSION
 EOF
 
+aws s3 cp /tmp/ssl-gateway-v$VERSION.tgz s3://anynines-bosh-releases/ssl-gateway-v$VERSION.tgz
+
 git add .
 # git commit -m "Create new final release ssl-gateway-v$VERSION"
 
