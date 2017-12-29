@@ -33,6 +33,8 @@ server {
     location ~ /\.ht {
       deny  all;
     }
+
+    return 301 https://$host$request_uri;
 }
 
     <% if (blacklisted_domain.key?("certificate") && blacklisted_domain.key?("ca") && blacklisted_domain.key?("private_key")) %>

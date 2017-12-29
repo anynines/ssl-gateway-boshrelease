@@ -24,4 +24,9 @@ module BoshHelpers
   def cleanup_all
     system("bosh -n clean-up --all")
   end
+
+  def scp_read(node, path)
+    system("bosh -n scp -d ssl-gateway --gw-user=vcap ssl-gateway/#{node}:#{path} /tmp/file")
+    File.read("/tmp/file")
+  end
 end
