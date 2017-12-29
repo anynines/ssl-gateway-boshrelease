@@ -1,0 +1,62 @@
+name: ssl-gateway
+version: 1.1.0
+commit_hash: af6e641
+uncommitted_changes: false
+jobs:
+- name: nginx
+  version: c1f886c74700249c7cc81b0ddd6423877104bfb9
+  fingerprint: c1f886c74700249c7cc81b0ddd6423877104bfb9
+  sha1: 94d059c0bcc4799ff1d79d2ee29a5365a3764949
+- name: virtual_host_service_api
+  version: 4ca130dd7b124570d801e3c45aa5219efe69e29b
+  fingerprint: 4ca130dd7b124570d801e3c45aa5219efe69e29b
+  sha1: 60713cd5d440bbe51ebd0aa381237d8190ee08a0
+- name: virtual_host_service_worker
+  version: 2bc642145b8991d0c4c9d6c4c6c900e27c95ff5c
+  fingerprint: 2bc642145b8991d0c4c9d6c4c6c900e27c95ff5c
+  sha1: 0703113c43f5c9dea9bb084798424ba7d6cefcf2
+packages:
+- name: libpq
+  version: d27de4889ebd19799ed3f0a663b642de80dca5bb
+  fingerprint: d27de4889ebd19799ed3f0a663b642de80dca5bb
+  sha1: 2b5faf4f70c3a19bac285439510639b632bacbf5
+  dependencies: []
+- name: libyaml
+  version: ec170fd1ca2cda520318a00bda317209f6976459
+  fingerprint: ec170fd1ca2cda520318a00bda317209f6976459
+  sha1: 492ad761f980078cc5b2cd73f26f2a8d3bf15c85
+  dependencies: []
+- name: nginx
+  version: 8832f79a3ce14d3f25b5d14aaba0177bd58debbc
+  fingerprint: 8832f79a3ce14d3f25b5d14aaba0177bd58debbc
+  sha1: cc5692b75e2ea96bb624f5c625dc79fbc8138794
+  dependencies: []
+- name: ruby
+  version: 9b91b689aa1f8f4690b55532c1ffcca32379bf4f
+  fingerprint: 9b91b689aa1f8f4690b55532c1ffcca32379bf4f
+  sha1: 73a6a7b79ebe418209612244b9f910ba8ae21abf
+  dependencies:
+  - libyaml
+  - zlib
+- name: virtual_host_service_api
+  version: de65d33707b24b5f5ea78cdf4d03ba2c703481cc
+  fingerprint: de65d33707b24b5f5ea78cdf4d03ba2c703481cc
+  sha1: 27e4025da119e3ab844b0d0c5a92a647a9c86ff4
+  dependencies:
+  - ruby
+  - libpq
+- name: virtual_host_service_worker
+  version: f99880f0cbe4ad9bbbad4d46ec98f0d6244b0312
+  fingerprint: f99880f0cbe4ad9bbbad4d46ec98f0d6244b0312
+  sha1: e3da817ae95fec2724ab900ea7be71b45d72dc5f
+  dependencies:
+  - ruby
+- name: zlib
+  version: 5995f47d27c11d09522a631a1a2ff2a0622d53db
+  fingerprint: 5995f47d27c11d09522a631a1a2ff2a0622d53db
+  sha1: ae413c53cf6f465d5e4724fb56156a86931f1cd9
+  dependencies: []
+license:
+  version: ae6a94b3e38944457867abb9a3ac4d796d712a59
+  fingerprint: ae6a94b3e38944457867abb9a3ac4d796d712a59
+  sha1: 86167b01b4313271b502312afe0c76f7907cb022

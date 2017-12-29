@@ -14,9 +14,11 @@ outputs:
 - name: release-output
 
 params:
-  BUCKET_URL:
+  CF_ADMIN_USER:
+  CF_ADMIN_PASSWORD:
+  LOCALHOST_IP:
 
 run: 
   path: sh
   args:
-  - ../scripts/create-final-release.sh
+  - ../scripts/acceptance-tests.sh
