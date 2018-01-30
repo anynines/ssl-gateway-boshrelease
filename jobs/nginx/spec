@@ -41,5 +41,7 @@ properties:
   a9s_ssl_gateway.z3.network_address:
     description: 'network address of the  z3 network, optional if failover_ip is nil'
     default: ""
+  a9s_ssl_gateway.proxy_address:
+    description: 'network address/range of the proxy in front of the nginx e.g. AWS elb'
   a9s_ssl_gateway.ssh_routers:
     description: 'ssh upstream servers (access vms)'
