@@ -1,14 +1,8 @@
-<% domain_blacklist = p('a9s_ssl_gateway.domain_blacklist') %>
-
-
-<% domain_blacklist.each do |blacklisted_domain| %>
+<% p('a9s_ssl_gateway.domain_blacklist').each do |blacklisted_domain| %>
 server {
-    listen       80 proxy_protocol;
+    listen       80 $proxy_protocol;
     server_name  *.<%= blacklisted_domain['domain'] %> <%= blacklisted_domain['domain'] %>;
     
-    set_real_ip_from <%= proxy_ip %>;
-    real_ip_header proxy_protocol;
-
     access_log  /var/vcap/sys/log/nginx/<%= blacklisted_domain['domain'] %>.access.log  main;
     error_log   /var/vcap/sys/log/nginx/<%= blacklisted_domain['domain'] %>.error.log;
 
@@ -19,31 +13,16 @@ server {
       <% end %>
       <% end %>
       deny all;
-      proxy_buffering  off;
-      proxy_set_header X-Forwarded-Host $host;
-      proxy_set_header X-Forwarded-Server $host;
-      proxy_set_header X-Real-IP $proxy_protocol_addr;
-      proxy_set_header X-Forwarded-For $proxy_protocol_addr; 
-      proxy_set_header X-Forwarded-Proto $scheme;
-      proxy_set_header Host $http_host;
-      proxy_pass http://cf-routers;
-    }
 
-    error_page   500 502 503 504  /50x.html;
-    location = /50x.html {
-      root   /usr/share/nginx/html;
-    }
-
-    location ~ /\.ht {
-      deny  all;
+      include $default_location_header;
     }
 
     return 301 https://$host$request_uri;
 }
 
-    <% if (blacklisted_domain.key?("certificate") && blacklisted_domain.key?("ca") && blacklisted_domain.key?("private_key")) %>
+<% if (blacklisted_domain.key?("certificate") && blacklisted_domain.key?("ca") && blacklisted_domain.key?("private_key")) %>
 server {
-    listen       443 proxy_protocol;
+    listen       443 $proxy_protocol;
     server_name  *.<%= blacklisted_domain['domain'] %> <%= blacklisted_domain['domain'] %>;
     
     set_real_ip_from <%= proxy_ip %>;
@@ -52,16 +31,10 @@ server {
     access_log  /var/vcap/sys/log/nginx/<%= blacklisted_domain['domain'] %>.access.log  main;
     error_log   /var/vcap/sys/log/nginx/<%= blacklisted_domain['domain'] %>.error.log;
 
-    ssl                  on;
+    include /var/vcap/store/nginx/conf/default_ssl.config;
+
     ssl_certificate      /var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain['domain'] %>.crt.bundle;
     ssl_certificate_key  /var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain['domain'] %>.key;
-    ssl_session_timeout 1d;
-    ssl_session_cache shared:SSL:50m;
-    ssl_session_tickets off;
-
-    ssl_protocols TLSv1.2;
-    ssl_ciphers 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256';
-    ssl_prefer_server_ciphers on;
 
     location / {
       <% if blacklisted_domain.key?("allow") %>
@@ -70,49 +43,21 @@ server {
       <% end %>
       <% end %>
       deny all;
-      proxy_buffering  off;
-      proxy_http_version 1.1;
-      proxy_set_header Upgrade $http_upgrade;
-      proxy_set_header Connection $connection_upgrade;
-      proxy_set_header X-Forwarded-Host $host;
-      proxy_set_header X-Forwarded-Server $host;
-      proxy_set_header X-Real-IP $proxy_protocol_addr;
-      proxy_set_header X-Forwarded-For $proxy_protocol_addr; 
-      proxy_set_header X-Forwarded-Proto $scheme;
-      proxy_set_header Host $http_host;
-      proxy_pass http://cf-routers;
-    }
-
-    error_page   500 502 503 504  /50x.html;
-    location = /50x.html {
-      root   /usr/share/nginx/html;
-    }
-
-    location ~ /\.ht {
-      deny  all;
+      include $default_location_header;
     }
 }
 
 server {
-    listen       4443 proxy_protocol;
+    listen       4443 $proxy_protocol;
     server_name  *.<%= blacklisted_domain['domain'] %> <%= blacklisted_domain['domain'] %>;
 
     access_log  /var/vcap/sys/log/nginx/<%= blacklisted_domain['domain'] %>.access.log  main;
     error_log   /var/vcap/sys/log/nginx/<%= blacklisted_domain['domain'] %>.error.log;
     
-    proxy_set_header X-Real-IP $proxy_protocol_addr;
-    proxy_set_header X-Forwarded-For $proxy_protocol_addr; 
+    include /var/vcap/store/nginx/conf/default_ssl.config;
 
-    ssl                  on;
     ssl_certificate      /var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain['domain'] %>.crt.bundle;
     ssl_certificate_key  /var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain['domain'] %>.key;
-    ssl_session_timeout 1d;
-    ssl_session_cache shared:SSL:50m;
-    ssl_session_tickets off;
-
-    ssl_protocols TLSv1.2;
-    ssl_ciphers 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256';
-    ssl_prefer_server_ciphers on;
 
     location / {
       <% if blacklisted_domain.key?("allow") %>
@@ -121,26 +66,9 @@ server {
       <% end %>
       <% end %>
       deny all;
-      proxy_http_version 1.1;
-      proxy_set_header Upgrade $http_upgrade;
-      proxy_set_header Connection $connection_upgrade;
-      proxy_set_header X-Forwarded-Host $host;
-      proxy_set_header X-Forwarded-Server $host;
-      proxy_set_header X-Real-IP $proxy_protocol_addr;
-      proxy_set_header X-Forwarded-For $proxy_protocol_addr; 
-      proxy_set_header X-Forwarded-Proto $scheme;
-      proxy_set_header Host $http_host;
-      proxy_pass http://cf-routers;
-    }
 
-    error_page   500 502 503 504  /50x.html;
-    location = /50x.html {
-      root   /usr/share/nginx/html;
-    }
-
-    location ~ /\.ht {
-      deny  all;
+      include $default_location_header;
     }
 }
-    <% end %>
+<% end %>
 <% end %>
