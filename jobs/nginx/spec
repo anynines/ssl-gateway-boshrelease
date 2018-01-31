@@ -8,6 +8,8 @@ templates:
   blacklist-app-domains.conf.erb: etc/blacklist-app-domains.conf
   cf-default-apps-domain-cert.key.erb: etc/cf-default-apps-domain-cert.key
   shared.conf.erb: etc/shared.conf
+  default-location-header.conf: etc/default-location-header.conf
+  default-ssl.conf: etc/default-ssl.conf
   shared_host_wss.conf.erb: etc/shared_host_wss.conf
   upstream.conf.erb: etc/upstream.conf
   pre-start.erb: bin/pre-start
@@ -41,7 +43,8 @@ properties:
   a9s_ssl_gateway.z3.network_address:
     description: 'network address of the  z3 network, optional if failover_ip is nil'
     default: ""
-  a9s_ssl_gateway.proxy_address:
-    description: 'network address/range of the proxy in front of the nginx e.g. AWS elb'
+  a9s_ssl_gateway.elb_address:
+    description: 'network address/range of the load balancer (only required when using proxy-pass)'
+    default: ""
   a9s_ssl_gateway.ssh_routers:
     description: 'ssh upstream servers (access vms)'

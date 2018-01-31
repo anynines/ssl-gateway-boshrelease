@@ -8,7 +8,7 @@ server {
     error_log   /var/vcap/sys/log/nginx/<%= cf_app_domain %>.error.log;
     
     location / {
-      include $default_location_header;
+      include /var/vcap/store/nginx/conf/default-location-header.conf;
     }
     
     return 301 https://$host$request_uri;
@@ -18,7 +18,7 @@ server {
     listen       443 $proxy_protocol;
     server_name  <%= cf_app_domain %> *.<%= cf_app_domain %>;
     
-    include /var/vcap/store/nginx/conf/default_ssl.config;
+    include /var/vcap/store/nginx/conf/default-ssl.conf;
 
     access_log  /var/vcap/sys/log/nginx/<%= cf_app_domain %>.access.log  main;
     error_log   /var/vcap/sys/log/nginx/<%= cf_app_domain %>.error.log;
@@ -27,7 +27,7 @@ server {
     ssl_certificate_key  /var/vcap/store/nginx/ssl/wild.<%= cf_app_domain %>.key;
 
     location / {
-      include $default_location_header;
+      include /var/vcap/store/nginx/conf/default-location-header.conf;
     }
 }
 
@@ -35,7 +35,7 @@ server {
     listen       4443 $proxy_protocol;
     server_name  <%= cf_app_domain %> *.<%= cf_app_domain %>;
     
-    include /var/vcap/store/nginx/conf/default_ssl.config;
+    include /var/vcap/store/nginx/conf/default-ssl.conf;
 
     access_log  /var/vcap/sys/log/nginx/<%= cf_app_domain %>.access.log  main;
     error_log   /var/vcap/sys/log/nginx/<%= cf_app_domain %>.error.log;
@@ -44,7 +44,7 @@ server {
     ssl_certificate_key  /var/vcap/store/nginx/ssl/wild.<%= cf_app_domain %>.key;
 
     location / {
-      include $default_location_header;
+      include /var/vcap/store/nginx/conf/default-location-header.conf;
     }
 }
 

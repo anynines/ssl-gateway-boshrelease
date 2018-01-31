@@ -8,42 +8,38 @@ server {
 
     location / {
       <% if blacklisted_domain.key?("allow") %>
-      <% blacklisted_domain['allow'].each do |allowed_ip| %>
+        <% blacklisted_domain['allow'].each do |allowed_ip| %>
       allow <%= allowed_ip %>;
-      <% end %>
+        <% end %>
       <% end %>
       deny all;
-
-      include $default_location_header;
+      include /var/vcap/store/nginx/conf/default-location-header.conf;
     }
 
     return 301 https://$host$request_uri;
 }
 
-<% if (blacklisted_domain.key?("certificate") && blacklisted_domain.key?("ca") && blacklisted_domain.key?("private_key")) %>
+  <% if (blacklisted_domain.key?("certificate") && blacklisted_domain.key?("ca") && blacklisted_domain.key?("private_key")) %>
 server {
     listen       443 $proxy_protocol;
     server_name  *.<%= blacklisted_domain['domain'] %> <%= blacklisted_domain['domain'] %>;
-    
-    set_real_ip_from <%= proxy_ip %>;
-    real_ip_header proxy_protocol;
 
     access_log  /var/vcap/sys/log/nginx/<%= blacklisted_domain['domain'] %>.access.log  main;
     error_log   /var/vcap/sys/log/nginx/<%= blacklisted_domain['domain'] %>.error.log;
 
-    include /var/vcap/store/nginx/conf/default_ssl.config;
+    include /var/vcap/store/nginx/conf/default-ssl.conf;
 
     ssl_certificate      /var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain['domain'] %>.crt.bundle;
     ssl_certificate_key  /var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain['domain'] %>.key;
 
     location / {
       <% if blacklisted_domain.key?("allow") %>
-      <% blacklisted_domain['allow'].each do |allowed_ip| %>
+       <% blacklisted_domain['allow'].each do |allowed_ip| %>
       allow <%= allowed_ip %>;
-      <% end %>
+        <% end %>
       <% end %>
       deny all;
-      include $default_location_header;
+      include /var/vcap/store/nginx/conf/default-location-header.conf;
     }
 }
 
@@ -54,21 +50,20 @@ server {
     access_log  /var/vcap/sys/log/nginx/<%= blacklisted_domain['domain'] %>.access.log  main;
     error_log   /var/vcap/sys/log/nginx/<%= blacklisted_domain['domain'] %>.error.log;
     
-    include /var/vcap/store/nginx/conf/default_ssl.config;
+    include /var/vcap/store/nginx/conf/default-ssl.conf;
 
     ssl_certificate      /var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain['domain'] %>.crt.bundle;
     ssl_certificate_key  /var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain['domain'] %>.key;
 
     location / {
       <% if blacklisted_domain.key?("allow") %>
-      <% blacklisted_domain['allow'].each do |allowed_ip| %>
+        <% blacklisted_domain['allow'].each do |allowed_ip| %>
       allow <%= allowed_ip %>;
-      <% end %>
+        <% end %>
       <% end %>
       deny all;
-
-      include $default_location_header;
+      include /var/vcap/store/nginx/conf/default-location-header.conf;
     }
 }
-<% end %>
+  <% end %>
 <% end %>
