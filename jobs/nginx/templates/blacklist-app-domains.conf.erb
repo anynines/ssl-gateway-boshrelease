@@ -1,10 +1,6 @@
 <% p('a9s_ssl_gateway.domain_blacklist').each do |blacklisted_domain| %>
 server {
-  if ($proxy_protocol_addr) {
-    listen 80 proxy_protocol;
-  } else {
-    listen 80;
-  }
+  listen 80 $listen_proxy_protocol;
 
   server_name  *.<%= blacklisted_domain['domain'] %> <%= blacklisted_domain['domain'] %>;
   
@@ -28,11 +24,7 @@ server {
 
   <% if (blacklisted_domain.key?("certificate") && blacklisted_domain.key?("ca") && blacklisted_domain.key?("private_key")) %>
 server {
-  if ($proxy_protocol_addr) {
-    listen 443 proxy_protocol;
-  } else {
-    listen 443;
-  }
+  listen 443 $listen_proxy_protocol;
 
   server_name  *.<%= blacklisted_domain['domain'] %> <%= blacklisted_domain['domain'] %>;
 
@@ -57,11 +49,7 @@ server {
 }
 
 server {
-  if ($proxy_protocol_addr) {
-    listen 4443 proxy_protocol;
-  } else {
-    listen 4443;
-  }
+  listen 4443 $listen_proxy_protocol;
 
   server_name  *.<%= blacklisted_domain['domain'] %> <%= blacklisted_domain['domain'] %>;
 

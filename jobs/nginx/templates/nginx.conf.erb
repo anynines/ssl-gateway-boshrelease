@@ -30,6 +30,11 @@ http {
     ~.      proxy_protocol;
   }
 
+  map $proxy_protocol_addr $listen_proxy_protocol {
+    default '';
+    ~.      proxy_protocol;
+  }
+
   map $proxy_protocol_addr $client_ip {
     default $remote_addr;
     ~.      $proxy_protocol_addr;
