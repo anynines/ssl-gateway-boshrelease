@@ -6,7 +6,7 @@ describe 'ssl specs' do
   
   let(:cipher_scan) do
     system("../cipherscan/cipherscan -j #{api} > /tmp/cipher_scan.json")
-    JSON.parse(File.read("/tmp/cipher_scan.json")
+    JSON.parse(File.read("/tmp/cipher_scan.json"))
   end
 
   let(:allowed_ciphers) do
