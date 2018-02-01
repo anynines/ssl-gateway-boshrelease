@@ -32,7 +32,7 @@ http {
 
   map $proxy_protocol_addr $client_ip {
     default $remote_addr;
-    ~.      $proxy_protocol_addr
+    ~.      $proxy_protocol_addr;
   }
 
   map $http_upgrade $connection_upgrade {
