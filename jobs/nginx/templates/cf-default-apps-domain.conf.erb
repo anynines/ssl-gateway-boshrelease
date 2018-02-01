@@ -1,7 +1,7 @@
 <% cf_app_domain = p('a9s_ssl_gateway.default_apps_domain') %>
 
 server {
-  if ($proxy_protocol_addr == '') {
+  if ($proxy_protocol_addr) {
     listen 80 proxy_protocol;
   } else {
     listen 80;
@@ -12,15 +12,17 @@ server {
   access_log  /var/vcap/sys/log/nginx/<%= cf_app_domain %>.access.log  main;
   error_log   /var/vcap/sys/log/nginx/<%= cf_app_domain %>.error.log;
   
+  include /var/vcap/store/nginx/default-vserver.conf;
+
   location / {
-    include /var/vcap/store/nginx/conf/default-location-header.conf;
+    include /var/vcap/store/nginx/default-location-header.conf;
   }
   
   return 301 https://$host$request_uri;
 }
 
 server {
-  if ($proxy_protocol_addr == '') {
+  if ($proxy_protocol_addr) {
     listen 443 proxy_protocol;
   } else {
     listen 443;
@@ -28,7 +30,8 @@ server {
 
   server_name  <%= cf_app_domain %> *.<%= cf_app_domain %>;
   
-  include /var/vcap/store/nginx/conf/default-ssl.conf;
+  include /var/vcap/store/nginx/default-ssl.conf;
+  include /var/vcap/store/nginx/default-vserver.conf;
 
   access_log  /var/vcap/sys/log/nginx/<%= cf_app_domain %>.access.log  main;
   error_log   /var/vcap/sys/log/nginx/<%= cf_app_domain %>.error.log;
@@ -37,12 +40,12 @@ server {
   ssl_certificate_key  /var/vcap/store/nginx/ssl/wild.<%= cf_app_domain %>.key;
 
   location / {
-    include /var/vcap/store/nginx/conf/default-location-header.conf;
+    include /var/vcap/store/nginx/default-location-header.conf;
   }
 }
 
 server {
-  if ($proxy_protocol_addr == '') {
+  if ($proxy_protocol_addr) {
     listen 4443 proxy_protocol;
   } else {
     listen 4443;
@@ -50,7 +53,8 @@ server {
 
   server_name  <%= cf_app_domain %> *.<%= cf_app_domain %>;
   
-  include /var/vcap/store/nginx/conf/default-ssl.conf;
+  include /var/vcap/store/nginx/default-ssl.conf;
+  include /var/vcap/store/nginx/default-vserver.conf;
 
   access_log  /var/vcap/sys/log/nginx/<%= cf_app_domain %>.access.log  main;
   error_log   /var/vcap/sys/log/nginx/<%= cf_app_domain %>.error.log;
@@ -59,7 +63,7 @@ server {
   ssl_certificate_key  /var/vcap/store/nginx/ssl/wild.<%= cf_app_domain %>.key;
 
   location / {
-    include /var/vcap/store/nginx/conf/default-location-header.conf;
+    include /var/vcap/store/nginx/default-location-header.conf;
   }
 }
 

@@ -14,7 +14,8 @@ pushd nginx-*
     --with-pcre=../pcre-8.38 \
     --prefix=${BOSH_INSTALL_TARGET} \
     --with-http_ssl_module \
-    --with-stream
+    --with-stream \
+    --with-http_realip_module
 
   make
   make install

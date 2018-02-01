@@ -20,6 +20,9 @@ cp /var/vcap/jobs/nginx/etc/upstream.conf /var/vcap/store/nginx/conf.d/
 cp /var/vcap/jobs/nginx/etc/shared.conf /var/vcap/store/nginx/static/
 cp /var/vcap/jobs/nginx/etc/shared_host_wss.conf /var/vcap/store/nginx/static/
 cp /var/vcap/jobs/nginx/etc/ssh-proxy.conf /var/vcap/store/nginx/
+cp /var/vcap/jobs/nginx/etc/default-location-header.conf /var/vcap/store/nginx/
+cp /var/vcap/jobs/nginx/etc/default-ssl.conf /var/vcap/store/nginx/
+cp /var/vcap/jobs/nginx/etc/default-vserver.conf /var/vcap/store/nginx/
 
 <% domain_blacklist.each do |blacklisted_domain| %>
   <% if (blacklisted_domain.key?("certificate") && blacklisted_domain.key?("ca") && blacklisted_domain.key?("private_key")) %>

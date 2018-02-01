@@ -1,4 +1,4 @@
-<% elb_ip = p('a9s_ssl_gateway.elb_ip') %>
+<% elb_address = p('a9s_ssl_gateway.elb_address') %>
 
 user  vcap;
 worker_processes  12;
@@ -21,17 +21,8 @@ http {
 
   access_log  /var/vcap/sys/log/nginx/access.log  main;
 
-  error_page   500 502 503 504  /50x.html;
-  location = /50x.html {
-    root   /usr/share/nginx/html;
-  }
-
-  location ~ /\.ht {
-    deny  all;
-  }
-
-  <% if elb_ip %>
-  set_real_ip_from  <%= elb_ip %>;
+  <% if elb_address %>
+  set_real_ip_from  <%= elb_address %>;
   <% end %>
 
   map $proxy_protocol_addr $real_ip_module_header {

@@ -1,6 +1,6 @@
 <% p('a9s_ssl_gateway.domain_blacklist').each do |blacklisted_domain| %>
 server {
-  if ($proxy_protocol_addr == '') {
+  if ($proxy_protocol_addr) {
     listen 80 proxy_protocol;
   } else {
     listen 80;
@@ -11,6 +11,8 @@ server {
   access_log  /var/vcap/sys/log/nginx/<%= blacklisted_domain['domain'] %>.access.log  main;
   error_log   /var/vcap/sys/log/nginx/<%= blacklisted_domain['domain'] %>.error.log;
 
+  include /var/vcap/store/nginx/default-vserver.conf;
+
   location / {
     <% if blacklisted_domain.key?("allow") %>
       <% blacklisted_domain['allow'].each do |allowed_ip| %>
@@ -18,7 +20,7 @@ server {
       <% end %>
     <% end %>
     deny all;
-    include /var/vcap/store/nginx/conf/default-location-header.conf;
+    include /var/vcap/store/nginx/default-location-header.conf;
   }
 
   return 301 https://$host$request_uri;
@@ -26,7 +28,7 @@ server {
 
   <% if (blacklisted_domain.key?("certificate") && blacklisted_domain.key?("ca") && blacklisted_domain.key?("private_key")) %>
 server {
-  if ($proxy_protocol_addr == '') {
+  if ($proxy_protocol_addr) {
     listen 443 proxy_protocol;
   } else {
     listen 443;
@@ -37,7 +39,8 @@ server {
   access_log  /var/vcap/sys/log/nginx/<%= blacklisted_domain['domain'] %>.access.log  main;
   error_log   /var/vcap/sys/log/nginx/<%= blacklisted_domain['domain'] %>.error.log;
 
-  include /var/vcap/store/nginx/conf/default-ssl.conf;
+  include /var/vcap/store/nginx/default-ssl.conf;
+  include /var/vcap/store/nginx/default-vserver.conf;
 
   ssl_certificate      /var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain['domain'] %>.crt.bundle;
   ssl_certificate_key  /var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain['domain'] %>.key;
@@ -49,12 +52,12 @@ server {
       <% end %>
     <% end %>
     deny all;
-    include /var/vcap/store/nginx/conf/default-location-header.conf;
+    include /var/vcap/store/nginx/default-location-header.conf;
   }
 }
 
 server {
-  if ($proxy_protocol_addr == '') {
+  if ($proxy_protocol_addr) {
     listen 4443 proxy_protocol;
   } else {
     listen 4443;
@@ -65,7 +68,8 @@ server {
   access_log  /var/vcap/sys/log/nginx/<%= blacklisted_domain['domain'] %>.access.log  main;
   error_log   /var/vcap/sys/log/nginx/<%= blacklisted_domain['domain'] %>.error.log;
   
-  include /var/vcap/store/nginx/conf/default-ssl.conf;
+  include /var/vcap/store/nginx/default-ssl.conf;
+  include /var/vcap/store/nginx/default-vserver.conf;
 
   ssl_certificate      /var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain['domain'] %>.crt.bundle;
   ssl_certificate_key  /var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain['domain'] %>.key;
@@ -77,7 +81,7 @@ server {
       <% end %>
     <% end %>
     deny all;
-    include /var/vcap/store/nginx/conf/default-location-header.conf;
+    include /var/vcap/store/nginx/default-location-header.conf;
   }
 }
   <% end %>
