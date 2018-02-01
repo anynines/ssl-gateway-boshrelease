@@ -44,11 +44,6 @@ http {
     ~.      $proxy_protocol_addr
   }
 
-  map $proxy_protocol_addr $proxy_protocol {
-    default '';
-    ~.      proxy_protocol;
-  }
-
   map $http_upgrade $connection_upgrade {
     default upgrade;
     ''      close;
