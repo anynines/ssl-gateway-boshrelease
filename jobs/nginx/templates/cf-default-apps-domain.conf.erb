@@ -1,15 +1,16 @@
 <% cf_app_domain = p('a9s_ssl_gateway.default_apps_domain') %>
+<% enable_proxy_protocol = p('a9s_ssl_gateway.enable_proxy_protocol') %>
 
 server {
-  if ($proxy_protocol_addr) {
-    listen 80 proxy_protocol;
-    listen 443 ssl proxy_protocol;
-    listen 4443 ssl proxy_protocol;
-  }
-
+  <% if enable_proxy_protocol %>
+  listen 80 proxy_protocol;
+  listen 443 ssl proxy_protocol;
+  listen 4443 ssl proxy_protocol;
+  <% else %>
   listen 80;
   listen 443 ssl;
   listen 4443 ssl;
+  <% end %>
 
   server_name  <%= cf_app_domain %> *.<%= cf_app_domain %>;
   

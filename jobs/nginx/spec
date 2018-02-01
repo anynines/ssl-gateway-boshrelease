@@ -49,5 +49,8 @@ properties:
   a9s_ssl_gateway.elb_address:
     description: 'network address/range of the load balancer (only required when using proxy-pass)'
     default: ""
+  a9s_ssl_gateway.enable_proxy_protocol:
+    description: 'specify wether you want to use the proxy protocol to forward client ips through tcp proxy'
+    default: false 
   a9s_ssl_gateway.ssh_routers:
     description: 'ssh upstream servers (access vms)'
