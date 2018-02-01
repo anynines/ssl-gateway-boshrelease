@@ -13,6 +13,8 @@ templates:
   shared_host_wss.conf.erb: etc/shared_host_wss.conf
   upstream.conf.erb: etc/upstream.conf
   pre-start.erb: bin/pre-start
+  ssh-proxy.conf.erb: etc/https-redirect.conf
+  ssh-proxy.conf.erb: etc/maps.conf
   ssh-proxy.conf.erb: etc/ssh-proxy.conf
   default-vserver.conf: etc/default-vserver.conf
 
