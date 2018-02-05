@@ -3,11 +3,9 @@
 
 server {
   <% if enable_proxy_protocol %>
-  listen 80 proxy_protocol;
   listen 443 ssl proxy_protocol;
   listen 4443 ssl proxy_protocol;
   <% else %>
-  listen 80;
   listen 443 ssl;
   listen 4443 ssl;
   <% end %>

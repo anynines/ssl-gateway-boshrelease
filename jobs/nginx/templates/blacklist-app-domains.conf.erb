@@ -3,13 +3,11 @@
   <% ssl_enabled = (blacklisted_domain.key?("certificate") && blacklisted_domain.key?("ca") && blacklisted_domain.key?("private_key")) %>
 server {
   <% if enable_proxy_protocol %>
-  listen 80 proxy_protocol;
     <% if ssl_enabled %>
   listen 443 ssl proxy_protocol;
   listen 4443 ssl proxy_protocol;
     <% end %>
   <% else %>
-  listen 80;
     <% if ssl_enabled %>
   listen 443 ssl;
   listen 4443 ssl;
