@@ -1,0 +1,32 @@
+<% proxy_protocol = p('a9s_ssl_gateway.enable_proxy_protocol') ? "proxy_protocol" : "" %>
+<% p('a9s_ssl_gateway.vserver').each do |vserver| %>
+  <% ssl = (vserver.key?("certificate") && vserver.key?("ca") && vserver.key?("private_key")) ? "ssl" : "" %>
+  <% default_server = (vserver.key?("default_server") && vserver["default_server"]) ? "defualt_server" : "" %>
+  <% deny_all = (vserver.key?("deny_all") && vserver["deny_all"]) ? "deny_all;" : "" %>
+server {
+  listen 80 <%= proxy_protocol %> <%= default_server %>;
+  listen 443 ssl <%= proxy_protocol %> <%= ssl %> <%= default_server %>;
+  listen 4443 ssl <%= proxy_protocol %> <%= ssl %> <%= default_server %>;
+
+  server_name  *.<%= vserver['domain'] %> <%= vserver['domain'] %>;
+
+  access_log  /var/vcap/sys/log/nginx/<%= vserver['domain'] %>.access.log  main;
+  error_log   /var/vcap/sys/log/nginx/<%= vserver['domain'] %>.error.log;
+
+  include /var/vcap/store/nginx/default-vserver.conf;
+
+  include /var/vcap/store/nginx/default-ssl.conf;
+  ssl_certificate      /var/vcap/store/nginx/ssl/wild.<%= vserver['domain'] %>.crt.bundle;
+  ssl_certificate_key  /var/vcap/store/nginx/ssl/wild.<%= vserver['domain'] %>.key;
+
+  location / {
+    <% if vserver.key?("allow") %>
+     <% vserver['allow'].each do |allowed_ip| %>
+    allow <%= allowed_ip %>;
+      <% end %>
+    <% end %>
+    <%= deny_all %>
+    include /var/vcap/store/nginx/default-location-header.conf;
+  }
+}
+<% end %>

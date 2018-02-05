@@ -1,7 +1,4 @@
 #!/bin/bash -e
-<% cf_app_domain = p('a9s_ssl_gateway.default_apps_domain') %>
-<% domain_blacklist = p('a9s_ssl_gateway.domain_blacklist') %>
-
 
 PIDFILE=/var/vcap/packages/nginx/logs/nginx.pid
 
@@ -15,33 +12,32 @@ mkdir -p /var/vcap/store/nginx/ssl
 mkdir -p /var/vcap/store/nginx/static
 
 cp /var/vcap/jobs/nginx/etc/nginx.conf /var/vcap/store/nginx/
-cp /var/vcap/jobs/nginx/etc/cf-default-apps-domain.conf /var/vcap/store/nginx/conf.d/
-cp /var/vcap/jobs/nginx/etc/https-redirect.conf /var/vcap/store/nginx/conf.d/
 cp /var/vcap/jobs/nginx/etc/upstream.conf /var/vcap/store/nginx/conf.d/
 cp /var/vcap/jobs/nginx/etc/shared.conf /var/vcap/store/nginx/static/
 cp /var/vcap/jobs/nginx/etc/shared_host_wss.conf /var/vcap/store/nginx/static/
 cp /var/vcap/jobs/nginx/etc/ssh-proxy.conf /var/vcap/store/nginx/
 cp /var/vcap/jobs/nginx/etc/default-location-header.conf /var/vcap/store/nginx/
-cp /var/vcap/jobs/nginx/etc/https-redirect.conf /var/vcap/store/nginx/
 cp /var/vcap/jobs/nginx/etc/maps.conf /var/vcap/store/nginx/
 cp /var/vcap/jobs/nginx/etc/default-ssl.conf /var/vcap/store/nginx/
 cp /var/vcap/jobs/nginx/etc/default-vserver.conf /var/vcap/store/nginx/
+cp /var/vcap/jobs/nginx/etc/tcp-redirect.conf /var/vcap/store/nginx/
 
-<% domain_blacklist.each do |blacklisted_domain| %>
-  <% if (blacklisted_domain.key?("certificate") && blacklisted_domain.key?("ca") && blacklisted_domain.key?("private_key")) %>
->/var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain["domain"] %>.crt.bundle
-echo "<%= blacklisted_domain["certificate"] %>" >> /var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain["domain"] %>.crt.bundle
-echo "<%= blacklisted_domain["ca"] %>" >> /var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain["domain"] %>.crt.bundle
+<% if p('a9s_ssl_gateway.enable_https_redirect') %>
+cp /var/vcap/jobs/nginx/etc/https-redirect.conf /var/vcap/store/nginx/conf.d
+<% end %>
 
->/var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain["domain"] %>.key
-echo "<%= blacklisted_domain["private_key"] %>" >> /var/vcap/store/nginx/ssl/wild.<%= blacklisted_domain["domain"] %>.key
+<% p('a9s_ssl_gateway.vserver').each do |vserver| %>
+  <% if (vserver.key?("certificate") && vserver.key?("ca") && vserver.key?("private_key")) %>
+>/var/vcap/store/nginx/ssl/wild.<%= vserver["domain"] %>.crt.bundle
+echo "<%= vserver["certificate"] %>" >> /var/vcap/store/nginx/ssl/wild.<%= vserver["domain"] %>.crt.bundle
+echo "<%= vserver["ca"] %>" >> /var/vcap/store/nginx/ssl/wild.<%= vserver["domain"] %>.crt.bundle
+
+>/var/vcap/store/nginx/ssl/wild.<%= vserver["domain"] %>.key
+echo "<%= vserver["private_key"] %>" >> /var/vcap/store/nginx/ssl/wild.<%= vserver["domain"] %>.key
   <% end %>
 <% end %>
 
-cp /var/vcap/jobs/nginx/etc/blacklist-app-domains.conf /var/vcap/store/nginx/conf.d/blacklist-app-domains.conf
-cp /var/vcap/jobs/nginx/etc/cf-default-apps-domain.conf /var/vcap/store/nginx/conf.d/<%= cf_app_domain %>.conf
-cp /var/vcap/jobs/nginx/etc/cf-default-apps-domain-cert.crt.bundle /var/vcap/store/nginx/ssl/wild.<%= cf_app_domain %>.crt.bundle
-cp /var/vcap/jobs/nginx/etc/cf-default-apps-domain-cert.key /var/vcap/store/nginx/ssl/wild.<%= cf_app_domain %>.key
+cp /var/vcap/jobs/nginx/etc/vserver.conf /var/vcap/store/nginx/conf.d/vserver.conf
 
 case $1 in
 

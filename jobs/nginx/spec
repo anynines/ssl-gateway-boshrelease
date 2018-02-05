@@ -3,36 +3,26 @@ name: nginx
 templates:
   nginx_ctl.sh.erb: bin/nginx_ctl
   nginx.conf.erb: etc/nginx.conf
-  cf-default-apps-domain.conf.erb: etc/cf-default-apps-domain.conf
-  cf-default-apps-domain-cert.crt.bundle.erb: etc/cf-default-apps-domain-cert.crt.bundle
-  blacklist-app-domains.conf.erb: etc/blacklist-app-domains.conf
-  cf-default-apps-domain-cert.key.erb: etc/cf-default-apps-domain-cert.key
   shared.conf.erb: etc/shared.conf
-  default-location-header.conf.erb: etc/default-location-header.conf
-  default-ssl.conf: etc/default-ssl.conf
   shared_host_wss.conf.erb: etc/shared_host_wss.conf
   upstream.conf.erb: etc/upstream.conf
   pre-start.erb: bin/pre-start
-  https-redirect.conf: etc/https-redirect.conf
-  maps.conf: etc/maps.conf
   ssh-proxy.conf.erb: etc/ssh-proxy.conf
-  default-vserver.conf: etc/default-vserver.conf
+  conf.d/tcp-redirect.conf
+  conf.d/vserver.conf.erb: etc/vserver.conf
+  conf.d/https-redirect.conf: etc/https-redirect.conf
+  partials/maps.conf: etc/maps.conf
+  partials/default-location-header.conf.erb: etc/default-location-header.conf
+  partials/default-ssl.conf: etc/default-ssl.conf
+  partials/default-vserver-location.conf: etc/default-vserver-location.conf
 
 packages:
 - nginx
 
 properties:
-  a9s_ssl_gateway.default_apps_domain_ca_cert:
-    description: 'SSL ca certificate for the shared app domain'
-  a9s_ssl_gateway.default_apps_domain_cert:
-    description: 'SSL certificate for the shared app domain'
-  a9s_ssl_gateway.default_apps_domain_cert_key:
-    description: 'private key for the shared app domain certificate'
-  a9s_ssl_gateway.domain_blacklist:
-    description: 'Blacklisted app domains'
+  a9s_ssl_gateway.vserver:
+    description: 'List of vserver domains'
     default: []
-  a9s_ssl_gateway.default_apps_domain:
-    description: 'The shared app dommain for the Cloud Foundry instance'
   a9s_ssl_gateway.cf_routers:
     description: 'array with ip addresses of the cf routers'
   a9s_ssl_gateway.failover_ip:
@@ -50,6 +40,9 @@ properties:
     description: 'network address/range of the load balancer (only required when using proxy-pass)'
     default: ""
   a9s_ssl_gateway.enable_proxy_protocol:
+    description: 'specify wether you want to use the proxy protocol to forward client ips through tcp proxy'
+    default: false 
+  a9s_ssl_gateway.enable_https_redirect:
     description: 'specify wether you want to use the proxy protocol to forward client ips through tcp proxy'
     default: false 
   a9s_ssl_gateway.ssh_routers:
