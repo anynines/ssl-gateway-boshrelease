@@ -1,3 +1,5 @@
+# passes requests to the cf gorouter defined in cf_routers in 
+# the deployment manifest.
 upstream cf-routers {
   <% p('a9s_ssl_gateway.cf_routers').each do |router| %>
   <%= "server #{router} max_fails=1 fail_timeout=60s;" %>

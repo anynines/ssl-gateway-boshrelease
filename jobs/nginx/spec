@@ -5,16 +5,16 @@ templates:
   nginx.conf.erb: etc/nginx.conf
   shared.conf.erb: etc/shared.conf
   shared_host_wss.conf.erb: etc/shared_host_wss.conf
-  upstream.conf.erb: etc/upstream.conf
   pre-start.erb: bin/pre-start
   ssh-proxy.conf.erb: etc/ssh-proxy.conf
-  conf.d/tcp-redirect.conf
+  tcp-redirect.conf: etc/tcp-redirect.conf
+  conf.d/upstream.conf.erb: etc/upstream.conf
   conf.d/vserver.conf.erb: etc/vserver.conf
   conf.d/https-redirect.conf: etc/https-redirect.conf
   partials/maps.conf: etc/maps.conf
   partials/default-location-header.conf.erb: etc/default-location-header.conf
   partials/default-ssl.conf: etc/default-ssl.conf
-  partials/default-vserver-location.conf: etc/default-vserver-location.conf
+  partials/default-vserver-locations.conf: etc/default-vserver-locations.conf
 
 packages:
 - nginx

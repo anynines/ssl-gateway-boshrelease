@@ -1,3 +1,8 @@
+# location header that are commonly used in the location / blocks of
+# the vserver config.
+# 
+# The headers will adjust depending on the enably_proxy_protocol flag in
+# the deployment manifest which activates the proxy_pass protocol.
 <% enable_proxy_protocol = p('a9s_ssl_gateway.enable_proxy_protocol') %>
 
 proxy_http_version 1.1;

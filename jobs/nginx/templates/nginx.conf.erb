@@ -1,3 +1,11 @@
+# specifies the IP or IP - range from the loadbalancer in
+# front of the ssl-gateway. If you specified, only requests
+# from this network are processed by the ssl-gateway.
+#
+# This is optional and can be seen as a additional security feature.
+# If you have a sound network configuration that guarantees that only
+# request from the loadbalancers network can reach the ssl-gateway, 
+# you can leave it off.
 <% elb_address = p('a9s_ssl_gateway.elb_address') %>
 
 user  vcap;
@@ -16,6 +24,7 @@ http {
   include       /var/vcap/packages/nginx/conf/mime.types;
   default_type  application/octet-stream;
 
+  # default log format
   log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
                     '$status $body_bytes_sent "$http_referer" '
                     '"$http_user_agent" "$http_x_forwarded_for"';
@@ -43,7 +52,7 @@ http {
 
   server_tokens off;
 
-  include /var/vcap/store/nginx/maps.conf;
+  include /var/vcap/store/nginx/partials/maps.conf;
 }
 
 include /var/vcap/store/nginx/ssh-proxy.conf;
