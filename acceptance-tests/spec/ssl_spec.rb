@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'json'
+require 'pp'
 
 describe 'ssl specs' do 
   let(:api) { ENV["CF_API"] }
@@ -19,24 +20,24 @@ describe 'ssl specs' do
 
   context 'with a valid ssl-gateway deployment' do
     it "should have the correct default app cert bundles on all instances" do
-      should = File.read(File.join(__dir__, "fixtures/wild.de.a9sapp.eu.crt.bundle"))
+      should = File.read(File.join(__dir__, "fixtures/wild.de.a9sapp.eu.crt.bundle")).gsub("\n", "")
       expect(BoshHelpers::scp_read(0, "/var/vcap/store/nginx/ssl/wild.de.a9sapp.eu.crt.bundle")).to eq(should)
       expect(BoshHelpers::scp_read(1, "/var/vcap/store/nginx/ssl/wild.de.a9sapp.eu.crt.bundle")).to eq(should)
       expect(BoshHelpers::scp_read(2, "/var/vcap/store/nginx/ssl/wild.de.a9sapp.eu.crt.bundle")).to eq(should)
     end
 
     it "should have the correct ssltest cert bundles on all instances" do
-      should = File.read(File.join(__dir__, "fixtures/wild.checker.ssltest.com.crt.bundle"))
+      should = File.read(File.join(__dir__, "fixtures/wild.checker.ssltest.com.crt.bundle")).gsub("\n", "")
       expect(BoshHelpers::scp_read(0, "/var/vcap/store/nginx/ssl/wild.checker.ssltest.com.crt.bundle")).to eq(should)
       expect(BoshHelpers::scp_read(1, "/var/vcap/store/nginx/ssl/wild.checker.ssltest.com.crt.bundle")).to eq(should)
       expect(BoshHelpers::scp_read(2, "/var/vcap/store/nginx/ssl/wild.checker.ssltest.com.crt.bundle")).to eq(should)
     end
 
-    it "should have the correct ssltest cert bundles on all instances" do
-      should = File.read(File.join(__dir__, "fixtures/wild.checker.ssltest2.com.crt.bundle"))
-      expect(BoshHelpers::scp_read(0, "/var/vcap/store/nginx/ssl/wild.checker.ssltest2.com.crt.bundle")).to eq(should)
-      expect(BoshHelpers::scp_read(1, "/var/vcap/store/nginx/ssl/wild.checker.ssltest2.com.crt.bundle")).to eq(should)
-      expect(BoshHelpers::scp_read(2, "/var/vcap/store/nginx/ssl/wild.checker.ssltest2.com.crt.bundle")).to eq(should)
+    it "should have the correct ssltest2 cert bundles on all instances" do
+      should = File.read(File.join(__dir__, "fixtures/wild.de.checker.ssltest2.com.crt.bundle")).gsub("\n", "")
+      expect(BoshHelpers::scp_read(0, "/var/vcap/store/nginx/ssl/wild.ssltest2.com.crt.bundle")).to eq(should)
+      expect(BoshHelpers::scp_read(1, "/var/vcap/store/nginx/ssl/wild.ssltest2.com.crt.bundle")).to eq(should)
+      expect(BoshHelpers::scp_read(2, "/var/vcap/store/nginx/ssl/wild.ssltest2.com.crt.bundle")).to eq(should)
     end
 
     it "should have the correct ciphers" do

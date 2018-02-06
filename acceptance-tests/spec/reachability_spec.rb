@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'httparty'
+require 'socket'
 require 'pp'
 
 include CFHelpers
@@ -10,86 +11,40 @@ describe 'ssl-gateway reachability spec for apps' do
   let(:app_name) { "checker" }
 
   context 'when service checker apps are pushed' do
-    context "reachable blacklist domain #{ENV["REACHABLE_BLACKLIST_DOMAIN"]}" do
-      it 'it is possible to send a http request on port 80 to the reachable blacklist domain' do
-        expect(HTTParty.get("http://#{app_name}.#{ENV["REACHABLE_BLACKLIST_DOMAIN"]}").code == 200)
+    context "when the https redirect is enabled" do
+      it "should return 301 moved permanetely for all apps on port 80" do
+        expect(Net::HTTP.get_response(URI("http://#{app_name}.#{ENV["REACHABLE_DOMAIN"]}")) == 301)
+        expect(Net::HTTP.get_response(URI("http://#{app_name}.#{ENV["UNREACHABLE_DOMAIN"]}")) == 301)
+        expect(Net::HTTP.get_response(URI("http://#{app_name}.#{ENV["REACHABLE_SSL_DOMAIN"]}")) == 301)
+        expect(Net::HTTP.get_response(URI("http://#{app_name}.#{ENV["UNREACHABLE_SSL_DOMAIN"]}")) == 301)
+        expect(Net::HTTP.get_response(URI("http://#{app_name}.#{ENV["RANDOM_DOMAIN"]}")) == 301)
+        expect(Net::HTTP.get_response(URI("http://#{app_name}.#{ENV["DEFAULT_APP_DOMAIN"]}")) == 301)
       end
     end
 
-    context "unreachable blacklist domain #{ENV["UNREACHABLE_BLACKLIST_DOMAIN"]}" do
-      it 'it should not be possible to send a http request on port 80 to the unreachable blacklist domain' do
-        expect(HTTParty.get("http://#{app_name}.#{ENV["UNREACHABLE_SSL_BLACKLIST_DOMAIN"]}").code == 200)
-      end
-    end
-
-    context "random_domain #{ENV["RANDOM_DOMAIN"]}" do
-      it 'it is possible to send a http request on port 80 to the random domain' do
-        expect(HTTParty.get("http://#{app_name}.#{ENV["RANDOM_DOMAIN"]}").code == 200)
-      end
-
-      it 'it redirects http requests to port 443' do
-        response = HTTParty.get("http://#{app_name}.#{ENV["RANDOM_DOMAIN"]}", follow_redirects: false)
-        expect(response.headers["location"]).to eq("https://#{app_name}.#{ENV["DEFAULT_APP_DOMAIN"]}")
-      end
-
-      it 'it is possible to send a https request on port 443 to the random domain' do
+    context "with a default ssl server configured" do
+      it "is possible to send https requests to all reachable apps on port 443" do
+        expect(HTTParty.get("https://#{app_name}.#{ENV["REACHABLE_DOMAIN"]}:443", :verify => false).code == 200)
+        expect(HTTParty.get("https://#{app_name}.#{ENV["UNREACHABLE_DOMAIN"]}:443", :verify => false).code == 401)
+        expect(HTTParty.get("https://#{app_name}.#{ENV["REACHABLE_SSL_DOMAIN"]}:443", :verify => false).code == 201)
+        expect(HTTParty.get("https://#{app_name}.#{ENV["UNREACHABLE_SSL_DOMAIN"]}:443", :verify => false).code == 403)
         expect(HTTParty.get("https://#{app_name}.#{ENV["RANDOM_DOMAIN"]}:443", :verify => false).code == 200)
-      end
-
-      it 'it is possible to send a http request on port 4443 to the random domain' do
-        expect(HTTParty.get("https://#{app_name}.#{ENV["RANDOM_DOMAIN"]}:4443", :verify => false).code == 200)
-      end
-    end
-
-    context "default_app_domain #{ENV["DEFAULT_APP_DOMAIN"]}" do
-      it 'it is possible to send a http request on port 80 to the default app domain' do
-        expect(HTTParty.get("http://#{app_name}.#{ENV["DEFAULT_APP_DOMAIN"]}").code == 200)
-      end
-
-      it 'it redirects http requests to port 443' do
-        response = HTTParty.get("http://#{app_name}.#{ENV["DEFAULT_APP_DOMAIN"]}", follow_redirects: false)
-        expect(response.headers["location"]).to eq("https://#{app_name}.#{ENV["DEFAULT_APP_DOMAIN"]}")
-      end
-
-      it 'it is possible to send a https request on port 443 to the default app domain' do
         expect(HTTParty.get("https://#{app_name}.#{ENV["DEFAULT_APP_DOMAIN"]}:443", :verify => false).code == 200)
       end
 
-      it 'it is possible to send a http request on port 4443 to the default app domain' do
+      it "is possible to send https requests to all reachable apps on port 4443" do
+        expect(HTTParty.get("https://#{app_name}.#{ENV["REACHABLE_DOMAIN"]}:4443", :verify => false).code == 200)
+        expect(HTTParty.get("https://#{app_name}.#{ENV["UNREACHABLE_DOMAIN"]}:4443", :verify => false).code == 401)
+        expect(HTTParty.get("https://#{app_name}.#{ENV["REACHABLE_SSL_DOMAIN"]}:4443", :verify => false).code == 201)
+        expect(HTTParty.get("https://#{app_name}.#{ENV["UNREACHABLE_SSL_DOMAIN"]}:4443", :verify => false).code == 403)
+        expect(HTTParty.get("https://#{app_name}.#{ENV["RANDOM_DOMAIN"]}:4443", :verify => false).code == 200)
         expect(HTTParty.get("https://#{app_name}.#{ENV["DEFAULT_APP_DOMAIN"]}:4443", :verify => false).code == 200)
       end
     end
 
-    context "blacklist domain with ssl and localhost allowed #{ENV["REACHABLE_BLACKLIST_DOMAIN"]}" do
-      it 'it is possible to send a http request on port 80 to the reachable blacklist domain' do
-        expect(HTTParty.get("http://#{app_name}.#{ENV["REACHABLE_BLACKLIST_DOMAIN"]}").code == 200)
-      end
-
-      it 'it redirects http requests to port 443' do
-        response = HTTParty.get("http://#{app_name}.#{ENV["REACHABLE_BLACKLIST_DOMAIN"]}", follow_redirects: false)
-        expect(response.headers["location"]).to eq("https://#{app_name}.#{ENV["DEFAULT_APP_DOMAIN"]}")
-      end
-
-      it 'it is possible to send a https request on port 443 to the reachable blacklist domain' do
-        expect(HTTParty.get("https://#{app_name}.#{ENV["REACHABLE_BLACKLIST_DOMAIN"]}:443", :verify => false).code == 200)
-      end
-
-      it 'it is possible to send a http request on port 4443 to thereachable blacklist domain' do
-        expect(HTTParty.get("https://#{app_name}.#{ENV["REACHABLE_BLACKLIST_DOMAIN"]}:4443", :verify => false).code == 200)
-      end
-    end
-
-    context "blacklist domain with ssl and deny all #{ENV["UNREACHABLE_SSL_BLACKLIST_DOMAIN"]}" do
-      it 'it should not be possible to send a http request on port 80 to the unreachable ssl blacklist domain' do
-        expect(HTTParty.get("http://#{app_name}.#{ENV["UNREACHABLE_SSL_BLACKLIST_DOMAIN"]}").code == 403)
-      end
-
-      it 'it should not be possible to send a https request on port 443 to the unreachable ssl blacklist domain' do
-        expect(HTTParty.get("https://#{app_name}.#{ENV["UNREACHABLE_SSL_BLACKLIST_DOMAIN"]}:443", :verify => false).code == 403)
-      end
-
-      it 'it should not be possible to send a http request on port 4443 to the unreachable ssl blacklist domain' do
-        expect(HTTParty.get("https://#{app_name}.#{ENV["UNREACHABLE_SSL_BLACKLIST_DOMAIN"]}:4443", :verify => false).code == 403)
+    context "with a tcp forwarding on port 2222 enabled" do
+      it "should be possible to create a websocket on port 2222 of the default app" do
+        TCPSocket.new("#{app_name}.#{ENV["DEFAULT_APP_DOMAIN"]}", 2222).close
       end
     end
   end

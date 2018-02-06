@@ -3,8 +3,10 @@
 # 
 # This config is only included in conf.d when the enable_https_redirect
 # flag in the deployment manifest is set to ture (default is false).
+<% proxy_protocol = p('a9s_ssl_gateway.enable_proxy_protocol') ? "proxy_protocol" : "" %>
+
 server {
-  listen 80;
+  listen 80 default_server <%= proxy_protocol %>;
   server_name _;
 
   return 301 https://$server_name$request_uri;

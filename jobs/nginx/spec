@@ -10,7 +10,7 @@ templates:
   tcp-redirect.conf: etc/tcp-redirect.conf
   conf.d/upstream.conf.erb: etc/upstream.conf
   conf.d/vserver.conf.erb: etc/vserver.conf
-  conf.d/https-redirect.conf: etc/https-redirect.conf
+  conf.d/https-redirect.conf.erb: etc/https-redirect.conf
   partials/maps.conf: etc/maps.conf
   partials/default-location-header.conf.erb: etc/default-location-header.conf
   partials/default-ssl.conf: etc/default-ssl.conf

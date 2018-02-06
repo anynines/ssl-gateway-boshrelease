@@ -2,17 +2,21 @@
 # the client ip through loadbalancers e.g. AWS ELB. The load-balancer need to support the proxy-protocol otherwise
 # this wont work. Note you only can run nginx with this protocol activated or with standard headers.
 <% proxy_protocol = p('a9s_ssl_gateway.enable_proxy_protocol') ? "proxy_protocol" : "" %>
+<% https_redirect_enabled = p('a9s_ssl_gateway.enable_https_redirect') %>
 
 # iterate through vserver list and create server block for each.
 <% p('a9s_ssl_gateway.vserver').each do |vserver| %>
   # check if ssl certs are specified
-  <% ssl = (vserver.key?("certificate") && vserver.key?("ca") && vserver.key?("private_key")) ? "ssl" : "" %>
+  <% ssl_enabled = vserver.key?("certificate") && vserver.key?("ca") && vserver.key?("private_key") %>
+  <% ssl = ssl_enabled ? "ssl" : "" %>
   # set default server label if flag is true (for ports 80, 443, 4443)
   <% default_server = (vserver.key?("default_server") && vserver["default_server"]) ? "default_server" : "" %>
   # deny all incoming traffic on location / if set to true
-  <% deny_all = (vserver.key?("deny_all") && vserver["deny_all"]) ? "deny_all;" : "" %>
+  <% deny_all = (vserver.key?("deny_all") && vserver["deny_all"]) ? "deny all;" : "" %>
 server {
+  <% unless https_redirect_enabled %>
   listen 80 <%= proxy_protocol %> <%= default_server %>;
+  <% end %>
   listen 443 <%= proxy_protocol %> <%= ssl %> <%= default_server %>;
   listen 4443 <%= proxy_protocol %> <%= ssl %> <%= default_server %>;
 
@@ -25,9 +29,11 @@ server {
   include /var/vcap/store/nginx/partials/default-vserver-locations.conf;
 
   # common ssl config, ciphers, supported tls protocol versions...
+  <% if ssl_enabled %>
   include /var/vcap/store/nginx/partials/default-ssl.conf;
   ssl_certificate      /var/vcap/store/nginx/ssl/wild.<%= vserver['domain'] %>.crt.bundle;
   ssl_certificate_key  /var/vcap/store/nginx/ssl/wild.<%= vserver['domain'] %>.key;
+  <% end %>
 
   location / {
     <% if vserver.key?("allow") %>

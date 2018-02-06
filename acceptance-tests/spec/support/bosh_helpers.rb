@@ -26,7 +26,7 @@ module BoshHelpers
   end
 
   def scp_read(node, path)
-    system("bosh -n scp -d ssl-gateway --gw-user=vcap ssl-gateway/#{node}:#{path} /tmp/file")
-    File.read("/tmp/file")
+    system("bosh -n scp -d ssl-gateway --gw-user=vcap ssl-gateway/#{node}:#{path} /tmp/file > /dev/null")
+    File.read("/tmp/file").gsub("\n", "")
   end
 end

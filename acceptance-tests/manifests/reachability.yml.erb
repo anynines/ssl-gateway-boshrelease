@@ -94,28 +94,31 @@ properties:
     host: ssl-gateway-rabbitmq-0.node.dc1.((iaas.consul.domain))
 
   a9s_ssl_gateway:
-    default_apps_domain: ((iaas.cf.app_domain))
     cf_routers: ((iaas.cf.router_ips))
-    default_apps_domain_cert: ((default_app.certificate))
-    default_apps_domain_ca_cert: ((default_app.ca))
-    default_apps_domain_cert_key: ((default_app.private_key))
     ssh_routers: ((iaas.cf.router_ips))
-    
-    domain_blacklist:
-    - domain: checker.ssltest.com
-      ca: ((ssltest.ca))
-      certificate: ((ssltest.certificate))
-      private_key: ((ssltest.private_key))
-      allow: 
-      - <%= ENV["LOCALHOST_IP"] %>
-    - domain: ssltest2.com
-      ca: ((ssltest2.ca))
-      certificate: ((ssltest2.certificate))
-      private_key: ((ssltest2.private_key))
-    - domain: ssltest3.com
-    - domain: ssltest4.com
-      allow: 
-      - <%= ENV["LOCALHOST_IP"] %>
+    enable_https_redirect: true 
+
+    vserver:
+      - domain: ((iaas.cf.app_domain))
+        ca: ((default_app.ca))
+        certificate: ((default_app.certificate))
+        private_key: ((default_app.private_key))
+        default_server: true
+      - domain: checker.ssltest.com
+        ca: ((ssltest.ca))
+        certificate: ((ssltest.certificate))
+        private_key: ((ssltest.private_key))
+        deny_all: true
+        allow:
+        - <%= ENV["LOCALHOST_IP"] %>
+      - domain: ssltest2.com
+        ca: ((ssltest2.ca))
+        certificate: ((ssltest2.certificate))
+        private_key: ((ssltest2.private_key))
+        deny_all: true
+      - domain: ssltest4.com
+      - domain: ssltest3.com
+        deny_all: true
 
   default_app:
     ca: |
