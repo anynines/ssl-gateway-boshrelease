@@ -14,9 +14,8 @@ export CF_USER=max@mustermann.com
 export CF_PASSWORD=test123
 ```
 
-The test scripts holds default values for the a9s vSphere staging system. Change them if needed (@see [env_vars](https://github.com/anynines/ssl-gateway-boshrelease/blob/enable-tcp-proxy-pass/scripts/accceptance-tests.sh#L5-L15))
+The test script holds default values for the a9s vSphere staging system. Change them if needed (@see [env_vars](https://github.com/anynines/ssl-gateway-boshrelease/blob/enable-tcp-proxy-pass/scripts/accceptance-tests.sh#L5-L15))
 
-Call acceptance script
 ```
 scripts/accceptance-tests.sh
 ```
@@ -27,8 +26,8 @@ scripts/accceptance-tests.sh
 - Check if https-redirect is working and returns *301 moved permanently* (reachability_spec.rb)
 - Check if port 443, 4443 is reachable in vserver with ssl on (security_spec.rb)
 - Check if port 80 is reachable in vserver (reachability_spec.rb)
-- Ciphercheck CloudFoundry API and check if supported ciphers are used (security_spec.rb)
-- Ciphercheck CloudFoundry API and check if supported TLS protocols are used (security_spec.rb)
+- [Cipherscan](https://github.com/mozilla/cipherscan) CloudFoundry API and check if supported ciphers are used (security_spec.rb)
+- [Cipherscan](https://github.com/mozilla/cipherscan) CloudFoundry API and check if supported TLS protocols are used (security_spec.rb)
 - Check whitelist feature is working (reachability_spec.rb)
 - Check deny_all flag is working (reachability_spec.rb)
 - Check tcp fowarding is working for port 222 (reachability_spec.rb)
@@ -214,18 +213,18 @@ properties:
 
 | Property | Description |
 |----------|-------------|
-| a9s_ssl_gateway.cf_routers | [ List IP's ]List of upstream ips to which the SSL-Gateway will proxy (e.g. CloudFoundry gorouter IP's) |
-| a9s_ssl_gateway.elb_address | [ IP / IP - range] sets the [__real_ip_from__](http://nginx.org/en/docs/http/ngx_http_realip_module.html) directive. Use this to specify the network from which the SSL-Gateway will only accept requests (e.g. AWS VPC to which the ELB belongs) |
-| a9s_ssl_gateway.enable_proxy_protocol | [ true / false ] if set to true enables the [__proxy_protocol__](https://www.nginx.com/resources/admin-guide/proxy-protocol/). The proxy protocol is used to receive the client's ip through e.g. Loadbalancer which are in front of the SSL-Gateway and to a TCP - proxying. __NOTE__ if proxy_protocol is set to true Nginx will enforce it! |
+| a9s_ssl_gateway.cf_routers | [ List IP's ] List of upstream ips to which the SSL-Gateway will proxy (e.g. CloudFoundry gorouter IP's) |
+| a9s_ssl_gateway.elb_address | [ IP / IP - range] sets the [real_ip_from](http://nginx.org/en/docs/http/ngx_http_realip_module.html) directive. Use this to specify the network from which the SSL-Gateway will only accept requests (e.g. AWS VPC to which the ELB belongs) |
+| a9s_ssl_gateway.enable_proxy_protocol | [ true / false ] if set to true enables the [proxy_protocol](https://www.nginx.com/resources/admin-guide/proxy-protocol/). The proxy protocol is used to receive the client's IP through e.g. Loadbalancer (tcp forwarding) which are in front of the SSL-Gateway. __NOTE__ if proxy_protocol is set to true Nginx will enforce it! |
 | a9s_ssl_gateway.enable_https_redirect | [ true / false ] if set to true all requests on port 80 are redirect to the same url via https |
-| a9s_ssl_gateway.ssh_routers | TODO |
-| a9s_ssl_gateway.failover_ip | TODO |
+| a9s_ssl_gateway.ssh_routers | mostly gorouter IP's |
+| a9s_ssl_gateway.failover_ip | mostly gorouter IP's |
 | a9s_ssl_gateway.z1.network_address | [ IP ] network address for availability zone z1 |
 | a9s_ssl_gateway.z2.network_address | [ IP ] network address for availability zone z2 |
 | a9s_ssl_gateway.z3.network_address | [ IP ] network address for availability zone z3 |
 | a9s_ssl_gateway.vserver | List of vservers which will be created in the nginx http config |
-| a9s_ssl_gateway.vserver[n].default_server | Sets the label [__default_server__](http://nginx.org/en/docs/http/ngx_http_core_module.html#listen) on all ports of this vserver |
-| a9s_ssl_gateway.vserver[n].domain | Sets the [__server_name__](http://nginx.org/en/docs/http/ngx_http_core_module.html#server_name) directive in the vserver entry to match __domain__ and __*.domain___ (all subdomains) |
+| a9s_ssl_gateway.vserver[n].default_server | Sets the label [default_server](http://nginx.org/en/docs/http/ngx_http_core_module.html#listen) on all ports of this vserver |
+| a9s_ssl_gateway.vserver[n].domain | Sets the [server_name](http://nginx.org/en/docs/http/ngx_http_core_module.html#server_name) directive in the vserver entry to match __domain__ and __*.domain___ (all subdomains) |
 | a9s_ssl_gateway.vserver[n].ca | (TLS) ca - cert for TLS (Port 443, 4443 are automatically activated if you specify a valid value for ca, certificate and private_key) |
 | a9s_ssl_gateway.vserver[n].certificate | (TLS) certificate for TLS |
 | a9s_ssl_gateway.vserver[n].private_key | (TLS) private_key for TLS |
