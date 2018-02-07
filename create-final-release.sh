@@ -1,7 +1,4 @@
-
-cd acceptance-tests
-./run-testsuite.sh
-cd ..
+set -e
 
 bosh create-release --final --name=ssl-gateway --version=$VERSION --tarball=/tmp/ssl-gateway-v$VERSION.tgz
 
