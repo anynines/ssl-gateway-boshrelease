@@ -36,7 +36,7 @@ properties:
   a9s_ssl_gateway.z3.network_address:
     description: 'network address of the  z3 network, optional if failover_ip is nil'
     default: ""
-  a9s_ssl_gateway.load_balancer_address
+  a9s_ssl_gateway.load_balancer_address:
     description: 'network address/range of the load balancer (only required when using proxy-pass)'
     default: []
   a9s_ssl_gateway.enable_proxy_protocol:
