@@ -1,5 +1,5 @@
 module ManifestHelpers
-  def render_manifest(manifest, properties)
+  def render_manifest(manifest, properties=[])
     b = binding
     properties.each { |key, value| b.local_variable_set(key, value) }
       

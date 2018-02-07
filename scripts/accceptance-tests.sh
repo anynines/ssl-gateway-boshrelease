@@ -12,6 +12,7 @@ export OPS_FILE=/home/vcap/bosh/anynines-PaaS-deployment/ssl-gateway/ops/vSphere
 export IAAS_CONFIG=/home/vcap/bosh/anynines-PaaS-deployment/iaas-config/a9s-staging-vsphere.yml
 export LOCALHOST_IP=172.27.1.5
 export ANYNINES_PAAS_DEPLOYMENT=/home/vcap/bosh/anynines-PaaS-deployment
+export CF_API=https://api.de.a9s.eu
 
 
 # create org and space
@@ -60,7 +61,7 @@ bundle install
 #ruby -r erb -e "puts ERB.new(File.read('manifests/reachability.yml.erb')).result" > 'manifests/reachability.yml'
 #$BOSH deploy -d ssl-gateway manifests/reachability.yml -o $OPS_FILE -l $IAAS_CONFIG
 #rspec spec/reachability_spec.rb
-rspec spec/ssl_spec.rb
+rspec spec/security_spec.rb
 popd > /dev/null
 
 # clean-up

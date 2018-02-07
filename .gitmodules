@@ -5,3 +5,6 @@
 [submodule "src/virtual_host_service_api"]
 	path = src/virtual_host_service_api
 	url = git@github.com:anynines/virtual_host_service_api.git
+[submodule "acceptance-tests/cipherscan"]
+	path = acceptance-tests/cipherscan
+	url = git@github.com:mozilla/cipherscan.git
