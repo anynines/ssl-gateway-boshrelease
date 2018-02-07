@@ -8,3 +8,6 @@
 [submodule "acceptance-tests/cipherscan"]
 	path = acceptance-tests/cipherscan
 	url = git@github.com:mozilla/cipherscan.git
+[submodule "acceptance-tests/service-binding-checker"]
+  path = acceptance-tests/service-binding-checker
+  url = git@github.com:anynines/service-binding-checker.git
