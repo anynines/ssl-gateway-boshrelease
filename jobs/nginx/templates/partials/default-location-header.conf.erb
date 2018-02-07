@@ -16,7 +16,6 @@ proxy_set_header Host $http_host;
 <% if enable_proxy_protocol %>
 proxy_set_header X-Real-IP $proxy_protocol_addr;
 proxy_set_header X-Forwarded-For $proxy_protocol_addr;
-real_ip_header $proxy_protocol_addr;
 <% else %>
 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 <% end %>

@@ -214,7 +214,7 @@ properties:
 | Property | Description |
 |----------|-------------|
 | a9s_ssl_gateway.cf_routers | [ List IP's ] List of upstream ips to which the SSL-Gateway will proxy (e.g. CloudFoundry gorouter IP's) |
-| a9s_ssl_gateway.elb_address | [ IP / IP - range] sets the [real_ip_from](http://nginx.org/en/docs/http/ngx_http_realip_module.html) directive. Use this to specify the network from which the SSL-Gateway will only accept requests (e.g. AWS VPC to which the ELB belongs) |
+| a9s_ssl_gateway.load_balancer_address | [ List IP / IP - range] sets the [real_ip_from](http://nginx.org/en/docs/http/ngx_http_realip_module.html) directive. Use this to specify the network from which the SSL-Gateway will only accept requests (e.g. AWS VPC to which the ELB belongs) |
 | a9s_ssl_gateway.enable_proxy_protocol | [ true / false ] if set to true enables the [proxy_protocol](https://www.nginx.com/resources/admin-guide/proxy-protocol/). The proxy protocol is used to receive the client's IP through e.g. Loadbalancer (tcp forwarding) which are in front of the SSL-Gateway. __NOTE__ if proxy_protocol is set to true Nginx will enforce it! |
 | a9s_ssl_gateway.enable_https_redirect | [ true / false ] if set to true all requests on port 80 are redirect to the same url via https |
 | a9s_ssl_gateway.ssh_routers | mostly gorouter IP's |
@@ -263,5 +263,6 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 - Implement feature that lets us scale the vhost worker instances and syncs certs / vservers (also for failover)
 - Add migration testcases which check if values in store/nginx[site-enabled/ site-available/ ssl/ ] are kept upon migration
 - Add migration testcases which check if old config file in store/nginx are removed and updated upon migration
+- Add reachability testcases with https-redirect disabled
 
 
