@@ -24,7 +24,7 @@ http {
 
   # default log form
   <% if p('a9s_ssl_gateway.enable_proxy_protocol') %>
-  log_format  main  '$proxy_protocol_addr - $remote_user - $remote_user [$time_local] "$request" '
+  log_format  main  '$proxy_protocol_addr - $remote_user [$time_local] "$request" '
                     '$status $body_bytes_sent "$http_referer" '
                     '"$http_user_agent" "$http_x_forwarded_for"';
   <% else %>
@@ -40,7 +40,6 @@ http {
   set_real_ip_from <%= load_balancer %>;
     <% end %>
   real_ip_header proxy_protocol;
-  real_ip_header X-Forwarded-For;
   real_ip_recursive on;
   <% end %>
 
