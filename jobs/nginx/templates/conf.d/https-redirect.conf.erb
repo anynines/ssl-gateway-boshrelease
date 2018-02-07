@@ -9,5 +9,5 @@ server {
   listen 80 default_server <%= proxy_protocol %>;
   server_name _;
 
-  return 301 https://$server_name$request_uri;
+  return 301 https://$host$request_uri;
 }
