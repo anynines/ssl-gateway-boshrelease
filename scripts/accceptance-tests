@@ -69,7 +69,7 @@ function push-app {
 function push-checker-apps {
   pushd ${PWD}/../acceptance-tests/service-binding-checker > /dev/null
   push-app checker $DEFAULT_APP_DOMAIN
-  push-app checker $REACHEABLE_SSL_DOMAIN
+  push-app checker $REACHABLE_SSL_DOMAIN
   push-app checker $UNREACHABLE_SSL_DOMAIN
   push-app checker $UNREACHABLE_DOMAIN
   push-app checker $REACHABLE_DOMAIN
