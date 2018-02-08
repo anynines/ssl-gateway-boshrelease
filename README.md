@@ -264,5 +264,8 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 - Add migration testcases which check if values in store/nginx[site-enabled/ site-available/ ssl/ ] are kept upon migration
 - Add migration testcases which check if old config file in store/nginx are removed and updated upon migration
 - Add reachability testcases with https-redirect disabled
+- Add glossar to README.md
+- Add CONTRIBUTING.md
+- Make release tarballs public in s3 bucket automatically
 
 
