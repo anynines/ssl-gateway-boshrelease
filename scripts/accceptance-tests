@@ -14,115 +14,136 @@
 set -o errexit # Exit immediately if a simple command exits with a non-zero status
 set -o nounset # Report the usage of uninitialized variables
 
-: BOSH=${BOSH:-"bosh -n"} 
-: CF=${CF:-cf} 
-: DEFAULT_APP_DOMAIN=${DEFAULT_APP_DOMAIN:-de.a9sapp.eu} 
-: RANDOM_DOMAIN=${RANDOM_DOMAIN:-misterX.com} 
-: UNREACHABLE_DOMAIN=${UNREACHABLE_DOMAIN:-ssltest3.com} 
-: REACHABLE_DOMAIN=${REACHABLE_DOMAIN:-ssltest4.com} 
-: UNREACHABLE_SSL_DOMAIN=${UNREACHABLE_SSL_DOMAIN:-ssltest2.com} 
-: REACHEABLE_SSL_DOMAIN=${REACHEABLE_SSL_DOMAIN:-ssltest.com} 
-: OPS_FILES=${OPS_FILES:-/home/vcap/bosh/anynines-PaaS-deployment/ssl-gateway/ops/vSphere-networks.yml /home/vcap/bosh/anynines-PaaS-deployment/ssl-gateway/ops/vSphere-vserver-conf.yml} 
-: IAAS_CONFIG=${IAAS_CONFIG:-/home/vcap/bosh/anynines-PaaS-deployment/iaas-config/a9s-staging-vsphere.yml} 
-: LOCALHOST_IP=${LOCALHOST_IP:172.27.1.5} 
-: ANYNINES_PAAS_DEPLOYMENT=${ANYNINES_PAAS_DEPLOYMENT:-/home/vcap/bosh/anynines-PaaS-deployment} 
-: CF_API=${CF_API:-https//api.de.a9s.eu} 
+ export BOSH=${BOSH:-"bosh -n"} 
+ export CF=${CF:-cf} 
+ export DEFAULT_APP_DOMAIN=${DEFAULT_APP_DOMAIN:-de.a9sapp.eu} 
+ export RANDOM_DOMAIN=${RANDOM_DOMAIN:-misterX.com} 
+ export UNREACHABLE_DOMAIN=${UNREACHABLE_DOMAIN:-ssltest3.com} 
+ export REACHABLE_DOMAIN=${REACHABLE_DOMAIN:-ssltest4.com} 
+ export UNREACHABLE_SSL_DOMAIN=${UNREACHABLE_SSL_DOMAIN:-ssltest2.com} 
+ export REACHABLE_SSL_DOMAIN=${REACHEABLE_SSL_DOMAIN:-ssltest.com} 
+ export OPS_FILES=${OPS_FILES:-/home/vcap/bosh/anynines-PaaS-deployment/ssl-gateway/ops/vSphere-networks.yml}
+ export IAAS_CONFIG=${IAAS_CONFIG:-/home/vcap/bosh/anynines-PaaS-deployment/iaas-config/a9s-staging-vsphere.yml} 
+ export LOCALHOST_IP=${LOCALHOST_IP:-172.27.1.5} 
+ export ANYNINES_PAAS_DEPLOYMENT=${ANYNINES_PAAS_DEPLOYMENT:-/home/vcap/bosh/anynines-PaaS-deployment} 
+ export CF_API=${CF_API:-https//api.de.a9s.eu} 
 : ${CF_USER?"Env variable CF_USER not set"}
 : ${CF_PASSWORD?"Env variable CF_PASSWORD not set"}
+ SETUP=true
+ CLEANUP=true
 
 function setup-org {
-  $CF auth $CF_USER $CF_PASSWORD
-  $CF create-org ssl-gateway-acceptance
-  $CF target -o ssl-gateway-acceptance
-  $CF create-space test
-  $CF target -s test
+  $CF auth $CF_USER $CF_PASSWORD > /dev/null
+  $CF create-org ssl-gateway-acceptance > /dev/null
+  $CF target -o ssl-gateway-acceptance > /dev/null
+  $CF create-space test > /dev/null
+  $CF target -s test > /dev/null
 }
 
 function create-domains {
   printf "create-domains..."
-  $CF create-domain ssl-gateway-acceptance de.a9sapp.eu > /dev/null
-  $CF create-domain ssl-gateway-acceptance misterX.com > /dev/null
-  $CF create-domain ssl-gateway-acceptance ssltest3.com > /dev/null
-  $CF create-domain ssl-gateway-acceptance ssltest4.com > /dev/null
-  $CF create-domain ssl-gateway-acceptance ssltest2.com > /dev/null
-  $CF create-domain ssl-gateway-acceptance ssltest.com > /dev/null
-  printf "done\n"
+  {
+    $CF create-domain ssl-gateway-acceptance de.a9sapp.eu > /dev/null
+    $CF create-domain ssl-gateway-acceptance misterX.com > /dev/null
+    $CF create-domain ssl-gateway-acceptance ssltest3.com > /dev/null
+    $CF create-domain ssl-gateway-acceptance ssltest4.com > /dev/null
+    $CF create-domain ssl-gateway-acceptance ssltest2.com > /dev/null
+    $CF create-domain ssl-gateway-acceptance ssltest.com > /dev/null
+    printf "done\n"
+  } || {
+  printf "domains already exist\n"
+  }
 }
 
 function push-app {
-  if curl -sf https://$1.$2 --insecure;
+  if curl -sf https://$1.$2 --insecure > /dev/null; then
+    printf "app $1.$2 already there!; skip\n"
     return
   else
     printf "push app $1.$2..."
-    $CF PUSH $1 -d $2
+    $CF push $1 -d $2 > /dev/null
     printf "done\n"
   fi
 }
 
 function push-checker-apps {
-  pushd ../acceptance-tests/service-binding-checker > /dev/null
-  push-app(checker, $DEFAULT_APP_DOMAIN)
-  push-app(checker, $REACHEABLE_SSL_DOMAIN)
-  push-app(checker, $UNREACHABLE_SSL_DOMAIN)
-  push-app(checker, $UNREACHABLE_DOMAIN)
-  push-app(checker, $REACHABLE_DOMAIN)
+  pushd ${PWD}/../acceptance-tests/service-binding-checker > /dev/null
+  push-app checker $DEFAULT_APP_DOMAIN
+  push-app checker $REACHEABLE_SSL_DOMAIN
+  push-app checker $UNREACHABLE_SSL_DOMAIN
+  push-app checker $UNREACHABLE_DOMAIN
+  push-app checker $REACHABLE_DOMAIN
   popd > /dev/null
 }
 
 function upload-dev-release {
+  if [ ! -f ${PWD}/../config/private.yml ]; then
+    printf "you need to create config/private.yml to access the a9s blobstore!"
+    exit 1
+  fi
   printf "create and upload new dev release..."
-  pushd ../ > /dev/null
-  $BOSH create-release --force
+  pushd ${PWD}/../ > /dev/null
+  $BOSH create-release --force > /dev/null
   release=$(ls -1t dev_releases/ssl-gateway | tr " " "\n"|sed -n '2p')
   prefix="ssl-gateway-"
   suffix=".yml"
   release_version=${release#$prefix}
   release_version=${release_version%$suffix}
   export RELEASE_VERSION=$release_version
-  $BOSH upload-release dev_releases/ssl-gateway/$release
+  $BOSH upload-release dev_releases/ssl-gateway/$release > /dev/null
   popd > /dev/null
   printf "done\n"
 }
 
 function parse-ops {
   ops_cmd=""
-
   for ops in $OPS_FILES;
   do
-    $ops+="-o $ops"
+    ops_cmd+="-o $ops "
   done
-
-  return $ops_cmd
+  echo $ops_cmd
 }
 
 function render-deployment-manifest {
   printf "render deployment manifest..."
-  pushd ../acceptance-tests > /dev/null
+  pushd ${PWD}/../acceptance-tests > /dev/null
   ruby -r erb -e "puts ERB.new(File.read('manifests/reachability.yml.erb')).result" > 'manifests/reachability.yml'
   popd > /dev/null
   printf "done\n"
 }
 
 function deploy-ssl-gateway {
-  printf "deploy ssl-gateway..."
-  pushd ../acceptance-tests > /dev/null
+  pushd ${PWD}/../acceptance-tests > /dev/null
   render-deployment-manifest
-  ops_cmd=parse-ops
-  $BOSH deploy -d ssl-gateway manifests/reachability.yml $ops_cmd -l $IAAS_CONFIG
+  ops_cmd=$(parse-ops)
+  printf "deploy ssl-gateway..."
+  $BOSH deploy -d ssl-gateway manifests/reachability.yml $ops_cmd -l $IAAS_CONFIG > /dev/null
   popd > /dev/null
   printf "done\n"
 }
 
 function execute-specs {
   printf "execute specs...\n"
-  pushd ../acceptance-tests > /dev/null
-  bundle install
+  pushd ${PWD}/../acceptance-tests > /dev/null
+  bundle install > /dev/null
 
-  printf "reachability_spec\n"
-  rspec spec/reachability_spec.rb
+  for testcase in ${TESTCASES[@]}
+  do
+    case $testcase in
+      security)
+        printf "security_spec\n"
+        rspec spec/security_spec.rb
+        ;;
+      reachability)
+        printf "reachability_spec\n"
+        rspec spec/reachability_spec.rb
+        ;;
+      *)
+        printf "$testcase not found\n"
+        ;;
+    esac
+  done
 
-  printf "security_spec\n"
-  rspec spec/security_spec.rb
   popd > /dev/null
   printf "...done\n"
 }
@@ -134,13 +155,41 @@ function clean-up-director {
 }
 
 function main {
-  setup-org
-  create-domains
-  push-checker-apps
-  upload-dev-release
-  deploy-ssl-gateway
+
+  if ${SETUP}; then
+    setup-org
+    create-domains
+    push-checker-apps
+    upload-dev-release
+    deploy-ssl-gateway
+  fi
+
   execute-specs
-  clean-up-director
+
+ if ${CLEANUP}; then
+   clean-up-director
+ fi
 }
+
+while [[ $# -gt 0 ]]
+do
+  key="$1"
+  case $key in
+    -t|--testcase)
+    TESTCASES+="$2 "
+    shift
+    shift
+    ;;
+    --skip-setup)
+    SETUP=false
+    shift
+    ;;
+    --skip-cleanup)
+    CLEANUP=false
+    shift
+    ;;
+    *)
+  esac
+done
 
 main

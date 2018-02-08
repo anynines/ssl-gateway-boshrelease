@@ -3,10 +3,13 @@ require 'json'
 require 'pp'
 require 'httparty'
 
+include CustomMatcher
+
 describe 'ssl specs' do 
   let(:app_name) { "checker" }
   let(:api) { ENV["CF_API"] }
   let(:cipherscan) { File.join(__dir__, "../cipherscan/cipherscan") }
+  let(:fixtures) { File.join(__dir__, "./fixtures") }
   
   let(:cipher_scan) do
     system("#{cipherscan} -j #{api} > /tmp/cipher_scan.json")
@@ -23,15 +26,15 @@ describe 'ssl specs' do
 
   context 'with a valid ssl-gateway deployment' do
     it "should have the correct default app cert bundles on all instances" do
-      check_ssl_cert_bundle([0, 1, 2], "fixtures/wild.de.a9sapp.eu.crt.bundle", "/var/vcap/store/nginx/ssl/wild.de.a9sapp.eu.crt.bundle")
+      check_ssl_cert_bundle([0, 1, 2], File.join(fixtures, "wild.de.a9sapp.eu.crt.bundle"), "/var/vcap/store/nginx/ssl/wild.de.a9sapp.eu.crt.bundle")
     end
 
     it "should have the correct ssltest cert bundles on all instances" do
-      check_ssl_cert_bundle([0, 1, 2], "fixtures/wild.checker.ssltest.com.crt.bundle", "/var/vcap/store/nginx/ssl/wild.checker.ssltest.com.crt.bundle")
+      check_ssl_cert_bundle([0, 1, 2], File.join(fixtures, "wild.checker.ssltest.com.crt.bundle"), "/var/vcap/store/nginx/ssl/wild.checker.ssltest.com.crt.bundle")
     end
 
     it "should have the correct ssltest2 cert bundles on all instances" do
-      check_ssl_cert_bundle([0, 1, 2], "fixtures/wild.de.checker.ssltest2.com.crt.bundle", "/var/vcap/store/nginx/ssl/wild.ssltest2.com.crt.bundle")
+      check_ssl_cert_bundle([0, 1, 2], File.join(fixtures, "wild.de.checker.ssltest2.com.crt.bundle"), "/var/vcap/store/nginx/ssl/wild.ssltest2.com.crt.bundle")
     end
 
     it "should have the correct ciphers" do
