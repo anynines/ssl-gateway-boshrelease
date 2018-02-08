@@ -240,10 +240,10 @@ properties:
 We use [SemVer](http://semver.org/) for versioning.
 
 ## Contributing
-@see [CONTRIBUTING.md]()
+@see [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 ## Changelog
-@see [CHANGELOG.md]()
+@see [CHANGELOG.md](./CHANGELOG.md)
 
 ## Authors
 * **Dennis Groß** - *v1.2.0* - [gdenn](https://github.com/gdenn)

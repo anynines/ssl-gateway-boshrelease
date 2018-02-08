@@ -1,0 +1,146 @@
+#!/bin/bash
+# 
+# This sciprt is used to call the specs in ssl-gateway/acceptance/**/*_spec.rb to execute the 
+# acceptance tests for the SSL-Gateay boshrelease.
+#
+# The script already offers default values for most of the env variables to test in a9s staging
+# vSephere. If you need other environment variables, feel free to provide them before calling the
+# script.
+#
+# Before you start the script make sure you have set the following env variables:
+# - CF_USER - test user name for CloudFoundry
+# - CF_PASSWORD - test user password for CloudFoundry
+#
+set -o errexit # Exit immediately if a simple command exits with a non-zero status
+set -o nounset # Report the usage of uninitialized variables
+
+: BOSH=${BOSH:-"bosh -n"} 
+: CF=${CF:-cf} 
+: DEFAULT_APP_DOMAIN=${DEFAULT_APP_DOMAIN:-de.a9sapp.eu} 
+: RANDOM_DOMAIN=${RANDOM_DOMAIN:-misterX.com} 
+: UNREACHABLE_DOMAIN=${UNREACHABLE_DOMAIN:-ssltest3.com} 
+: REACHABLE_DOMAIN=${REACHABLE_DOMAIN:-ssltest4.com} 
+: UNREACHABLE_SSL_DOMAIN=${UNREACHABLE_SSL_DOMAIN:-ssltest2.com} 
+: REACHEABLE_SSL_DOMAIN=${REACHEABLE_SSL_DOMAIN:-ssltest.com} 
+: OPS_FILES=${OPS_FILES:-/home/vcap/bosh/anynines-PaaS-deployment/ssl-gateway/ops/vSphere-networks.yml /home/vcap/bosh/anynines-PaaS-deployment/ssl-gateway/ops/vSphere-vserver-conf.yml} 
+: IAAS_CONFIG=${IAAS_CONFIG:-/home/vcap/bosh/anynines-PaaS-deployment/iaas-config/a9s-staging-vsphere.yml} 
+: LOCALHOST_IP=${LOCALHOST_IP:172.27.1.5} 
+: ANYNINES_PAAS_DEPLOYMENT=${ANYNINES_PAAS_DEPLOYMENT:-/home/vcap/bosh/anynines-PaaS-deployment} 
+: CF_API=${CF_API:-https//api.de.a9s.eu} 
+: ${CF_USER?"Env variable CF_USER not set"}
+: ${CF_PASSWORD?"Env variable CF_PASSWORD not set"}
+
+function setup-org {
+  $CF auth $CF_USER $CF_PASSWORD
+  $CF create-org ssl-gateway-acceptance
+  $CF target -o ssl-gateway-acceptance
+  $CF create-space test
+  $CF target -s test
+}
+
+function create-domains {
+  printf "create-domains..."
+  $CF create-domain ssl-gateway-acceptance de.a9sapp.eu > /dev/null
+  $CF create-domain ssl-gateway-acceptance misterX.com > /dev/null
+  $CF create-domain ssl-gateway-acceptance ssltest3.com > /dev/null
+  $CF create-domain ssl-gateway-acceptance ssltest4.com > /dev/null
+  $CF create-domain ssl-gateway-acceptance ssltest2.com > /dev/null
+  $CF create-domain ssl-gateway-acceptance ssltest.com > /dev/null
+  printf "done\n"
+}
+
+function push-app {
+  if curl -sf https://$1.$2 --insecure;
+    return
+  else
+    printf "push app $1.$2..."
+    $CF PUSH $1 -d $2
+    printf "done\n"
+  fi
+}
+
+function push-checker-apps {
+  pushd ../acceptance-tests/service-binding-checker > /dev/null
+  push-app(checker, $DEFAULT_APP_DOMAIN)
+  push-app(checker, $REACHEABLE_SSL_DOMAIN)
+  push-app(checker, $UNREACHABLE_SSL_DOMAIN)
+  push-app(checker, $UNREACHABLE_DOMAIN)
+  push-app(checker, $REACHABLE_DOMAIN)
+  popd > /dev/null
+}
+
+function upload-dev-release {
+  printf "create and upload new dev release..."
+  pushd ../ > /dev/null
+  $BOSH create-release --force
+  release=$(ls -1t dev_releases/ssl-gateway | tr " " "\n"|sed -n '2p')
+  prefix="ssl-gateway-"
+  suffix=".yml"
+  release_version=${release#$prefix}
+  release_version=${release_version%$suffix}
+  export RELEASE_VERSION=$release_version
+  $BOSH upload-release dev_releases/ssl-gateway/$release
+  popd > /dev/null
+  printf "done\n"
+}
+
+function parse-ops {
+  ops_cmd=""
+
+  for ops in $OPS_FILES;
+  do
+    $ops+="-o $ops"
+  done
+
+  return $ops_cmd
+}
+
+function render-deployment-manifest {
+  printf "render deployment manifest..."
+  pushd ../acceptance-tests > /dev/null
+  ruby -r erb -e "puts ERB.new(File.read('manifests/reachability.yml.erb')).result" > 'manifests/reachability.yml'
+  popd > /dev/null
+  printf "done\n"
+}
+
+function deploy-ssl-gateway {
+  printf "deploy ssl-gateway..."
+  pushd ../acceptance-tests > /dev/null
+  render-deployment-manifest
+  ops_cmd=parse-ops
+  $BOSH deploy -d ssl-gateway manifests/reachability.yml $ops_cmd -l $IAAS_CONFIG
+  popd > /dev/null
+  printf "done\n"
+}
+
+function execute-specs {
+  printf "execute specs...\n"
+  pushd ../acceptance-tests > /dev/null
+  bundle install
+
+  printf "reachability_spec\n"
+  rspec spec/reachability_spec.rb
+
+  printf "security_spec\n"
+  rspec spec/security_spec.rb
+  popd > /dev/null
+  printf "...done\n"
+}
+
+function clean-up-director {
+  printf "clean-up director..."
+  $BOSH clean-up --all > /dev/null
+  printf "done\n"
+}
+
+function main {
+  setup-org
+  create-domains
+  push-checker-apps
+  upload-dev-release
+  deploy-ssl-gateway
+  execute-specs
+  clean-up-director
+}
+
+main
