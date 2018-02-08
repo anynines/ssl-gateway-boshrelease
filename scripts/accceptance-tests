@@ -14,19 +14,19 @@
 set -o errexit # Exit immediately if a simple command exits with a non-zero status
 set -o nounset # Report the usage of uninitialized variables
 
- export BOSH=${BOSH:-"bosh -n"} 
- export CF=${CF:-cf} 
- export DEFAULT_APP_DOMAIN=${DEFAULT_APP_DOMAIN:-de.a9sapp.eu} 
- export RANDOM_DOMAIN=${RANDOM_DOMAIN:-misterX.com} 
- export UNREACHABLE_DOMAIN=${UNREACHABLE_DOMAIN:-ssltest3.com} 
- export REACHABLE_DOMAIN=${REACHABLE_DOMAIN:-ssltest4.com} 
- export UNREACHABLE_SSL_DOMAIN=${UNREACHABLE_SSL_DOMAIN:-ssltest2.com} 
- export REACHABLE_SSL_DOMAIN=${REACHEABLE_SSL_DOMAIN:-ssltest.com} 
- export OPS_FILES=${OPS_FILES:-/home/vcap/bosh/anynines-PaaS-deployment/ssl-gateway/ops/vSphere-networks.yml}
- export IAAS_CONFIG=${IAAS_CONFIG:-/home/vcap/bosh/anynines-PaaS-deployment/iaas-config/a9s-staging-vsphere.yml} 
- export LOCALHOST_IP=${LOCALHOST_IP:-172.27.1.5} 
- export ANYNINES_PAAS_DEPLOYMENT=${ANYNINES_PAAS_DEPLOYMENT:-/home/vcap/bosh/anynines-PaaS-deployment} 
- export CF_API=${CF_API:-https//api.de.a9s.eu} 
+export BOSH=${BOSH:-"bosh -n"} 
+export CF=${CF:-cf} 
+export DEFAULT_APP_DOMAIN=${DEFAULT_APP_DOMAIN:-de.a9sapp.eu} 
+export RANDOM_DOMAIN=${RANDOM_DOMAIN:-misterX.com} 
+export UNREACHABLE_DOMAIN=${UNREACHABLE_DOMAIN:-ssltest3.com} 
+export REACHABLE_DOMAIN=${REACHABLE_DOMAIN:-ssltest4.com} 
+export UNREACHABLE_SSL_DOMAIN=${UNREACHABLE_SSL_DOMAIN:-ssltest2.com} 
+export REACHABLE_SSL_DOMAIN=${REACHEABLE_SSL_DOMAIN:-ssltest.com} 
+export OPS_FILES=${OPS_FILES:-/home/vcap/bosh/anynines-PaaS-deployment/ssl-gateway/ops/vSphere-networks.yml}
+export IAAS_CONFIG=${IAAS_CONFIG:-/home/vcap/bosh/anynines-PaaS-deployment/iaas-config/a9s-staging-vsphere.yml} 
+export LOCALHOST_IP=${LOCALHOST_IP:-172.27.1.5} 
+export ANYNINES_PAAS_DEPLOYMENT=${ANYNINES_PAAS_DEPLOYMENT:-/home/vcap/bosh/anynines-PaaS-deployment} 
+export CF_API=${CF_API:-https//api.de.a9s.eu} 
 : ${CF_USER?"Env variable CF_USER not set"}
 : ${CF_PASSWORD?"Env variable CF_PASSWORD not set"}
  SETUP=true
@@ -171,6 +171,25 @@ function main {
  fi
 }
 
+function print-usage {
+  cat << EOF
+usage: accceptance-tests [-t/--testcase TESTCASE] [--skip-setup] [--skip-cleanup]
+
+-t / --testcase TESTCASE: 
+  Executes the spec test for this testcase.
+  Testcases are:
+  - security
+  - reachability
+
+--skip-setup:
+  Skips the setup step which creates and uploads a dev release and deploys
+  the SSL-Gateway.
+
+--skip-cleanup:
+  Prevents bosh clean-up at the end of the script.
+EOF
+}
+
 while [[ $# -gt 0 ]]
 do
   key="$1"
@@ -189,6 +208,9 @@ do
     shift
     ;;
     *)
+    print-usage
+    exit 0
+    ;;
   esac
 done
 
