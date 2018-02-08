@@ -22,38 +22,29 @@ describe 'ssl specs' do
   end
 
   context 'with a valid ssl-gateway deployment' do
-    #it "should have the correct default app cert bundles on all instances" do
-      #should = File.read(File.join(__dir__, "fixtures/wild.de.a9sapp.eu.crt.bundle")).gsub("\n", "")
-      #expect(BoshHelpers::scp_read(0, "/var/vcap/store/nginx/ssl/wild.de.a9sapp.eu.crt.bundle")).to eq(should)
-      #expect(BoshHelpers::scp_read(1, "/var/vcap/store/nginx/ssl/wild.de.a9sapp.eu.crt.bundle")).to eq(should)
-      #expect(BoshHelpers::scp_read(2, "/var/vcap/store/nginx/ssl/wild.de.a9sapp.eu.crt.bundle")).to eq(should)
-    #end
+    it "should have the correct default app cert bundles on all instances" do
+      check_ssl_cert_bundle([0, 1, 2], "fixtures/wild.de.a9sapp.eu.crt.bundle", "/var/vcap/store/nginx/ssl/wild.de.a9sapp.eu.crt.bundle")
+    end
 
-    #it "should have the correct ssltest cert bundles on all instances" do
-      #should = File.read(File.join(__dir__, "fixtures/wild.checker.ssltest.com.crt.bundle")).gsub("\n", "")
-      #expect(BoshHelpers::scp_read(0, "/var/vcap/store/nginx/ssl/wild.checker.ssltest.com.crt.bundle")).to eq(should)
-      #expect(BoshHelpers::scp_read(1, "/var/vcap/store/nginx/ssl/wild.checker.ssltest.com.crt.bundle")).to eq(should)
-      #expect(BoshHelpers::scp_read(2, "/var/vcap/store/nginx/ssl/wild.checker.ssltest.com.crt.bundle")).to eq(should)
-    #end
+    it "should have the correct ssltest cert bundles on all instances" do
+      check_ssl_cert_bundle([0, 1, 2], "fixtures/wild.checker.ssltest.com.crt.bundle", "/var/vcap/store/nginx/ssl/wild.checker.ssltest.com.crt.bundle")
+    end
 
-    #it "should have the correct ssltest2 cert bundles on all instances" do
-      #should = File.read(File.join(__dir__, "fixtures/wild.de.checker.ssltest2.com.crt.bundle")).gsub("\n", "")
-      #expect(BoshHelpers::scp_read(0, "/var/vcap/store/nginx/ssl/wild.ssltest2.com.crt.bundle")).to eq(should)
-      #expect(BoshHelpers::scp_read(1, "/var/vcap/store/nginx/ssl/wild.ssltest2.com.crt.bundle")).to eq(should)
-      #expect(BoshHelpers::scp_read(2, "/var/vcap/store/nginx/ssl/wild.ssltest2.com.crt.bundle")).to eq(should)
-    #end
+    it "should have the correct ssltest2 cert bundles on all instances" do
+      check_ssl_cert_bundle([0, 1, 2], "fixtures/wild.de.checker.ssltest2.com.crt.bundle", "/var/vcap/store/nginx/ssl/wild.ssltest2.com.crt.bundle")
+    end
 
-    #it "should have the correct ciphers" do
-      #cipher_scan["ciphersuite"].each do |cipher|
-        #expect(allowed_ciphers).to include(cipher["cipher"])
-      #end
-    #end
+    it "should have the correct ciphers" do
+      cipher_scan["ciphersuite"].each do |cipher|
+        expect(allowed_ciphers).to include(cipher["cipher"])
+      end
+    end
 
-    #it "should support the correct TLS protocols" do
-      #cipher_scan["ciphersuite"].each do |cipher|
-        #cipher["protocols"].each { |protocol| expect(allowed_protocols.include?(protocol)) }
-      #end
-    #end
+    it "should support the correct TLS protocols" do
+      cipher_scan["ciphersuite"].each do |cipher|
+        cipher["protocols"].each { |protocol| expect(allowed_protocols.include?(protocol)) }
+      end
+    end
 
     it "should not show the nginx version in header" do
       expect(HTTParty.get("https://#{app_name}.#{ENV["REACHABLE_DOMAIN"]}:443", :verify => false).headers["server"] == "nginx")
