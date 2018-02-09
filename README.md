@@ -267,5 +267,6 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 - Add glossar to README.md
 - Add CONTRIBUTING.md
 - Make release tarballs public in s3 bucket automatically
+- Add ratelimit spec property to SSL-Gateway to protect against ddos
 
 
