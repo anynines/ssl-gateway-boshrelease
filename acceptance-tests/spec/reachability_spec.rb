@@ -45,7 +45,7 @@ describe 'ssl-gateway reachability spec for apps' do
 
     context "with a tcp forwarding on port 8833 enabled" do
       it "should be possible to create a websocket on port 8843 of the default app" do
-        check_tcp_socket(app_name, ENV["DEFAULT_APP_DOMAIN"], 2222)
+        check_tcp_socket(app_name, ENV["DEFAULT_APP_DOMAIN"], 8843)
       end
     end
   end

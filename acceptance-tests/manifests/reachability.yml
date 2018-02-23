@@ -3,7 +3,7 @@ name: ssl-gateway
 
 releases:
 - name: ssl-gateway
-  version: 13+dev.26
+  version: 13+dev.30
 - name: rabbitmq36
   version: 5
   url: https://s3-eu-west-1.amazonaws.com/anynines-bosh-releases/rabbitmq36-5.tgz
@@ -96,6 +96,7 @@ properties:
   a9s_ssl_gateway:
     cf_routers: ((iaas.cf.router_ips))
     ssh_routers: ((iaas.cf.router_ips))
+    cf_ssh_port: 8833
     enable_https_redirect: true 
 
     vserver:
