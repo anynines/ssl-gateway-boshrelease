@@ -1,15 +1,18 @@
-# tcp forwarding for port 2222. This is needed to ssh into 
+# tcp forwarding for port cf_ssh_port. This is needed to ssh into 
 # cf apps.
+<% cf_ssh_port = p('a9s_ssl_gateway.cf_ssh_port') %>
+<% ssh_routers = p('a9s_ssl_gateway.ssh_routers') %>
+
 stream {
   upstream ssh_routers {
-    <% p('a9s_ssl_gateway.ssh_routers').each do |router| %>
+    <% ssh_routers.each do |router| %>
     <%= "server #{router}:2222;" %>
     <% end %>
   }
 
   server {
-      listen 2222;
-      proxy_pass ssh_routers;
+    listen <%= cf_ssh_port %>;
+    proxy_pass ssh_routers;
   }
 }
 
