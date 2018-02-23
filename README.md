@@ -30,7 +30,7 @@ scripts/accceptance-tests.sh
 - [Cipherscan](https://github.com/mozilla/cipherscan) CloudFoundry API and check if supported TLS protocols are used (security_spec.rb)
 - Check whitelist feature is working (reachability_spec.rb)
 - Check deny_all flag is working (reachability_spec.rb)
-- Check tcp fowarding is working for port 222 (reachability_spec.rb)
+- Check tcp fowarding is working for cf_ssh_port (reachability_spec.rb)
 
 ## Dependencies
 - a9s-consul-dns boshrelease
@@ -218,6 +218,7 @@ properties:
 | a9s_ssl_gateway.enable_proxy_protocol | [ true / false ] if set to true enables the [proxy_protocol](https://www.nginx.com/resources/admin-guide/proxy-protocol/). The proxy protocol is used to receive the client's IP through e.g. Loadbalancer (tcp forwarding) which are in front of the SSL-Gateway. __NOTE__ if proxy_protocol is set to true Nginx will enforce it! |
 | a9s_ssl_gateway.enable_https_redirect | [ true / false ] if set to true all requests on port 80 are redirect to the same url via https |
 | a9s_ssl_gateway.ssh_routers | mostly gorouter IP's |
+| a9s_ssl_gateway.cf_ssh_port | port which will be redirect to ssh_routers.2222 (cf apps ssh) |
 | a9s_ssl_gateway.failover_ip | mostly gorouter IP's |
 | a9s_ssl_gateway.z1.network_address | [ IP ] network address for availability zone z1 |
 | a9s_ssl_gateway.z2.network_address | [ IP ] network address for availability zone z2 |
