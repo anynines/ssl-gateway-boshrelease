@@ -44,7 +44,7 @@ cp /var/vcap/jobs/nginx/etc/vserver.conf /var/vcap/store/nginx/conf.d/
 cp /var/vcap/jobs/nginx/etc/upstream.conf /var/vcap/store/nginx/conf.d/
 
 # deprecated config, will be removed when vhost api gets updated 
-cp /var/vcap/jobs/nginx/etc/shared.conf /var/vcap/store/nginx/static/
+cp /var/vcap/jobs/nginx/etc/shared.conf /var/vcap/store/nginx/static/shared_host.conf
 cp /var/vcap/jobs/nginx/etc/shared_host_wss.conf /var/vcap/store/nginx/static/
 
 # add https-redirect vserver config to conf.d folder if https-redirect flag is enabled.
