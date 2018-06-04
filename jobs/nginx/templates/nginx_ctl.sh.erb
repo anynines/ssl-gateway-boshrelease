@@ -6,7 +6,7 @@ PIDFILE=/var/vcap/packages/nginx/logs/nginx.pid
 rm -rf /var/vcap/store/nginx/conf.d
 rm -rf /var/vcap/store/nginx/static
 rm -rf /var/vcap/store/nginx/partials
-rm /var/vcap/store/nginx/*.conf
+rm -f /var/vcap/store/nginx/*.conf
 
 # create folder structure
 mkdir -p /var/vcap/sys/run/nginx
