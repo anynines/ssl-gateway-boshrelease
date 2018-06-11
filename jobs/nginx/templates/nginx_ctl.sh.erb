@@ -1,6 +1,12 @@
 #!/bin/bash -e
 
-PIDFILE=/var/vcap/packages/nginx/logs/nginx.pid
+PIDFILE=/var/vcap/sys/run/nginx/nginx.pid
+
+# #2303985 migration step for pidfile
+if [ -f /var/vcap/packages/nginx/logs/nginx.pid ]; then
+  mv /var/vcap/packages/nginx/logs/nginx.pid /var/vcap/sys/run/nginx/nginx.pid
+  exit 0
+fi
 
 # remove old config and certs
 rm -rf /var/vcap/store/nginx/conf.d
