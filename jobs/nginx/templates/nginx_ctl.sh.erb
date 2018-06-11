@@ -4,7 +4,8 @@ PIDFILE=/var/vcap/sys/run/nginx/nginx.pid
 
 # #2303985 migration step for pidfile
 if [ -f /var/vcap/packages/nginx/logs/nginx.pid ]; then
-  cp /var/vcap/packages/nginx/logs/nginx.pid /var/vcap/sys/run/nginx/nginx.pid
+  mv /var/vcap/packages/nginx/logs/nginx.pid /var/vcap/sys/run/nginx/nginx.pid
+  exit 0
 fi
 
 # remove old config and certs
@@ -93,8 +94,6 @@ case $1 in
   start)
 
     /var/vcap/packages/nginx/sbin/nginx -g "pid $PIDFILE;" -c /var/vcap/store/nginx/nginx.conf
-    # migrate #2303985
-    rm -f /var/vcap/packages/nginx/logs/nginx.pid
     ;;
   stop)
     kill $(cat $PIDFILE)
