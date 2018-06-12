@@ -257,6 +257,8 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## Limitations
 
 ## Known Issues
+- __NOTE__: The pid file location for the ngninx process is hardcoded in the packaging script for nginx. We had to 
+do this dirty workaround to migrate a pid location change on an already deployed ssl-gateway.
 
 ## TODO
 - Modify vhost api include directives to use the same ssl config and default location headers as in vserver.conf.erb
@@ -268,5 +270,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 - Add CONTRIBUTING.md
 - Make release tarballs public in s3 bucket automatically
 - Add ratelimit spec property to SSL-Gateway to protect against ddos
+- The vhost worker production log is not created under /var/vcap/sys/log/virtual_host..
+- The vhost worker and api DaemonKit logs are surpressed
 
 
