@@ -1,5 +1,0 @@
-
-name: ssl-gateway-v1.2.2
-  url: https://s3-eu-west-1.amazonaws.com/anynines-bosh-releases/ssl-gateway-v1.2.2.tgz
-  sha: c6d332e6b77278b406d183326ffe74391ccc6d89
-  version: 1.2.2
