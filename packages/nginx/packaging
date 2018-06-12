@@ -4,7 +4,7 @@ echo "Extracting pcre..."
 tar xzvf nginx/pcre-8.38.tgz
 
 echo "Extracting nginx..."
-tar xzvf nginx/nginx.tar.gz
+tar xzvf nginx/nginx-1.15.0.tar.gz
 
 echo "Building nginx..."
 
@@ -15,7 +15,8 @@ pushd nginx-*
     --prefix=${BOSH_INSTALL_TARGET} \
     --with-http_ssl_module \
     --with-stream \
-    --with-http_realip_module
+    --with-http_realip_module \
+    --pid-path="/var/vcap/sys/run/nginx/nginx.pid"
 
   make
   make install
