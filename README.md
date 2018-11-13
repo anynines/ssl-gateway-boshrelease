@@ -7,7 +7,7 @@ The SSL-Gateway bosh release provides SSL - termination for CloudFoundry apps an
 - bosh CLI v2
 
 ## Running the tests
-Create CloudFoundry user or use CF - admin user credentials 
+Create CloudFoundry user or use CF - admin user credentials
 ```
 cf create-user max@mustermann.com test123
 export CF_USER=max@mustermann.com
@@ -230,6 +230,9 @@ properties:
 | a9s_ssl_gateway.vserver[n].private_key | (TLS) private_key for TLS |
 | a9s_ssl_gateway.vserver[n].deny_all | [true / false] if set to true, all incoming requests are denied (can be combined with allow to implement whitelist) |
 | a9s_ssl_gateway.vserver[n].allow | [ IP / IP - range] Explicitly allows incoming requests from IP / IP - range (use this for whitelisting) |
+| a9s_ssl_gateway.client_max_body_size | [ default: 1536M ] max body size for file uploads (supports human readable scales K,M and G) |
+| a9s_ssl_gateway.proxy_read_timeout | [ default: 900 ] timeout in seconds for read requests  |
+| a9s_ssl_gateway.proxy_send_timeout | [ default: 900 ] timeout in seconds for file upload requests (supports human readable scales K,M and G) |
 
 *a9s_ssl_gateway.vserver[n].foo* - stands for property *foo* of an array element *n* in *a9s_ssl_gateway.vserver*
 
@@ -257,7 +260,7 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## Limitations
 
 ## Known Issues
-- __NOTE__: The pid file location for the ngninx process is hardcoded in the packaging script for nginx. We had to 
+- __NOTE__: The pid file location for the ngninx process is hardcoded in the packaging script for nginx. We had to
 do this dirty workaround to migrate a pid location change on an already deployed ssl-gateway.
 
 ## TODO
@@ -272,5 +275,3 @@ do this dirty workaround to migrate a pid location change on an already deployed
 - Add ratelimit spec property to SSL-Gateway to protect against ddos
 - The vhost worker production log is not created under /var/vcap/sys/log/virtual_host..
 - The vhost worker and api DaemonKit logs are surpressed
-
-
