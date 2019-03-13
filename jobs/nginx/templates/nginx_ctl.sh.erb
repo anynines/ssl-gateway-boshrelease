@@ -18,11 +18,11 @@ mkdir -p /var/vcap/store/nginx/conf.d
 mkdir -p /var/vcap/store/nginx/sites-enabled
 mkdir -p /var/vcap/store/nginx/sites-available
 
-# partial config - place config parts e.g. for locations, ssl 
+# partial config - place config parts e.g. for locations, ssl
 # config here
 mkdir -p /var/vcap/store/nginx/partials
 
-# certs, key, ca's 
+# certs, key, ca's
 mkdir -p /var/vcap/store/nginx/ssl
 
 # deprecated
@@ -42,8 +42,9 @@ cp /var/vcap/jobs/nginx/etc/default-vserver-locations.conf /var/vcap/store/nginx
 # vserver
 cp /var/vcap/jobs/nginx/etc/vserver.conf /var/vcap/store/nginx/conf.d/
 cp /var/vcap/jobs/nginx/etc/upstream.conf /var/vcap/store/nginx/conf.d/
+cp /var/vcap/jobs/nginx/etc/health.conf /var/vcap/store/nginx/conf.d/
 
-# deprecated config, will be removed when vhost api gets updated 
+# deprecated config, will be removed when vhost api gets updated
 cp /var/vcap/jobs/nginx/etc/shared.conf /var/vcap/store/nginx/static/shared_host.conf
 cp /var/vcap/jobs/nginx/etc/shared_host_wss.conf /var/vcap/store/nginx/static/
 
@@ -57,7 +58,7 @@ cp /var/vcap/jobs/nginx/etc/https-redirect.conf /var/vcap/store/nginx/conf.d
 # iterate over the vserver block in the deployment manifest and create vservers for  each.
 #
 # A vserver block in the deployment manifest can have the following properties:
-# __domain__: name of the domain, in the vserver config the domain and *.domain (subdomain) will be 
+# __domain__: name of the domain, in the vserver config the domain and *.domain (subdomain) will be
 # matched.
 # * SSL is optional leave the ca, certificate and private key and the vserver will automatically listen
 # to port 80 only (doesn't make sense if https-redirect is enabled).
