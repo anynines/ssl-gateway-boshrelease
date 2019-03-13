@@ -1,4 +1,4 @@
-<% if p('a9s_ssl_gateway.health.enable_endpoint') %>
+<% if p('a9s_ssl_gateway.health.enabled') %>
 server {
   listen <%= p('a9s_ssl_gateway.health.port') || 8080 %>;
   server_name _;
