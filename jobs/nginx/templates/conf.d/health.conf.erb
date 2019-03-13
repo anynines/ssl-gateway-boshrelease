@@ -1,0 +1,10 @@
+<% if p('a9s_ssl_gateway.health.enable_endpoint') %>
+server {
+  listen <%= p('a9s_ssl_gateway.health.port') || 8080 %>;
+  server_name _;
+
+  location <%= p('a9s_ssl_gateway.health.path') || "/health" %> {
+    return 200 "OK\n";
+  }
+}
+<% end %>
