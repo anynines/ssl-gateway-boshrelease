@@ -234,7 +234,7 @@ properties:
 | a9s_ssl_gateway.proxy_read_timeout | [ default: 900 ] timeout in seconds for read requests  |
 | a9s_ssl_gateway.proxy_send_timeout | [ default: 900 ] timeout in seconds for file upload requests (supports human readable scales K,M and G) |
 | a9s_ssl_gateway.health.enabled | default: true | enable http health endpoint for nginx |
-| a9s_ssl_gateway.health.port | 8080 | port to listen to health requests |
+| a9s_ssl_gateway.health.port | default: 8080 | port to listen to health requests |
 | a9s_ssl_gateway.health.path | default: /health | path under which the health endpoint is available |
 
 
