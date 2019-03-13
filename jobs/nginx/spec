@@ -8,6 +8,7 @@ templates:
   pre-start.erb: bin/pre-start
   ssh-proxy.conf.erb: etc/ssh-proxy.conf
   tcp-redirect.conf: etc/tcp-redirect.conf
+  conf.d/health.conf.erb: etc/health.conf
   conf.d/upstream.conf.erb: etc/upstream.conf
   conf.d/vserver.conf.erb: etc/vserver.conf
   conf.d/https-redirect.conf.erb: etc/https-redirect.conf
