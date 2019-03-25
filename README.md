@@ -236,6 +236,8 @@ properties:
 | a9s_ssl_gateway.health.enabled | default: true | enable http health endpoint for nginx |
 | a9s_ssl_gateway.health.port | default: 8080 | port to listen to health requests |
 | a9s_ssl_gateway.health.path | default: /health | path under which the health endpoint is available |
+| a9s_ssl_gateway.nginx.tls_ciphers | default: 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256' | Nginx supported tls ciphers |
+| a9s_ssl_gateway.nginx.tls_version | 'TLSv1.2' | Nginx supported TLS protocol versions |
 
 
 *a9s_ssl_gateway.vserver[n].foo* - stands for property *foo* of an array element *n* in *a9s_ssl_gateway.vserver*

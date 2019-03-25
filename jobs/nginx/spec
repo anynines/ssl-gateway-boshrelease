@@ -66,3 +66,9 @@ properties:
   a9s_ssl_gateway.health.path:
     description: 'path under which the health endpoint is available'
     default: /health
+  a9s_ssl_gateway.nginx.tls_version:
+    description: 'Nginx supported TLS protocol versions'
+    default: 'TLSv1.2'
+  a9s_ssl_gateway.nginx.tls_ciphers:
+    description: 'Nginx supported tls ciphers'
+    default: 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256'
