@@ -4,7 +4,7 @@ echo "Extracting pcre..."
 tar xzvf nginx/pcre-8.38.tgz
 
 echo "Extracting nginx..."
-tar xzvf nginx/nginx-1.15.0.tar.gz
+tar xzvf nginx/nginx.tar.gz
 
 echo "Building nginx..."
 

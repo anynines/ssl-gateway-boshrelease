@@ -1,3 +1,7 @@
+blobs/nginx:
+  size: 1032630
+  object_id: cec6eeb0-0af7-44ed-4ad8-145876d6a050
+  sha: 77ce4d26481b62f7a9d83e399454df0912f01a4b
 libpq/postgresql-9.4.6.tar.bz2:
   size: 17734946
   object_id: cdd4ffb2-b846-4b16-9695-5db1ce74d7ef
