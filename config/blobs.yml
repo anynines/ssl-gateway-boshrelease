@@ -1,7 +1,3 @@
-blobs/nginx:
-  size: 1032630
-  object_id: cec6eeb0-0af7-44ed-4ad8-145876d6a050
-  sha: 77ce4d26481b62f7a9d83e399454df0912f01a4b
 libpq/postgresql-9.4.6.tar.bz2:
   size: 17734946
   object_id: cdd4ffb2-b846-4b16-9695-5db1ce74d7ef
@@ -10,10 +6,10 @@ libyaml/yaml-0.1.5.tar.gz:
   size: 504897
   object_id: b65dc141-722b-4c49-8a7d-df69eea832ca
   sha: 8b78cb9f759c7d80db8a7328c0ebecfe34fde737
-nginx/nginx-1.15.0.tar.gz:
-  size: 1020675
-  object_id: d46378b2-244f-4c3b-758c-a768e4831b1c
-  sha: 150bfcdb620de41342ae574d6869c937566dc98c
+nginx/nginx.tar.gz:
+  size: 1032630
+  object_id: 5b3619cd-9ab9-451f-7aca-748317bceca4
+  sha: 77ce4d26481b62f7a9d83e399454df0912f01a4b
 nginx/pcre-8.38.tgz:
   size: 2053336
   object_id: f13c9152-c164-4818-bd3a-58750aa02994
