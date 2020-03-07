@@ -23,7 +23,7 @@ link_job_file() {
   echo link_job_file ${full_job_file} ${target_file}
   if [[ ! -f ${full_job_file} ]]
   then
-    echo "file to link ${full_job_file} does not exist"
+    echo "$(date): file to link ${full_job_file} does not exist"
   else
     # Create/recreate the symlink to current job file
     # If another process is using the file, it won't be
@@ -50,11 +50,11 @@ pid_guard() {
     pid=$(head -1 "$pidfile")
 
     if [ -n "$pid" ] && [ -e /proc/$pid ]; then
-      echo "$name is already running, please stop it first"
+      echo "$(date): $name is already running, please stop it first"
       exit 1
     fi
 
-    echo "Removing stale pidfile..."
+    echo "$(date): Removing stale pidfile..."
     rm $pidfile
   fi
 }
@@ -69,7 +69,7 @@ wait_pid() {
   echo wait_pid $pid $try_kill $timeout $force $countdown
   if [ -e /proc/$pid ]; then
     if [ "$try_kill" = "1" ]; then
-      echo "Killing $pidfile: $pid "
+      echo "$(date): Graceful stop $pidfile: $pid "
       kill $pid
     fi
     while [ -e /proc/$pid ]; do
@@ -89,13 +89,13 @@ wait_pid() {
       fi
     done
     if [ -e /proc/$pid ]; then
-      echo "Timed Out"
+      echo "$(date): Timed Out"
     else
-      echo "Stopped"
+      echo "$(date): Stopped"
     fi
   else
-    echo "Process $pid is not running"
-    echo "Attempting to kill pid anyway..."
+    echo "$(date): Process $pid is not running"
+    echo "$(date): Attempting to graceful stop pid anyway..."
     kill $pid
   fi
 }
@@ -110,7 +110,7 @@ wait_pidfile() {
   if [ -f "$pidfile" ]; then
     pid=$(head -1 "$pidfile")
     if [ -z "$pid" ]; then
-      echo "Unable to get pid from $pidfile"
+      echo "$(date): Unable to get pid from $pidfile"
       exit 1
     fi
 
@@ -118,7 +118,7 @@ wait_pidfile() {
 
     rm -f $pidfile
   else
-    echo "Pidfile $pidfile doesn't exist"
+    echo "$(date): Pidfile $pidfile doesn't exist"
   fi
 }
 
@@ -144,12 +144,12 @@ check_nfs_mount() {
   mount_point=$3
 
   if grep -qs $mount_point /proc/mounts; then
-    echo "Found NFS mount $mount_point"
+    echo "$(date): Found NFS mount $mount_point"
   else
-    echo "Mounting NFS..."
+    echo "$(date): Mounting NFS..."
     mount $opts $exports $mount_point
     if [ $? != 0 ]; then
-      echo "Cannot mount NFS from $exports to $mount_point, exiting..."
+      echo "$(date): Cannot mount NFS from $exports to $mount_point, exiting..."
       exit 1
     fi
   fi
