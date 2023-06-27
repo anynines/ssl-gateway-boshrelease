@@ -37,4 +37,4 @@ echo "Finished installing rubygems."
 cd ..
 
 # install the bundler version
-${BOSH_INSTALL_TARGET}/bin/gem install ruby/bundler-${BUNDLER_VERSION}.gem --no-ri --no-rdoc
+${BOSH_INSTALL_TARGET}/bin/gem install ruby/bundler-${BUNDLER_VERSION}.gem --no-document
