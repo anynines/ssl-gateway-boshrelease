@@ -28,7 +28,7 @@ cd ..
 echo "Installing rubygems..."
 tar xfz ruby/rubygems-$RUBYGEMS_VERSION.tgz
 cd rubygems-$RUBYGEMS_VERSION
-${BOSH_INSTALL_TARGET}/bin/ruby setup.rb
+${BOSH_INSTALL_TARGET}/bin/ruby setup.rb --env-shebang
 if [[ $? != 0 ]] ; then
   echo "Cannot install rubygems"
   exit 1
@@ -37,4 +37,7 @@ echo "Finished installing rubygems."
 cd ..
 
 # install the bundler version
-${BOSH_INSTALL_TARGET}/bin/gem install ruby/bundler-${BUNDLER_VERSION}.gem --no-document
+env
+export PATH="$PATH:/var/vcap/packages/ruby/bin"
+env
+${BOSH_INSTALL_TARGET}/bin/gem install ruby/bundler-${BUNDLER_VERSION}.gem --no-document --env-shebang

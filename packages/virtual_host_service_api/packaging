@@ -9,5 +9,11 @@ rm -rf ${BOSH_INSTALL_TARGET}/*
 cp -Ra virtual_host_service_api/* ${BOSH_INSTALL_TARGET}
 cd ${BOSH_INSTALL_TARGET}
 
+env
+export PATH="$PATH:/var/vcap/packages/ruby/bin"
+env
+${bundle_cmd} lock --add-platform x86_64-linux
 ${bundle_cmd} config build.pg --with-pg-lib=${libpq_dir}/lib --with-pg-include=${libpq_dir}/include
-${bundle_cmd} install --local --deployment --without development test
+${bundle_cmd} config set --local deployment 'true'
+${bundle_cmd} config set --local without 'development test'
+${bundle_cmd} install
