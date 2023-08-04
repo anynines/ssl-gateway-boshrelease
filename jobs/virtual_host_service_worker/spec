@@ -18,3 +18,6 @@ properties:
     descriptions: 'password for auth with rabbitmq'
   rabbitmq.host:
     description: 'Address of the message queue'
+  use_haproxy:
+    description: "Use HAProxy instead of NGINX"
+    default: true

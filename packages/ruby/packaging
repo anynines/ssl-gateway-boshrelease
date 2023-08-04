@@ -37,7 +37,6 @@ echo "Finished installing rubygems."
 cd ..
 
 # install the bundler version
-env
 export PATH="$PATH:/var/vcap/packages/ruby/bin"
-env
+
 ${BOSH_INSTALL_TARGET}/bin/gem install ruby/bundler-${BUNDLER_VERSION}.gem --no-document --env-shebang
