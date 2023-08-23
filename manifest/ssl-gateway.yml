@@ -7,6 +7,9 @@ addons:
   jobs:
   - name: bpm
     release: bpm
+  include:
+    instance_groups:
+    - ssl-gateway
 
 update:
   canaries: 1
@@ -24,7 +27,7 @@ releases:
 - name: ssl-gateway
   version: 13+dev.10
   url: /u/a9s/yby/ssl-gateway-v2/ssl-gateway-v13+dev.10.tgz
-  sha1: sha256:db8e05a9ea454c9737f53417f0f195204be7e6a3b4ed853362118f54d426cc84
+  sha1: sha256:d2d1268418d11f9ae64c94e832f1d5a9608d09efe3e7291b5730208e2d49f447
 - name: rabbitmq310
   version: 2.29.0
   url: https://d3r5lzz0qww9ge.cloudfront.net/rabbitmq310-2.29.0.tgz
@@ -119,6 +122,7 @@ instance_groups:
     properties:
       a9s_ssl_gateway:
         cf_routers: "((iaas.cf.router_ips))"
+      use_haproxy: true
       rabbitmq:
         admin_username: admin
         admin_password: "((ssl_gw_rabbitmq_password))"
