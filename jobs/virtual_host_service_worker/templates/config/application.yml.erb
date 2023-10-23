@@ -13,9 +13,9 @@ production:
   honeybadger_api_key: ''
 
   use_haproxy:          <%= p('use_haproxy') %>
-  haproxy_command:      "/var/vcap/packages/haproxy/bin/haproxy"
+  haproxy_command:      "/var/vcap/jobs/virtual_host_service_worker/bin/config-checker.sh"
   haproxy_reload:       "/var/vcap/jobs/haproxy/bin/reload"
-  haproxy_config:       "/var/vcap/jobs/haproxy/config/haproxy.cfg"
+  haproxy_config:       "/var/vcap/jobs/haproxy/config/haproxy.config"
   haproxy_cert_dir:     "/var/vcap/store/virtual_host_service_worker/ssl"
   haproxy_cert_list:    "/var/vcap/store/virtual_host_service_worker/haproxy-certificate-list"
 
