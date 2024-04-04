@@ -1,0 +1,72 @@
+### Modifies manifest to deploy a sidecar `ssl-gateway-haproxy` deployment.
+### Only leaves haproxy workers which connect to the rabbitmq of the main `ssl-gateway` deployment.
+
+- type: remove
+  path: /instance_groups/name=rabbitmq
+
+- type: remove
+  path: /instance_groups/name=gateway-api
+
+- type: remove
+  path: /releases/name=rabbitmq310
+
+- type: remove
+  path: /variables
+
+- type: replace
+  path: /name
+  value: ssl-gateway-haproxy
+
+- type: replace
+  path: /instance_groups/name=haproxy/jobs/name=virtual_host_service_worker/properties/rabbitmq/admin_password
+  value: "((/overbosh/ssl-gateway/ssl_gw_rabbitmq_password))"
+
+######
+###### a replacement for add-sni ops file
+###### add-sni ops should not be present in deploy.sh
+######
+# sni for apps domain
+- type: replace
+  path: /instance_groups/name=haproxy/jobs/name=haproxy/properties?/ha_proxy?/crt_list?/-
+  value:
+    verify: none
+    snifilter:
+    - "((iaas.cf.app_domain))"
+    - "*.((iaas.cf.app_domain))"
+    ssl_pem: |
+      ((/overbosh/ssl-gateway/default_app.certificate))
+      ((/overbosh/ssl-gateway/default_app.ca))
+      ((/overbosh/ssl-gateway/default_app.private_key))
+
+# sni for system domain
+- type: replace
+  path: /instance_groups/name=haproxy/jobs/name=haproxy/properties?/ha_proxy?/crt_list?/-
+  value:
+    verify: none
+    snifilter:
+    - "((iaas.cf.system_domain))"
+    - "*.((iaas.cf.system_domain))"
+    ssl_pem: |
+      ((/overbosh/ssl-gateway/system.certificate))
+      ((/overbosh/ssl-gateway/system.ca))
+      ((/overbosh/ssl-gateway/system.private_key))
+
+# sni for dashboard domain
+- type: replace
+  path: /instance_groups/name=haproxy/jobs/name=haproxy/properties?/ha_proxy?/crt_list?/-
+  value:
+    verify: none
+    snifilter:
+    - "*dashboard.((iaas.cf.system_domain))"
+    ssl_pem: |
+      ((/overbosh/ssl-gateway/default_app.certificate))
+      ((/overbosh/ssl-gateway/default_app.ca))
+      ((/overbosh/ssl-gateway/default_app.private_key))
+
+# force the strict use of sni certificates and disable default cert
+# Problem with strict-sni on 09.07.19 including AS-S and NM because of java restrictions in using SNI
+# https://stackoverflow.com/questions/7615645/ssl-handshake-alert-unrecognized-name-error-since-upgrade-to-java-1-7-0
+- type: replace
+  path:  /instance_groups/name=haproxy/jobs/name=haproxy/properties?/ha_proxy?/strict_sni?
+  value: false
+ 

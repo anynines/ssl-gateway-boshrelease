@@ -1,7 +1,5 @@
 name: ssl-gateway
 
-manifest_version: 2.0.0
-
 addons:
 - name: bpm
   jobs:
@@ -9,7 +7,7 @@ addons:
     release: bpm
   include:
     instance_groups:
-    - ssl-gateway
+    - haproxy
 
 update:
   canaries: 1
@@ -25,9 +23,9 @@ stemcells:
 
 releases:
 - name: ssl-gateway
-  version: 13+dev.10
-  url: /u/a9s/yby/ssl-gateway-v2/ssl-gateway-v13+dev.10.tgz
-  sha1: sha256:d2d1268418d11f9ae64c94e832f1d5a9608d09efe3e7291b5730208e2d49f447
+  version: 1.4.0
+  url: https://d3r5lzz0qww9ge.cloudfront.net/ssl-gateway-v1.4.0.tgz
+  sha1: sha256:555294816f25d99df4323446ce159a795962470ec6a4eb2cd936569bbd01584b
 - name: rabbitmq310
   version: 2.29.0
   url: https://d3r5lzz0qww9ge.cloudfront.net/rabbitmq310-2.29.0.tgz
@@ -37,13 +35,14 @@ releases:
   version: 37
   sha1: sha256:f9ddc2e752366059087171d3030778231b7730e18689a178557041d1899d4fd0
 - name: bpm
-  version: 1.2.4
-  url: https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.2.4
-  sha1: 52c90ab6a217a77bf03b1383606557c0f56d5d8c
+  sha1: 9c571c3463818ec1f8afe63d2da98c24381f7dda
+  url: https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.2.16
+  version: 1.2.16
 - name: haproxy
-  version: 12.1.0+2.7.7
-  url: https://github.com/cloudfoundry/haproxy-boshrelease/releases/download/v12.1.0+2.7.7/haproxy-12.1.0+2.7.7.tgz
-  sha1: f20937de3035567f07e76d72a5e5786b6cf368df
+  sha1: 6331b5595b1c06e316542a15d371e23f52b2b44d
+  url: https://github.com/cloudfoundry/haproxy-boshrelease/releases/download/v13.4.0+2.8.5/haproxy-13.4.0+2.8.5.tgz
+  version: 13.4.0+2.8.5
+
 
 instance_groups:
 - name: rabbitmq
@@ -84,7 +83,7 @@ instance_groups:
   networks:
   - name: dynamic
 
-- name: ssl-gateway
+- name: haproxy
   vm_type: small
   instances: "((iaas.ssl_gateway.gateway_instances))"
   azs: [z1, z2, z3]
@@ -111,6 +110,7 @@ instance_groups:
     release: haproxy
     properties:
       ha_proxy:
+        host_pid_namespace: false
         additional_unrestricted_volumes:
         - path: /var/vcap/store/virtual_host_service_worker/
           writable: true

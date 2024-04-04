@@ -1,0 +1,121 @@
+#!/bin/env bash
+
+set -e
+
+source $REPO_BASE_PATH/shared/scripts/lib/bash/commons.sh
+
+# ENV Variables:
+# REPO_BASE_PATH (required): local path to the epo repo
+: ${REPO_BASE_PATH?"ERROR: env variable REPO_BASE_PATH not set"}
+DEPLOYMENT=${1:-ssl-gateway}
+INSTANCE=${2:-ssl-gateway/0}
+BACKUP_USER=${BACKUP_USER:-a9s-service-backup}
+BACKUP_SRC_DIR=/var/vcap/store/nginx
+
+function log() {
+  echo
+  echo "$(date): $@" | tee -a $logfile
+  echo
+}
+
+prepare_environment() {
+  DATESTAMP=$(date +%Y%m%d-%s)
+
+  backup_dir="${HOME}/backup/ssl-gateway"
+  mkdir -p "${backup_dir}"
+  logfile="${backup_dir}/task.log"
+
+  PUBLIC_KEY="$HOME/.ssh/id_rsa.pub"
+  if [ ! -f "$PUBLIC_KEY" ]; then
+    ssh-keygen -b 4096 -t rsa -N "" -f "${PUBLIC_KEY%%.pub}"
+  fi
+
+  log "${DEPLOYMENT}: Getting instance details for deployment ${DEPLOYMENT}"
+  INSTANCES=$(bosh -d $DEPLOYMENT is --details --json)
+
+}
+
+PREPARED_INSTANCES=""
+prepare_instance() {
+  local instance=${1:-}
+  [ -z "$instance" ] && return 1
+
+  log "${instance}: Uploading temporary ssh key"
+  bosh -d $DEPLOYMENT scp "$PUBLIC_KEY" ${instance}:/tmp
+
+  log "${instance}: Updating file permissions"
+  bosh -d $DEPLOYMENT ssh $instance -c "sudo /usr/sbin/useradd -m -d /home/${BACKUP_USER} -s /bin/bash -g bosh_sudoers -G bosh_sshers ${BACKUP_USER}; sudo mkdir -p /home/${BACKUP_USER}/.ssh; sudo mv /tmp/id_rsa.pub /home/${BACKUP_USER}/.ssh/authorized_keys; sudo chown -R ${BACKUP_USER}: /home/${BACKUP_USER}/.ssh; sudo chmod 600 /home/${BACKUP_USER}/.ssh/authorized_keys"
+
+  PREPARED_INSTANCES+="$instance "
+  trap 'rc=$?; log "Running exit cleanup"; unprepare_instances; log "$0 EXIT($rc)"; exit $rc;' ERR EXIT SIGINT SIGTERM
+}
+
+unprepare_instances() {
+  for instance in $PREPARED_INSTANCES; do
+    log "${instance}: Removing temporary access"
+    bosh -d $DEPLOYMENT ssh $instance -c "sudo /usr/sbin/userdel -r -f ${BACKUP_USER}"
+    PREPARED_INSTANCES=$(echo "$PREPARED_INSTANCES" | sed -e "s#$instance ##")
+  done
+}
+
+
+download_backup() {
+  local instance="$1"
+  local instance_ip="$2"
+  backup_file="$3"
+
+  echo; echo "${instance}: Downloading backup"
+  pushd $(dirname ${backup_file}) >/dev/null
+  set +o errexit
+  ssh -n -o IdentitiesOnly=true -o StrictHostKeyChecking=false -o PasswordAuthentication=false -l ${BACKUP_USER} $instance_ip -- sudo tar -c -C "$BACKUP_SRC_DIR" sites-available ssl | gzip > "${backup_file}"
+
+  echo; echo "${instance}: Showing file metadata"
+  file "${backup_file}"
+  ls -lah "${backup_file}"
+  backup_content_file_count=$(tar tzf "${backup_file}" | wc -l)
+  echo "The archive contains $backup_content_file_count files"
+
+  echo; echo "${instance}: Test archive by extracting to stdout -> /dev/null"
+  tar xzf "${backup_file}" -O >/dev/null
+  if [ $? -eq 0 ]; then
+    echo "Succeeded"
+  else
+    echo "ERROR in testing archive"
+    exit 1
+  fi
+  set -o errexit
+  popd >/dev/null
+
+  echo; echo "${instance}: finished"
+}
+
+backup_instance() {
+  local instance="$1"
+  # check if the instance name can be found (long name with guid) or try to get it
+  local instance_details=$(echo "$INSTANCES" | jq -r ".Tables[].Rows[] | select(.instance == \"$instance\")")
+  if [ -z "$instance_details" ]; then
+    instance_group_part="${instance%%/*}"
+    instance_index_part="${instance##*/}"
+    instance=$(echo "$INSTANCES" | jq -r ".Tables[].Rows[] | select((.instance | test(\"$instance_group_part\")) and (.index | test(\"$instance_index_part\"))) | .instance")
+  fi
+  if [ -z "$instance" ]; then
+    log "$1: ERROR: Instance not found"
+    exit 1
+  fi
+
+  local instance_name=$(echo "$instance" | tr '/' '-')
+  local instance_ip=$(echo "$INSTANCES" | jq -r ".Tables[].Rows[] | select(.instance == \"$instance\") | .ips")
+  local instance_index=$(echo "$INSTANCES" | jq -r ".Tables[].Rows[] | select(.instance == \"$instance\") | .index")
+  local backup_file="${backup_dir}/${DEPLOYMENT}-${instance_index}-${instance_name}-${DATESTAMP}.tgz"
+
+  prepare_instance "$instance"
+  download_backup "$instance" "$instance_ip" "$backup_file"
+}
+
+# Main
+
+source ~/bosh/$(director_name overbosh)
+
+prepare_environment
+backup_instance $INSTANCE
+

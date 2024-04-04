@@ -1,0 +1,94 @@
+#!/bin/env bash
+
+set -e
+
+source $REPO_BASE_PATH/shared/scripts/lib/bash/commons.sh
+
+# ENV Variables:
+# REPO_BASE_PATH (required): local path to the epo repo
+: ${REPO_BASE_PATH?"ERROR: env variable REPO_BASE_PATH not set"}
+DEPLOYMENT=${1:-ssl-gateway}
+INSTANCE=${2:-ssl-gateway/0}
+BACKUP_USER=${BACKUP_USER:-a9s-service-backup}
+DST_DIR=/var/vcap/store/virtual_host_service_worker
+
+function log() {
+  echo
+  echo "$(date): $@" | tee -a $logfile
+  echo
+}
+
+prepare_environment() {
+  DATESTAMP=$(date +%Y%m%d-%s)
+
+  backup_dir="${HOME}/backup/ssl-gateway"
+  mkdir -p "${backup_dir}"
+  logfile="${backup_dir}/task.log"
+
+  PUBLIC_KEY="$HOME/.ssh/id_rsa.pub"
+  if [ ! -f "$PUBLIC_KEY" ]; then
+    ssh-keygen -b 4096 -t rsa -N "" -f "${PUBLIC_KEY%%.pub}"
+  fi
+
+  log "${DEPLOYMENT}: Getting instance details for deployment ${DEPLOYMENT}"
+  INSTANCES=$(bosh -d $DEPLOYMENT is --details --json)
+
+}
+
+extract_backup() {
+  NGINX_DIR=$(mktemp -d --suffix -ssl-gateway)
+  echo "Created working dir $NGINX_DIR"
+
+  backup_file=$(ls -crt ${backup_dir}/ssl-gateway*.tgz | tail -n 1)
+  echo "Using the latest certs backup: ${backup_file}"
+  if [[ ! "$NGINX_DIR" || ! -d "$NGINX_DIR" ]]; then
+    echo "Could not create temp dir"
+    exit 1
+  fi
+  tar xzf "${backup_file}" -C "$NGINX_DIR" >/dev/null
+}
+
+remove_extracted_backup() {
+  rm -rf "$NGINX_DIR"
+  echo "Deleted extracted backup directory $NGINX_DIR"
+}
+
+process_nginx_list() {
+  sites=()
+  echo "Generating list of certificates..."
+  pushd "${NGINX_DIR}/ssl" >/dev/null
+  for i in $(ls -d */); do
+    site=${i%%/};
+    sites+=(${site});
+  done
+  popd >/dev/null
+}
+
+create_haproxy_data() {
+  pushd "${NGINX_DIR}" >/dev/null
+  mkdir -p virtual_host_service_worker/ssl
+  echo "" > virtual_host_service_worker/haproxy-certificate-list
+  for site in "${sites[@]}"; do
+    pem=$(cat ssl/${site}/${site}.pem)
+    key=$(cat ssl/${site}/${site}.key)
+    domains=$(cat sites-available/${site}.conf | grep -m1 'server_name' | sed -E -e 's/\s+server_name\s+(.*)\s*;/\1/g')
+    echo "/var/vcap/store/virtual_host_service_worker/ssl/${site}.pem ${domains}" >> virtual_host_service_worker/haproxy-certificate-list
+    echo -e "${pem}\n${key}" > "virtual_host_service_worker/ssl/${site}.pem"
+  done
+  tar -zcvf haproxy-certs.tgz virtual_host_service_worker
+  bosh -d $DEPLOYMENT scp haproxy-certs.tgz $INSTANCE:/tmp
+  popd >/dev/null
+}
+
+# Main
+
+source ~/bosh/$(director_name overbosh)
+
+prepare_environment
+#backup_instance $INSTANCE
+extract_backup
+process_nginx_list
+create_haproxy_data
+
+# has to be moved to traps section later
+#remove_extracted_backup

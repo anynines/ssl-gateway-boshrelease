@@ -9,8 +9,7 @@ BOSH_DEPLOYMENT_ARGS="${BOSH_DEPLOYMENT_ARGS:-""}"
 REPO_BASE_PATH=${REPO_BASE_PATH:-~/bosh/epo-deployments-a9s}
 
 
-$BOSH_CLI $BOSH_DEPLOYMENT_ARGS -e overbosh ${BOSH_DEPLOYMENT_ACTION} -d ssl-gateway $REPO_BASE_PATH/deployments/ssl-gateway/${STAGE}/ssl-gateway.yml \
-  -o ${REPO_BASE_PATH}/shared/ops/ssl-gateway/add-sni.yml \
+$BOSH_CLI $BOSH_DEPLOYMENT_ARGS -e overbosh ${BOSH_DEPLOYMENT_ACTION} -d ssl-gateway-haproxy $REPO_BASE_PATH/deployments/ssl-gateway-haproxy/${STAGE}/ssl-gateway.yml \
   -o ${REPO_BASE_PATH}/shared/ops/ssl-gateway/ssl-gw-no-elb-haproxy.yml \
   -o ${REPO_BASE_PATH}/shared/ops/generic/parallel-updates.yml \
   -o ${REPO_BASE_PATH}/shared/ops/ssl-gateway/enable_hsts.yml \
