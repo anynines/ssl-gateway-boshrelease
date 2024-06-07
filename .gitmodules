@@ -1,11 +1,11 @@
 [submodule "src/virtual_host_service_worker"]
 	path = src/virtual_host_service_worker
 	url = git@github.com:anynines/virtual_host_service_worker.git
-	branch = develop
+	branch = master
 [submodule "src/virtual_host_service_api"]
 	path = src/virtual_host_service_api
 	url = git@github.com:anynines/virtual_host_service_api.git
-	branch = develop
+	branch = master
 [submodule "acceptance-tests/cipherscan"]
 	path = acceptance-tests/cipherscan
 	url = git@github.com:mozilla/cipherscan.git

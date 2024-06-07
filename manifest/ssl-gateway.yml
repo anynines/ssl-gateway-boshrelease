@@ -35,7 +35,7 @@ releases:
   version: 37
   sha1: sha256:f9ddc2e752366059087171d3030778231b7730e18689a178557041d1899d4fd0
 - name: bpm
-  sha1: 9c571c3463818ec1f8afe63d2da98c24381f7dda
+  sha1: 00e12a2c7e9389320999f99cf74061bbd08f3770
   url: https://bosh.io/d/github.com/cloudfoundry/bpm-release?v=1.2.16
   version: 1.2.16
 - name: haproxy
