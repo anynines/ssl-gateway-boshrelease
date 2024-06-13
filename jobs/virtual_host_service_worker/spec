@@ -19,9 +19,6 @@ properties:
     description: 'password for auth with rabbitmq'
   rabbitmq.host:
     description: 'Address of the message queue'
-  use_haproxy:
-    description: "Use HAProxy instead of NGINX"
-    default: true
 
   # A set of haproxy configurations used by a Worker
   ha_proxy.ext_crt_list:

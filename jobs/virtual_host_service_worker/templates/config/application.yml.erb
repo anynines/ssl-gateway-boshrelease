@@ -12,7 +12,7 @@ production:
   routers:            [<%= p('a9s_ssl_gateway.cf_routers').map{ |r| "'#{r}'" }.join(',') %>]
   honeybadger_api_key: ''
 
-  use_haproxy:          <%= p('use_haproxy') %>
+  use_haproxy:          true
   haproxy_command:      "/var/vcap/jobs/virtual_host_service_worker/bin/config-checker.sh"
   haproxy_reload:       "/var/vcap/jobs/haproxy/bin/reload"
   haproxy_config:       "/var/vcap/jobs/haproxy/config/haproxy.config"
