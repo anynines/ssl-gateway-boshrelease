@@ -2,5 +2,5 @@ check process virtual_host_service_worker
   with pidfile /var/vcap/sys/run/virtual_host_service_worker/virtual_host_service_worker.pid
   start program "/var/vcap/jobs/virtual_host_service_worker/bin/virtual_host_service_worker_ctl start"
   stop program "/var/vcap/jobs/virtual_host_service_worker/bin/virtual_host_service_worker_ctl stop"
-  depends on nginx
+  depends on haproxy
   group vcap

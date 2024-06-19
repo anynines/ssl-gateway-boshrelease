@@ -4,21 +4,44 @@ export BUNDLE_CMD=/var/vcap/packages/ruby/bin/bundle
 export DAEMON_ENV=production
 export PIDFILE=/var/vcap/sys/run/virtual_host_service_worker/virtual_host_service_worker.pid
 export PATH=/var/vcap/packages/ruby/bin/:$PATH
+export STORE_DIR=/var/vcap/store/virtual_host_service_worker
+export JOB_DIR=/var/vcap/jobs/virtual_host_service_worker
+export PACKAGE_DIR=/var/vcap/packages/virtual_host_service_worker
+export RUN_DIR=/var/vcap/sys/run/virtual_host_service_worker
+export LOG_DIR=/var/vcap/sys/log/virtual_host_service_worker
 
-
-mkdir -p /var/vcap/sys/run/virtual_host_service_worker/
-cp /var/vcap/jobs/virtual_host_service_worker/config/application.yml /var/vcap/packages/virtual_host_service_worker/config/
-cp /var/vcap/jobs/virtual_host_service_worker/config/amqp.yml /var/vcap/packages/virtual_host_service_worker/config/
 
 case $1 in
 
   start)
+    mkdir -p $RUN_DIR
+
+    echo "Linking configuration"
+    ln -sf $JOB_DIR/config/amqp.yml $PACKAGE_DIR/config/amqp.yml
+    ln -sf $JOB_DIR/config/application.yml $PACKAGE_DIR/config/application.yml
+    echo "Finished linking configuration"
+
+    echo "Creating certificate storage"
+    mkdir -p $STORE_DIR/ssl
+    touch $STORE_DIR/haproxy-certificate-list
+    chown -R vcap:vcap $STORE_DIR
+    echo "Finished creating certificate storage"
+
+    echo "Linking log directory"
+    if [ ! -L $PACKAGE_DIR/log ]; then
+      rm -rf $PACKAGE_DIR/log
+      ln -s $LOG_DIR $PACKAGE_DIR/log
+    fi
+    echo "Finished linking log directory"
+
     cd /var/vcap/packages/virtual_host_service_worker
     $BUNDLE_CMD exec bin/virtual_host_service_worker start --pid $PIDFILE
     ;;
+
   stop)
     kill $(cat $PIDFILE)
     ;;
+
   *)
     echo "Usage: ctl {start|stop}"
     ;;

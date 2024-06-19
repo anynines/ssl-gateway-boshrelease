@@ -1,0 +1,88 @@
+#!/bin/bash
+
+set -e
+export PATH=$PATH:/var/vcap/packages/haproxy/bin:/var/vcap/packages/ttar/bin
+
+# This function is imported from haproxy-boshrelease's `haproxy_wrapper` script
+update_certs() {
+  # reconstitute certs based on ttar file
+  mkdir -p /var/vcap/jobs/haproxy/config/ssl
+  ttar < /var/vcap/jobs/haproxy/config/certs.ttar
+
+  <%- if p("ha_proxy.ext_crt_list") == true -%>
+  # wait for optional external certs
+  local ext_crt_list_file=<%= p("ha_proxy.ext_crt_list_file") %>
+  local timeout=<%= p("ha_proxy.ext_crt_list_timeout") %>
+  local policy=<%= p("ha_proxy.ext_crt_list_policy") %>
+  <%- if not ["fail", "continue"].include?(p("ha_proxy.ext_crt_list_policy"))
+       abort("ha_proxy.ext_crt_list_policy must be either 'fail' or 'continue'")
+      end -%>
+  mkdir -p $(dirname $ext_crt_list_file)
+  chmod o+rwx $(dirname $ext_crt_list_file)
+  local max_retries=$timeout
+  local retries=1
+  while [ ! -f $ext_crt_list_file ]; do
+    echo "$(date): $ext_crt_list_file missing ($retries/$max_retries). waiting..."
+    sleep 1
+    retries=$((retries + 1))
+    if [ $retries -gt $max_retries ]; then
+      if [ $policy == "fail" ]; then
+        echo "$(date): ERROR: $ext_crt_list_file still missing after $max_retries seconds. Exiting."
+        cleanup_daemon
+        exit 1
+      fi
+      if [ $policy == "continue" ]; then
+        echo "$(date): WARNING: $ext_crt_list_file still missing after $max_retries seconds. Continuing without external certificates."
+        break
+      fi
+    fi
+  done
+  if [ -f $ext_crt_list_file ]; then
+    echo "$(date): $ext_crt_list_file found."
+  fi
+
+  # merge optional external certs
+  if grep -q OPTIONAL_EXT_CERTS /var/vcap/jobs/haproxy/config/ssl/crt-list; then
+    sed -i -e '/OPTIONAL_EXT_CERTS/r <%= p("ha_proxy.ext_crt_list_file") %>' /var/vcap/jobs/haproxy/config/ssl/crt-list
+  fi
+  <%- end -%>
+}
+
+usage() {
+  printf '%s\n'\
+    "$(basename $0) checks hapropxy config files" \
+    "" \
+    "Usage: $(basename $0) -f <haproxy.config> -c" \
+    "" \
+    "-f  path to the haproxy.config file (default value is '/var/vcap/jobs/haproxy/config/haproxy.config')" \
+    "-c  config-check mode (has to be set)" \
+    "" \
+    "Example: $(basename $0) -f /var/vcap/jobs/haproxy/config/haproxy.config -c"
+  exit 2
+}
+
+config='/var/vcap/jobs/haproxy/config/haproxy.config'
+while getopts ":f:c" OPTION; do
+  case "${OPTION}" in
+    f)
+      config=${OPTARG} >&2
+      ;;
+    c)
+      ;;
+    :)
+      echo "[!] Error: -${OPTARG} requires an argument." >&2
+      usage
+      ;;
+    *)
+      echo "[!] Invalid option \"${OPTARG}\"" >&2
+      usage
+      ;;
+  esac
+done
+
+echo "[haproxy-config-checker] Updating certificates..."
+
+# unpack base certs and add optional external certs
+update_certs
+/var/vcap/packages/haproxy/bin/haproxy -f $config -c
+exit $?

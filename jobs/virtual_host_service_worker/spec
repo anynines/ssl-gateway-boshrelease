@@ -2,6 +2,7 @@
 name: virtual_host_service_worker
 templates:
   bin/virtual_host_service_worker_ctl.sh.erb: bin/virtual_host_service_worker_ctl
+  bin/config-checker.sh.erb: bin/config-checker.sh
   config/application.yml.erb: config/application.yml
   config/amqp.yml.erb: config/amqp.yml
 
@@ -15,6 +16,29 @@ properties:
   rabbitmq.admin_username:
     description: 'username for auth with rabbitmq'
   rabbitmq.admin_password:
-    descriptions: 'password for auth with rabbitmq'
+    description: 'password for auth with rabbitmq'
   rabbitmq.host:
     description: 'Address of the message queue'
+
+  # A set of haproxy configurations used by a Worker
+  ha_proxy.ext_crt_list:
+    description: |
+      A flag denoting the use of additional certificates from external sources.
+      If set to true the contents of an external crt-list file located at `ha_proxy.ext_crt_list_file` are
+      added to the crt-list described by the `ha_proxy.crt_list` property. Please be aware that reloading external certificates does only work if haproxy is
+      started in daemon mode. So this feature does not work if "haproxy.syslog_server" is set to "stdout". If using this feature but not using internal certs,
+      you should set ha_proxy.crt_list to be an empty array
+    default: true
+  ha_proxy.ext_crt_list_file:
+    description: |
+      The location from which to load additional external certificates list
+    default: "/var/vcap/store/virtual_host_service_worker/haproxy-certificate-list"
+  ha_proxy.ext_crt_list_timeout:
+    description: |
+      Timeout (in seconds) to wait for the external certificates list located at `ha_proxy.ext_crt_list_file` to appear during HAproxy startup
+    default: 60
+  ha_proxy.ext_crt_list_policy:
+    description: |
+      What to do if the external certificates list located at `ha_proxy.ext_crt_list_file` does not appear within the time
+      denoted by `ha_proxy.ext_crt_list_timeout`. Set to either 'fail' (HAproxy will not start) or 'continue' (HAproxy will start without external certificates)
+    default: "continue"
