@@ -1,8 +1,5 @@
 ---
 blobstore:
-  provider: s3
+  provider: local
   options:
-    bucket_name: a9s-blobs
-    endpoint: https://s3-eu-west-1.amazonaws.com
-    region: eu-west-1
-final_name: ssl-gateway
+    blobstore_path: /tmp/final-blobs
