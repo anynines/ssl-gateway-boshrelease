@@ -1,18 +1,24 @@
 libpq/postgresql-15.3.tar.bz2:
   size: 22819107
+  object_id: 4f9779bd-9b5d-4240-5b8c-418fab37d081
   sha: sha256:ffc7d4891f00ffbf5c3f4eab7fbbced8460b8c0ee63c5a5167133b9e6599d932
 libyaml/yaml-0.2.5.tar.gz:
   size: 609454
+  object_id: 446bf420-c99e-45fb-777c-702b9c6d994e
   sha: sha256:c642ae9b75fee120b2d96c712538bd2cf283228d2337df2cf2988e3c02678ef4
 ruby/bundler-2.3.25.gem:
   size: 411136
+  object_id: 9aece3ee-38d2-4453-6c16-0a5838291885
   sha: sha256:fd81ec4635c4189b66fd0789537d5cb38b3810b70765f6e1e82dda15b97591ad
 ruby/ruby-3.1.2.tar.gz:
   size: 20553628
+  object_id: a6fce7bc-c4f9-45f7-65bc-844ac6723e28
   sha: sha256:61843112389f02b735428b53bb64cf988ad9fb81858b8248e22e57336f24a83e
 ruby/rubygems-3.4.14.tgz:
   size: 1327015
+  object_id: 8a772da8-f245-4546-6684-fa639b3e0d25
   sha: sha256:979b1842848a39be4d90efc9d399c294aca0b6e67d45f800b26c93cc22d03983
-zlib/zlib-1.3.tar.gz:
-  size: 1495873
-  sha: sha256:ff0ba4c292013dbc27530b3a81e1f9a813cd39de01ca5e0f8bf355702efa593e
+zlib/zlib-1.3.1.tar.gz:
+  size: 1512791
+  object_id: 8506c01b-a786-45f2-55a7-6b56d20e678c
+  sha: sha256:9a93b2b7dfdac77ceba5a558a580e74667dd6fede4585b91eefb60f03b72df23
