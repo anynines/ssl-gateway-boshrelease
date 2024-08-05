@@ -3,17 +3,17 @@
 LIBYAML_VERSION="0.2.5"
 LIBYAML_TARBALL_DIR=blobs/libyaml
 LIBYAML_TARBALL_FILE=$LIBYAML_TARBALL_DIR/yaml-$LIBYAML_VERSION.tar.gz
-LIBYAML_TARBALL_DOWNLOAD_URL=http://pyyaml.org/download/libyaml/yaml-$LIBYAML_VERSION.tar.gz
+LIBYAML_TARBALL_DOWNLOAD_URL=https://pyyaml.org/download/libyaml/yaml-$LIBYAML_VERSION.tar.gz
 
-ZLIB_VERSION="1.3"
+ZLIB_VERSION="1.3.1"
 ZLIB_TARBALL_DIR=blobs/zlib
 ZLIB_TARBALL_FILE=$ZLIB_TARBALL_DIR/zlib-$ZLIB_VERSION.tar.gz
-ZLIB_TARBALL_DOWNLOAD_URL=http://zlib.net/zlib-$ZLIB_VERSION.tar.gz
+ZLIB_TARBALL_DOWNLOAD_URL=https://zlib.net/zlib-$ZLIB_VERSION.tar.gz
 
 RUBY_VERSION="3.1.2"
 RUBY_TARBALL_DIR=blobs/ruby
 RUBY_TARBALL_FILE=$RUBY_TARBALL_DIR/ruby-$RUBY_VERSION.tar.gz
-RUBY_TARBALL_DOWNLOAD_URL=http://cache.ruby-lang.org/pub/ruby/3.1/ruby-$RUBY_VERSION.tar.gz
+RUBY_TARBALL_DOWNLOAD_URL=https://cache.ruby-lang.org/pub/ruby/3.1/ruby-$RUBY_VERSION.tar.gz
 
 RUBYGEMS_VERSION="3.4.14"
 RUBYGEMS_TARBALL_DIR=blobs/ruby
