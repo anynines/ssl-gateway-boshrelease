@@ -1,0 +1,5 @@
+
+name: ssl-gateway-v1.4.5
+  url: https://s3-eu-west-1.amazonaws.com/anynines-bosh-releases/ssl-gateway-v1.4.5.tgz
+  sha: 8c1e2bf6dccca16ba6ce11b239d3693eeecaa302a4783f217ab2be89d28cf5c4
+  version: 1.4.5
