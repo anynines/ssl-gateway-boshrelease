@@ -30,11 +30,21 @@ PSQL_TARBALL_DIR=blobs/libpq
 PSQL_TARBALL_FILE=$PSQL_TARBALL_DIR/postgresql-$PSQL_VERSION.tar.bz2
 PSQL_TARBALL_DOWNLOAD_URL=https://ftp.postgresql.org/pub/source/v$PSQL_VERSION/postgresql-$PSQL_VERSION.tar.bz2
 
+fail_if_file_missing()
+{
+  FILE=$1
+  if [ ! -f $FILE ]; then
+    echo "Error, file $FILE is not downloaded, please validate download url"
+    exit 23
+  fi
+}
+
 # libyaml sources
 if [ ! -f $LIBYAML_TARBALL_FILE ]; then
   echo "Downloading Libyaml version $LIBYAML_VERSION tarball"
   mkdir -p $LIBYAML_TARBALL_DIR
-  curl -L $LIBYAML_TARBALL_DOWNLOAD_URL -o $LIBYAML_TARBALL_FILE
+  curl -L $LIBYAML_TARBALL_DOWNLOAD_URL -o $LIBYAML_TARBALL_FILE -f
+  fail_if_file_missing $LIBYAML_TARBALL_FILE 
 else
   echo "Detected Libyaml tarball. Not downloading."
 fi
@@ -43,7 +53,8 @@ fi
 if [ ! -f $ZLIB_TARBALL_FILE ]; then
   echo "Downloading zlib version $ZLIB_VERSION tarball"
   mkdir -p $ZLIB_TARBALL_DIR
-  curl -L $ZLIB_TARBALL_DOWNLOAD_URL -o $ZLIB_TARBALL_FILE
+  curl -L $ZLIB_TARBALL_DOWNLOAD_URL -o $ZLIB_TARBALL_FILE -f
+  fail_if_file_missing $ZLIB_TARBALL_FILE
 else
   echo "Detected zlib tarball. Not downloading."
 fi
@@ -52,7 +63,8 @@ fi
 if [ ! -f $RUBY_TARBALL_FILE ]; then
   echo "Downloading Ruby version $RUBY_VERSION tarball"
   mkdir -p $RUBY_TARBALL_DIR
-  curl -L $RUBY_TARBALL_DOWNLOAD_URL -o $RUBY_TARBALL_FILE
+  curl -L $RUBY_TARBALL_DOWNLOAD_URL -o $RUBY_TARBALL_FILE -f
+  fail_if_file_missing $RUBY_TARBALL_FILE
 else
   echo "Detected Ruby tarball. Not downloading."
 fi
@@ -61,7 +73,8 @@ fi
 if [ ! -f $RUBYGEMS_TARBALL_FILE ]; then
   echo "Downloading Rubygems version $RUBYGEMS_VERSION tarball"
   mkdir -p $RUBYGEMS_TARBALL_DIR
-  curl -L $RUBYGEMS_TARBALL_DOWNLOAD_URL -o $RUBYGEMS_TARBALL_FILE
+  curl -L $RUBYGEMS_TARBALL_DOWNLOAD_URL -o $RUBYGEMS_TARBALL_FILE -f
+  fail_if_file_missing $RUBYGEMS_TARBALL_FILE
 else
   echo "Detected Rubygems tarball. Not downloading."
 fi
@@ -70,7 +83,8 @@ fi
 if [ ! -f $BUNDLER_TARBALL_FILE ]; then
   echo "Downloading bundler version $BUNDLER_VERSION gem"
   mkdir -p $BUNDLER_TARBALL_DIR
-  curl -L $BUNDLER_TARBALL_DOWNLOAD_URL -o $BUNDLER_TARBALL_FILE
+  curl -L $BUNDLER_TARBALL_DOWNLOAD_URL -o $BUNDLER_TARBALL_FILE -f
+  fail_if_file_missing $BUNDLER_TARBALL_FILE
 else
   echo "Detected bundler gem. Not downloading."
 fi
@@ -79,7 +93,8 @@ fi
 if [ ! -f $PSQL_TARBALL_FILE ]; then
   echo "Downloading psql version $PSQL_VERSION"
   mkdir -p $PSQL_TARBALL_DIR
-  curl -L $PSQL_TARBALL_DOWNLOAD_URL -o $PSQL_TARBALL_FILE
+  curl -L $PSQL_TARBALL_DOWNLOAD_URL -o $PSQL_TARBALL_FILE -f
+  fail_if_file_missing $PSQL_TARBALL_FILE
 else
   echo "Detected psql tarball. Not downloading."
 fi
