@@ -1,0 +1,62 @@
+name: ssl-gateway
+version: 1.4.7
+commit_hash: 8f271f6
+uncommitted_changes: false
+jobs:
+- name: virtual_host_service_api
+  version: b6fc93268fb119866fd86e48d17e695bf11f25bbf7bf02e2b06d81b90a42a839
+  fingerprint: b6fc93268fb119866fd86e48d17e695bf11f25bbf7bf02e2b06d81b90a42a839
+  sha1: sha256:b593c8c8d341c7e189fb1a3d36b4d1c038268638553d33d61a5ddffe857345cd
+  packages:
+  - ruby
+  - libpq
+  - libyaml
+  - zlib
+  - virtual_host_service_api
+- name: virtual_host_service_worker
+  version: 9d1943d89f9880bcb3e5abe8f82a61bf731814132a91e9bf495e8c84cc064ec8
+  fingerprint: 9d1943d89f9880bcb3e5abe8f82a61bf731814132a91e9bf495e8c84cc064ec8
+  sha1: sha256:d7442c8ec0d1934e6d27a2cc45e143f37cb9a107f206d0088aadaecec0225acb
+  packages:
+  - ruby
+  - virtual_host_service_worker
+packages:
+- name: libpq
+  version: aaaf251cf230807d9b2ede78cc669de668ffac150f899ab838fadb84a8083659
+  fingerprint: aaaf251cf230807d9b2ede78cc669de668ffac150f899ab838fadb84a8083659
+  sha1: sha256:ccc2f6f4d49bd30952698aea33dcb3a37690dbcc919d85923dc7d6eb4d02d729
+  dependencies: []
+- name: libyaml
+  version: ac3ab06e19435c2fec68b4a1009f423bd388a457416504f2f355e1a1e219f9cc
+  fingerprint: ac3ab06e19435c2fec68b4a1009f423bd388a457416504f2f355e1a1e219f9cc
+  sha1: sha256:4770002fb4b314ef013078069259645ce4362dac18fe3c9972f49d92ceab0002
+  dependencies: []
+- name: ruby
+  version: 943f4180b2277c3d43e3b23586a2677c7b10d3144c8236a92a43913a48492190
+  fingerprint: 943f4180b2277c3d43e3b23586a2677c7b10d3144c8236a92a43913a48492190
+  sha1: sha256:18c3f96f1b88c8f6598dac11222621fcdde2ef112759e5d15d0e2df2ebb1c84f
+  dependencies:
+  - libyaml
+  - zlib
+- name: virtual_host_service_api
+  version: b54519c6595c45fac15c1ccc1cf6c241adb368a1758da7eba6810932ba972a42
+  fingerprint: b54519c6595c45fac15c1ccc1cf6c241adb368a1758da7eba6810932ba972a42
+  sha1: sha256:85c2e1fe63f8fce4353fc5f8d76f363a507a4b56595d36769c9bed98c45bcc3b
+  dependencies:
+  - ruby
+  - libpq
+- name: virtual_host_service_worker
+  version: 84e76efe8d69c55680dba9f854de26c0b9b97d390d06ca98ab1f0832dd8eda97
+  fingerprint: 84e76efe8d69c55680dba9f854de26c0b9b97d390d06ca98ab1f0832dd8eda97
+  sha1: sha256:920516d66054dac53f59ed3fe35500de305538a030ae1cfa1acfcfd5abccbd88
+  dependencies:
+  - ruby
+- name: zlib
+  version: 0d561bd6e38f7aeaaff26b6b2134ec46d978f86f5da07ae2315e8beb62eb4a4c
+  fingerprint: 0d561bd6e38f7aeaaff26b6b2134ec46d978f86f5da07ae2315e8beb62eb4a4c
+  sha1: sha256:b4d0cb1e94a8bd6aef542608f2c2ca546b6fa3f85906fb6a13079374bff57e28
+  dependencies: []
+license:
+  version: 18a5ebae94d9c56046311fcc8eee7af11febd910396bb02e29bf09a986a027fe
+  fingerprint: 18a5ebae94d9c56046311fcc8eee7af11febd910396bb02e29bf09a986a027fe
+  sha1: sha256:f4ed094196a849abae33d47ae105e37c40f44ede46a926fa80f540ac0580546f
