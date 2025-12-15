@@ -18,6 +18,7 @@ name: ssl-gateway-v$VERSION
   version: $VERSION
 EOF
 
-aws s3 cp /tmp/ssl-gateway-v$VERSION.tgz s3://anynines-bosh-releases/ssl-gateway-v$VERSION.tgz
+echo "Please bug the DS team to upload the release tgz for you"
+#aws s3 cp /tmp/ssl-gateway-v$VERSION.tgz s3://anynines-bosh-releases/ssl-gateway-v$VERSION.tgz
 cd ..
 
