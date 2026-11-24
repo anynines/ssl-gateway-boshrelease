@@ -18,3 +18,8 @@ name: ssl-gateway-v1.4.8
   url: https://s3-eu-west-1.amazonaws.com/anynines-bosh-releases/ssl-gateway-v1.4.8.tgz
   sha: 77d2e81dd832a6de56d270d80fb578a87cdd4c140c4e3d645787bab243dc22f0
   version: 1.4.8
+
+name: ssl-gateway-v1.4.9
+  url: https://s3-eu-west-1.amazonaws.com/anynines-bosh-releases/ssl-gateway-v1.4.9.tgz
+  sha: ffdba117f24631cf963a7bbba0e305ced59bb23a375343f0ad83eaccd3d48ab5
+  version: 1.4.9
