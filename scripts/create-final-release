@@ -19,5 +19,5 @@ name: ssl-gateway-v$VERSION
 EOF
 
 aws s3 cp /tmp/ssl-gateway-v$VERSION.tgz s3://anynines-bosh-releases/ssl-gateway-v$VERSION.tgz
+aws s3api put-object-acl --bucket anynines-bosh-releases --key ssl-gateway-v$VERSION.tgz --acl public-read
 cd ..
-
